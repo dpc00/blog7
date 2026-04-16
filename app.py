@@ -772,18 +772,15 @@ def calcs():
     rows = db.fetchall(
         "SELECT day AS ts, SUM(CASE WHEN flow IN (2,5) THEN amt ELSE 0 END) AS net"
         " FROM transactions WHERE day IS NOT NULL" + excl +
-        " GROUP BY day ORDER BY day ASC", ebt_ids)
+        " GROUP BY day HAVING net != 0 ORDER BY day ASC", ebt_ids)
     rc    = len(rows)
     davg  = 0.0
     dtot  = 0.0
     dtot_label = ""
     if rc >= 1:
-        sc   = min(33, rc - 1)
-        bd   = datetime.fromisoformat(rows[rc - sc - 1].ts)
-        ed   = datetime.fromisoformat(rows[rc - 1].ts)
-        dd   = max(1.0, (ed - bd).total_seconds() / 86400.0)
+        sc   = min(29, rc - 1)
         te   = sum(rows[i].net for i in range(rc - sc - 1, rc))
-        davg = -te / dd
+        davg = -te / (sc + 1)
         dtot = -rows[-1].net
         dtot_label = rows[-1].ts
 
