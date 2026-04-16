@@ -7,12 +7,9 @@ Open: http://localhost:5000
 
 import calendar
 import math
-import os
 import re
-import shutil
 import sqlite3
 import threading
-import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -860,11 +857,6 @@ def exit_app():
     except Exception:
         backed_up = False
     synced = _sync_db_with_gd(DB_PATH)
-
-    def shutdown():
-        time.sleep(1.5)
-        os._exit(0)
-    threading.Thread(target=shutdown, daemon=True).start()
     return render_template('exit.html', backed_up=backed_up, synced=synced)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
