@@ -1,0 +1,95 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; font-size: 15px; background: #fff; color: #111; }
+
+/* Tab bar */
+.tabs { display: flex; overflow-x: auto; border-bottom: 2px solid #ddd;
+        background: #f5f5f5; -webkit-overflow-scrolling: touch; }
+.tabs a { padding: 10px 14px; white-space: nowrap; text-decoration: none;
+          color: #555; font-size: 14px; border-bottom: 3px solid transparent;
+          margin-bottom: -2px; display: block; }
+.tabs a.active { color: #1565c0; border-bottom-color: #1565c0; font-weight: bold; }
+
+/* Content */
+.content { padding: 12px; }
+
+/* Flash */
+.flash { padding: 8px 12px; margin: 0 0 10px; border-radius: 4px; font-size: 13px; }
+.flash.ok   { background: #e8f5e9; color: #2e7d32; }
+.flash.err  { background: #ffebee; color: #c62828; }
+.flash.info { background: #e3f2fd; color: #1565c0; }
+
+/* Forms */
+.field-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+.field-row label { width: 136px; text-align: right; font-size: 14px;
+                   color: #444; flex-shrink: 0; }
+.field-row input[type=text] {
+  flex: 1; padding: 7px 8px; border: 1px solid #bbb; border-radius: 4px;
+  font-size: 15px; background: #f0f0f0; min-width: 0; }
+
+/* Buttons */
+.btn { display: inline-block; padding: 11px 0; border: none; border-radius: 4px;
+       font-size: 15px; color: white; background: #1565c0; cursor: pointer;
+       text-align: center; font-weight: bold; text-decoration: none; }
+.btn-row { display: flex; gap: 8px; margin: 8px 0; }
+.btn-row .btn { flex: 1; }
+.btn-teal   { background: #00695c; }
+.btn-indigo { background: #283593; }
+.btn-red    { background: #b71c1c; }
+.btn-grey   { background: #757575; }
+
+/* Divider */
+hr { border: none; border-top: 1px solid #ddd; margin: 10px 0; }
+
+/* Section label */
+.section-label { font-size: 13px; color: #666; font-style: italic; margin: 4px 0 6px; }
+
+/* Recent transactions */
+.recent { font-size: 12px; margin-top: 4px; }
+.recent-hdr { display: flex; gap: 4px; font-weight: bold; color: #555;
+              padding: 4px 0 4px; border-bottom: 1px solid #ddd; }
+.recent-row { display: flex; gap: 4px; padding: 3px 0; border-bottom: 1px solid #f0f0f0;
+              align-items: center; }
+.c-day  { width: 90px; color: #555; }
+.c-amt  { width: 68px; text-align: right; }
+.c-pos  { color: #2e7d32; }
+.c-neg  { color: #c62828; }
+.c-flow { width: 30px; color: #999; }
+.c-bal  { width: 66px; text-align: right; color: #333; }
+.c-del  { width: 22px; text-align: center; }
+.c-del a { color: #ef9a9a; text-decoration: none; font-size: 14px; }
+
+/* Asset links */
+.asset-links { margin: 6px 0 2px; font-size: 13px; }
+.asset-links a { color: #1565c0; text-decoration: none; margin-right: 10px; }
+.asset-links a.active-asset { font-weight: bold; color: #283593; }
+
+/* Calc rows */
+.calc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.calc-label { width: 136px; text-align: right; font-size: 14px; color: #555; flex-shrink: 0; }
+.calc-value { font-size: 16px; font-weight: bold; }
+.c-pink   { color: #c2185b; }
+.c-green  { color: #2e7d32; }
+.c-red    { color: #c62828; }
+.c-teal   { color: #00695c; }
+.c-blue   { color: #1565c0; }
+.c-grey   { color: #555; }
+
+/* Countdown */
+.dl-item { color: #e65100; font-size: 14px; margin: 4px 0; }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
+table { border-collapse: collapse; font-size: 12px; }
+th { padding: 6px 5px; text-align: left; font-weight: bold;
+     border-bottom: 2px solid #ddd; white-space: nowrap; }
+th a { color: #1565c0; text-decoration: none; white-space: nowrap; }
+td { padding: 4px 5px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+td.num { text-align: right; }
+td.pos { color: #2e7d32; text-align: right; }
+td.neg { color: #c62828; text-align: right; }
+td.dim { color: #999; }
+
+/* Login form */
+.login-form { max-width: 320px; margin: 20px auto; }
+.login-form .field-row label { width: 100px; }
+.login-form h2 { margin-bottom: 14px; font-size: 18px; color: #333; }

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="post" action="/update">
+  {% for a in assets %}
+  <div class="field-row">
+    <label>{{ a.name }}</label>
+    <input type="text" name="bal_{{ a.id }}" value="{{ ncs(a.balance) }}">
+  </div>
+  {% endfor %}
+
+  <div class="btn-row">
+    <button class="btn" type="submit">Update</button>
+    <a class="btn btn-red" href="/exit">Exit</a>
+  </div>
+</form>
+
+<div class="btn-row">
+  <form method="post" action="/sync_ns" style="flex:1">
+    <button class="btn btn-teal" type="submit" style="width:100%">Sync NS</button>
+  </form>
+  <a class="btn btn-indigo" href="/login_ns" style="flex:1">NS Login</a>
+</div>
+
+<hr>
+
+<div class="asset-links">
+  {% for a in assets %}
+  <a href="/?asset={{ a.id }}"
+     class="{{ 'active-asset' if focused and focused.id == a.id }}">{{ a.name }}</a>
+  {% endfor %}
+</div>
+
+{% if focused %}
+<div class="section-label">── {{ focused.name }} ──</div>
+{% endif %}
+
+<div class="recent">
+  <div class="recent-hdr">
+    <span class="c-day">Date</span>
+    <span class="c-amt">Amount</span>
+    <span class="c-flow">Type</span>
+    <span class="c-bal">Balance</span>
+    <span class="c-del"></span>
+  </div>
+  {% for r in recent %}
+  <div class="recent-row">
+    <span class="c-day">{{ r.day }}</span>
+    <span class="c-amt {{ 'c-pos' if r.amt >= 0 else 'c-neg' }}">
+      {{ '%+.2f' % r.amt if r.amt != 0 else '—' }}
+    </span>
+    <span class="c-flow">{{ flow_code.get(r.flow, '') }}</span>
+    <span class="c-bal">{{ '%.2f' % r.balance if r.balance is not none else '' }}</span>
+    <span class="c-del">
+      <a href="/delete_txn/{{ r.id }}?asset={{ focused.id if focused else 2 }}">✕</a>
+    </span>
+  </div>
+  {% endfor %}
+  {% if not recent %}
+  <div style="color:#999; font-style:italic; padding:6px 0;">No transactions</div>
+  {% endif %}
+</div>
+
+{% endblock %}

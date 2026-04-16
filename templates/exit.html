@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding: 20px 0; color: #2e7d32; font-size: 16px;">
+  {% if synced %}
+  Synced to Google Drive. You can close this tab.
+  {% else %}
+  Backed up locally. You can close this tab.
+  {% endif %}
+</div>
+{% endblock %}

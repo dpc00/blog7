@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="login-form">
+  <h2>NS Login</h2>
+  <form method="post" action="/login_ns">
+    <div class="field-row">
+      <label>Username</label>
+      <input type="text" name="username" value="{{ prefill_un }}" autocomplete="username">
+    </div>
+    <div class="field-row">
+      <label>Password</label>
+      <input type="password" name="password" autocomplete="current-password">
+    </div>
+    <div class="btn-row" style="margin-top:12px;">
+      <button class="btn btn-indigo" type="submit">Login</button>
+      <a class="btn btn-grey" href="/">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

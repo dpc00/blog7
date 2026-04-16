@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% macro sort_link(label, col) %}
+  {% set next_asc = '0' if (sort_col == col and asc) else '1' %}
+  {% set indicator = ' ▲' if (sort_col == col and asc) else (' ▼' if sort_col == col else '') %}
+  <a href="/transactions?sort={{ col }}&asc={{ next_asc }}">{{ label }}{{ indicator }}</a>
+{% endmacro %}
+
+<div class="tbl-wrap">
+<table>
+  <tr>
+    <th>{{ sort_link('Date', 'day') }}</th>
+    <th>{{ sort_link('Desc', 'label') }}</th>
+    <th>{{ sort_link('Asset', 'asset_id') }}</th>
+    <th>{{ sort_link('Flow', 'flow') }}</th>
+    <th>{{ sort_link('Amt', 'amt') }}</th>
+    <th>{{ sort_link('Bal', 'balance') }}</th>
+  </tr>
+  {% for r in rows %}
+  <tr>
+    <td>{{ r.day }}</td>
+    <td>{{ r.label or '' }}</td>
+    <td class="dim">{{ asset_name_map.get(r.asset_id, r.asset_id) }}</td>
+    <td class="dim">{{ flow_name_map.get(r.flow, r.flow) }}</td>
+    <td class="{{ 'pos' if r.amt >= 0 else 'neg' }} num">{{ '%.2f' % r.amt }}</td>
+    <td class="num">{{ '%.2f' % r.balance if r.balance is not none else '' }}</td>
+  </tr>
+  {% endfor %}
+  {% if not rows %}
+  <tr><td colspan="6" style="color:#999; font-style:italic; padding:8px;">No transactions</td></tr>
+  {% endif %}
+</table>
+</div>
+
+{% endblock %}

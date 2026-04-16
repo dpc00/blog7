@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for key, label, value, color in calcs %}
+<div class="calc-row">
+  <span class="calc-label">{{ label }}</span>
+  <span class="calc-value c-{{ color }}">{{ value }}</span>
+  {% if key == 'DTotExp' and dtot_label %}
+  <span style="font-size:11px; color:#999; margin-left:6px;">{{ dtot_label }}</span>
+  {% endif %}
+</div>
+{% endfor %}
+
+{% if dl_items %}
+<hr>
+{% for item in dl_items %}
+<div class="dl-item">{{ item }}</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

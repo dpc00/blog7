@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="tbl-wrap">
+<table>
+  <tr>
+    <th>{{ period_col | capitalize }}</th>
+    <th>Asset</th>
+    <th class="num">Income</th>
+    <th class="num">Expense</th>
+    <th class="num">Xfer In</th>
+    <th class="num">Xfer Out</th>
+    <th class="num">Refund</th>
+  </tr>
+  {% for r in rows %}
+  <tr>
+    <td>{{ r[period_col] }}</td>
+    <td class="dim">{{ asset_name_map.get(r.asset_id, r.asset_id) }}</td>
+    <td class="{{ 'pos' if r.income else '' }} num">
+      {{ '%.2f' % r.income if r.income else '' }}</td>
+    <td class="{{ 'neg' if r.expense else '' }} num">
+      {{ '%.2f' % r.expense if r.expense else '' }}</td>
+    <td class="{{ 'pos' if r.transfer_in else '' }} num">
+      {{ '%.2f' % r.transfer_in if r.transfer_in else '' }}</td>
+    <td class="{{ 'neg' if r.transfer_out else '' }} num">
+      {{ '%.2f' % r.transfer_out if r.transfer_out else '' }}</td>
+    <td class="{{ 'pos' if r.refund_return else '' }} num">
+      {{ '%.2f' % r.refund_return if r.refund_return else '' }}</td>
+  </tr>
+  {% endfor %}
+  {% if not rows %}
+  <tr><td colspan="7" style="color:#999; font-style:italic; padding:8px;">No data</td></tr>
+  {% endif %}
+</table>
+</div>
+
+{% endblock %}
