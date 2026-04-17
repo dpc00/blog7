@@ -524,8 +524,11 @@ def _ns_ts_after(base_ts: str, offset_secs: int) -> str:
 def _ns_do_sync():
     """Returns (n, bal, err)."""
     if not TOKEN_FILE.exists():
-        return 0, None, "No token. Use NS Login first."
-    token = TOKEN_FILE.read_text().strip()
+        token = _silent_reauth()
+        if not token:
+            return 0, None, "No token and re-login failed."
+    else:
+        token = TOKEN_FILE.read_text().strip()
     if not token:
         return 0, None, "Token file is empty."
 
@@ -543,7 +546,13 @@ def _ns_do_sync():
         try:
             resp = requests.get(url, headers=hdrs, timeout=30)
             if resp.status_code in (401, 403):
-                return 0, None, "Token expired. Use NS Login."
+                token = _silent_reauth()
+                if not token:
+                    return 0, None, "Token expired. Use NS Login."
+                hdrs = {**_NS_HEADERS, "X-Ns-Access_token": token}
+                resp = requests.get(url, headers=hdrs, timeout=30)
+                if resp.status_code in (401, 403):
+                    return 0, None, "Token expired; re-login succeeded but still rejected."
             resp.raise_for_status()
             stmt = resp.json()
         except requests.HTTPError as exc:
@@ -683,16 +692,7 @@ def login_ns():
         flash("Enter username and password.", "err")
         return redirect(url_for('login_ns'))
     try:
-        s = requests.Session()
-        s.headers.update(_NS_LOGIN_HEADERS)
-        s.get("https://www.netspend.com/account/login", timeout=15)
-        resp = s.post(_NS_LOGIN_URL, json={
-            "username": un, "password": pw,
-            "auth_type": "password",
-            "device_fingerprint": _NS_DEVICE_FP,
-        }, timeout=30)
-        resp.raise_for_status()
-        data = resp.json()
+        data = _do_login_request(un, pw)
     except Exception as exc:
         flash(f"Login error: {exc}", "err")
         return redirect(url_for('login_ns'))
@@ -869,6 +869,36 @@ def _read_creds():
     if len(lines) >= 2:
         return lines[0].strip(), lines[1].strip()
     return None, None
+
+def _do_login_request(username, password):
+    """Blocking login — returns response dict or raises."""
+    s = requests.Session()
+    s.headers.update(_NS_LOGIN_HEADERS)
+    s.get("https://www.netspend.com/account/login", timeout=15)
+    resp = s.post(_NS_LOGIN_URL, json={
+        "username": username, "password": password,
+        "auth_type": "password",
+        "device_fingerprint": _NS_DEVICE_FP,
+    }, timeout=30)
+    resp.raise_for_status()
+    return resp.json()
+
+def _silent_reauth():
+    """Re-login with saved creds. Returns new token str, or None on failure."""
+    un, pw = _read_creds()
+    if not (un and pw):
+        return None
+    try:
+        data = _do_login_request(un, pw)
+    except Exception:
+        return None
+    if data.get("ooba_required"):
+        return None
+    token = data.get("token", "")
+    if token:
+        TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
+        TOKEN_FILE.write_text(token)
+    return token or None
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
