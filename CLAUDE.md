@@ -54,7 +54,7 @@ adb connect 10.0.0.53:<connect-port>
 ```
 Pairing port, connect port, and code come from the phone's Developer Options > Wireless Debugging (the connect port changes each session; don't hardcode it).
 
-Note: ADB shell cannot kill Termux processes (permission denied). To stop Flask/sshd/crond, use Termux directly or Force Stop Termux via Settings > Apps.
+Note: ADB shell cannot (that we know of now) kill Termux processes (permission denied). To stop Flask/sshd/crond, use Termux directly or Force Stop Termux via Settings > Apps.
 
 ## git / pybackup
 
