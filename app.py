@@ -870,12 +870,24 @@ def transactions():
                            asset_name_map=asset_name_map, flow_name_map=flow_name_map,
                            sort_col=sort_col, asc=asc)
 
+_SUMMARY_LIMITS = {'daily': 60, 'weekly': 12, 'monthly': 24, 'yearly': 9999}
+
 def _summary_route(tbl, period_col, title, tab):
     assets        = db.load_assets()
     asset_name_map = {a['id']: a['name'] for a in assets}
-    rows = db.fetchall(
-        f"SELECT {period_col}, asset_id, income, expense, transfer_in, transfer_out, refund_return"
-        f" FROM {tbl} ORDER BY {period_col} DESC")
+    limit = _SUMMARY_LIMITS.get(tbl, 60)
+    # Get most recent N distinct periods, then fetch all rows for those periods
+    periods_q = db.fetchall(
+        f"SELECT DISTINCT {period_col} FROM {tbl} ORDER BY {period_col} DESC LIMIT ?", [limit])
+    if not periods_q:
+        rows = []
+    else:
+        placeholders = ','.join('?' * len(periods_q))
+        period_vals  = [r[period_col] for r in periods_q]
+        rows = db.fetchall(
+            f"SELECT {period_col}, asset_id, income, expense, transfer_in, transfer_out, refund_return"
+            f" FROM {tbl} WHERE {period_col} IN ({placeholders}) ORDER BY {period_col} DESC",
+            period_vals)
 
     # Collect ordered periods; always show all assets as columns
     asset_ids = [a['id'] for a in assets]
