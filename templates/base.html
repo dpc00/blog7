@@ -24,5 +24,36 @@
     {% endwith %}
     {% block content %}{% endblock %}
   </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var tbl = document.querySelector('table');
+  if (!tbl) return;
+  var hdr = tbl.querySelector('tr');
+  if (!hdr) return;
+  var TAB_H = document.querySelector('.tabs').offsetHeight;
+
+  var fixDiv = document.createElement('div');
+  fixDiv.style.cssText = 'position:fixed;top:'+TAB_H+'px;left:0;right:0;overflow:hidden;background:#fff;z-index:5;display:none;border-bottom:2px solid #ddd;';
+  var fixTbl = document.createElement('table');
+  fixTbl.style.cssText = 'border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;';
+  fixTbl.appendChild(hdr.cloneNode(true));
+  fixDiv.appendChild(fixTbl);
+  document.body.appendChild(fixDiv);
+
+  function sync() {
+    fixTbl.style.transform = 'translateX('+tbl.getBoundingClientRect().left+'px)';
+  }
+  function update() {
+    if (hdr.getBoundingClientRect().bottom < TAB_H) {
+      fixDiv.style.display = 'block'; sync();
+    } else {
+      fixDiv.style.display = 'none';
+    }
+  }
+  window.addEventListener('scroll', update);
+  var wrap = tbl.closest('.tbl-wrap');
+  if (wrap) wrap.addEventListener('scroll', function() { if (fixDiv.style.display!='none') sync(); });
+});
+</script>
 </body>
 </html>
