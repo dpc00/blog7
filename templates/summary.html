@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div style="overflow:auto; height:calc(100vh - 90px); -webkit-overflow-scrolling:touch; margin-top:8px;">
+<div style="overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:8px;">
 <table style="border-collapse:separate; border-spacing:0; font-size:12px; white-space:nowrap;">
   <thead>
   <tr>
-    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;">{{ period_col | capitalize }}</th>
+    <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;">{{ period_col | capitalize }}</th>
     {% for aid in asset_ids %}
     {% set nm = asset_name_map.get(aid, aid) %}{% set ab = nm[:2] %}
-    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Inc</th>
-    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Exp</th>
-    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-XIn</th>
-    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-XO</th>
-    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Ref</th>
+    <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Inc</th>
+    <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Exp</th>
+    <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-XIn</th>
+    <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-XO</th>
+    <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Ref</th>
     {% endfor %}
   </tr>
   </thead>
