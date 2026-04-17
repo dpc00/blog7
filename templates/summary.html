@@ -5,31 +5,30 @@
 <table>
   <tr>
     <th>{{ period_col | capitalize }}</th>
-    <th>Asset</th>
-    <th class="num">Income</th>
-    <th class="num">Expense</th>
-    <th class="num">Xfer In</th>
-    <th class="num">Xfer Out</th>
-    <th class="num">Refund</th>
+    {% for aid in asset_ids %}
+    <th class="num" colspan="2">{{ asset_name_map.get(aid, aid) }}</th>
+    {% endfor %}
   </tr>
-  {% for r in rows %}
   <tr>
-    <td>{{ r[period_col] }}</td>
-    <td class="dim">{{ asset_name_map.get(r.asset_id, r.asset_id) }}</td>
-    <td class="{{ 'pos' if r.income else '' }} num">
-      {{ '%.2f' % r.income if r.income else '' }}</td>
-    <td class="{{ 'neg' if r.expense else '' }} num">
-      {{ '%.2f' % r.expense if r.expense else '' }}</td>
-    <td class="{{ 'pos' if r.transfer_in else '' }} num">
-      {{ '%.2f' % r.transfer_in if r.transfer_in else '' }}</td>
-    <td class="{{ 'neg' if r.transfer_out else '' }} num">
-      {{ '%.2f' % r.transfer_out if r.transfer_out else '' }}</td>
-    <td class="{{ 'pos' if r.refund_return else '' }} num">
-      {{ '%.2f' % r.refund_return if r.refund_return else '' }}</td>
+    <th></th>
+    {% for aid in asset_ids %}
+    <th class="num">Inc</th>
+    <th class="num">Exp</th>
+    {% endfor %}
+  </tr>
+  {% for p in periods %}
+  {% set row = pivot[p] %}
+  <tr>
+    <td>{{ p }}</td>
+    {% for aid in asset_ids %}
+    {% set vals = row.get(aid, (none, none)) %}
+    <td class="{{ 'pos' if vals[0] else '' }} num">{{ '%.2f' % vals[0] if vals[0] else '' }}</td>
+    <td class="{{ 'neg' if vals[1] else '' }} num">{{ '%.2f' % vals[1] if vals[1] else '' }}</td>
+    {% endfor %}
   </tr>
   {% endfor %}
-  {% if not rows %}
-  <tr><td colspan="7" style="color:#999; font-style:italic; padding:8px;">No data</td></tr>
+  {% if not periods %}
+  <tr><td colspan="3" style="color:#999; font-style:italic; padding:8px;">No data</td></tr>
   {% endif %}
 </table>
 </div>

@@ -296,9 +296,9 @@ class DB:
                 pass
 
         for tbl in ("daily", "weekly", "monthly", "yearly"):
-            cols = {r[1] for r in self.conn.execute(
+            info = {r[1]: r[5] for r in self.conn.execute(
                 f"PRAGMA table_info({tbl})").fetchall()}
-            if cols and "f_in" in cols:
+            if info and ("f_in" in info or info.get("asset_id", 0) == 0):
                 self.execute(f"DROP TABLE {tbl}")
 
         self.execute("""CREATE TABLE IF NOT EXISTS daily (
@@ -874,10 +874,25 @@ def _summary_route(tbl, period_col, title, tab):
     assets        = db.load_assets()
     asset_name_map = {a['id']: a['name'] for a in assets}
     rows = db.fetchall(
-        f"SELECT {period_col}, asset_id, income, expense, transfer_in, transfer_out, refund_return"
+        f"SELECT {period_col}, asset_id, income, expense"
         f" FROM {tbl} ORDER BY {period_col} DESC")
+
+    # Collect ordered periods and asset_ids that have data
+    periods   = []
+    asset_ids = []
+    pivot     = {}
+    for r in rows:
+        p = r[period_col]
+        if p not in pivot:
+            pivot[p] = {}
+            periods.append(p)
+        if r.asset_id not in asset_ids:
+            asset_ids.append(r.asset_id)
+        pivot[p][r.asset_id] = (r.income, r.expense)
+
     return render_template('summary.html', tab=tab, title=title,
-                           period_col=period_col, rows=rows,
+                           period_col=period_col, periods=periods,
+                           asset_ids=asset_ids, pivot=pivot,
                            asset_name_map=asset_name_map)
 
 @app.route('/daily')
