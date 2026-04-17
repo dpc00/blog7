@@ -874,7 +874,7 @@ def _summary_route(tbl, period_col, title, tab):
     assets        = db.load_assets()
     asset_name_map = {a['id']: a['name'] for a in assets}
     rows = db.fetchall(
-        f"SELECT {period_col}, asset_id, income, expense"
+        f"SELECT {period_col}, asset_id, income, expense, transfer_in, transfer_out, refund_return"
         f" FROM {tbl} ORDER BY {period_col} DESC")
 
     # Collect ordered periods; always show all assets as columns
@@ -886,7 +886,7 @@ def _summary_route(tbl, period_col, title, tab):
         if p not in pivot:
             pivot[p] = {}
             periods.append(p)
-        pivot[p][r.asset_id] = (r.income, r.expense)
+        pivot[p][r.asset_id] = (r.income, r.expense, r.transfer_in, r.transfer_out, r.refund_return)
 
     return render_template('summary.html', tab=tab, title=title,
                            period_col=period_col, periods=periods,

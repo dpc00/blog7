@@ -6,7 +6,7 @@
   <tr>
     <th>{{ period_col | capitalize }}</th>
     {% for aid in asset_ids %}
-    <th class="num" colspan="2">{{ asset_name_map.get(aid, aid) }}</th>
+    <th class="num" colspan="5">{{ asset_name_map.get(aid, aid) }}</th>
     {% endfor %}
   </tr>
   <tr>
@@ -14,6 +14,9 @@
     {% for aid in asset_ids %}
     <th class="num">Inc</th>
     <th class="num">Exp</th>
+    <th class="num">XIn</th>
+    <th class="num">XOut</th>
+    <th class="num">Ref</th>
     {% endfor %}
   </tr>
   {% for p in periods %}
@@ -21,9 +24,12 @@
   <tr>
     <td>{{ p }}</td>
     {% for aid in asset_ids %}
-    {% set vals = row.get(aid, (none, none)) %}
-    <td class="{{ 'pos' if vals[0] else '' }} num">{{ '%.2f' % vals[0] if vals[0] else '' }}</td>
-    <td class="{{ 'neg' if vals[1] else '' }} num">{{ '%.2f' % vals[1] if vals[1] else '' }}</td>
+    {% set v = row.get(aid, (none, none, none, none, none)) %}
+    <td class="{{ 'pos' if v[0] else '' }} num">{{ '%.2f' % v[0] if v[0] else '' }}</td>
+    <td class="{{ 'neg' if v[1] else '' }} num">{{ '%.2f' % v[1] if v[1] else '' }}</td>
+    <td class="{{ 'pos' if v[2] else '' }} num">{{ '%.2f' % v[2] if v[2] else '' }}</td>
+    <td class="{{ 'neg' if v[3] else '' }} num">{{ '%.2f' % v[3] if v[3] else '' }}</td>
+    <td class="{{ 'pos' if v[4] else '' }} num">{{ '%.2f' % v[4] if v[4] else '' }}</td>
     {% endfor %}
   </tr>
   {% endfor %}
