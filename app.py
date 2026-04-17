@@ -842,6 +842,9 @@ def calcs():
         ("DTotExp", "Today Expense",    ncs(dtot),    "blue"),
         ("MaxDL",   "Max Days Left",    ncs(maxdl),   "grey"),
     ]
+    for key, val in [("DAllow", dallow), ("INec", inec), ("TLeft", tleft),
+                     ("DAvgExp", davg), ("DTotExp", dtot), ("MaxDL", maxdl)]:
+        db.save_number(key, val)
     return render_template('calcs.html', tab='calcs', calcs=calcs_data,
                            dl_items=dl_items, dtot_label=dtot_label)
 
