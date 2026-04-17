@@ -21,6 +21,13 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 app = Flask(__name__)
 app.secret_key = "blog7-balance-log"
 
+@app.context_processor
+def _css_version():
+    try:
+        return {'css_v': int(Path(app.static_folder, 'style.css').stat().st_mtime)}
+    except OSError:
+        return {'css_v': 0}
+
 # ── Platform detection ────────────────────────────────────────────────────────
 
 _BLOG7_DATA = Path("/sdcard/Android/data/com.termux/files/blog7")
