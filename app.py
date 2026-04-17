@@ -456,12 +456,32 @@ def _gd_upload(file_id, src_path):
     _sync_log(f"upload failed: {r.status_code}")
     return False
 
+def _gd_create_file(src_path):
+    """Create a new file on GD and upload src_path contents. Returns file_id or None."""
+    headers = _gd_headers()
+    r = requests.post(
+        "https://www.googleapis.com/drive/v3/files",
+        headers=headers,
+        json={"name": GD_FILENAME},
+        timeout=15)
+    if r.status_code != 200:
+        _sync_log(f"create failed: {r.status_code}")
+        return None
+    file_id = r.json().get("id")
+    if file_id and _gd_upload(file_id, src_path):
+        return file_id
+    return None
+
 def _sync_db_with_gd(local_path):
     """Push local DB to GD if local is newer. Never auto-download."""
     try:
         file_id, gd_time = _gd_find_file()
         if not file_id:
-            _sync_log("blog7.db not found on GD")
+            _sync_log(f"{GD_FILENAME} not found on GD — creating")
+            file_id = _gd_create_file(local_path)
+            if file_id:
+                _sync_log("created and uploaded")
+                return True
             return False
         local_time = None
         if local_path.exists():
