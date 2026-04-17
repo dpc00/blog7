@@ -877,17 +877,15 @@ def _summary_route(tbl, period_col, title, tab):
         f"SELECT {period_col}, asset_id, income, expense"
         f" FROM {tbl} ORDER BY {period_col} DESC")
 
-    # Collect ordered periods and asset_ids that have data
+    # Collect ordered periods; always show all assets as columns
+    asset_ids = [a['id'] for a in assets]
     periods   = []
-    asset_ids = []
     pivot     = {}
     for r in rows:
         p = r[period_col]
         if p not in pivot:
             pivot[p] = {}
             periods.append(p)
-        if r.asset_id not in asset_ids:
-            asset_ids.append(r.asset_id)
         pivot[p][r.asset_id] = (r.income, r.expense)
 
     return render_template('summary.html', tab=tab, title=title,
