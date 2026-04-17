@@ -1,49 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="tbl-header-wrap">
-<table class="tbl-hdr">
+<div style="overflow:auto; height:calc(100vh - 90px); -webkit-overflow-scrolling:touch; margin-top:8px;">
+<table style="border-collapse:separate; border-spacing:0; font-size:12px; white-space:nowrap;">
+  <thead>
   <tr>
-    <th>{{ period_col | capitalize }}</th>
+    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;">{{ period_col | capitalize }}</th>
     {% for aid in asset_ids %}
-    {% set nm = asset_name_map.get(aid, aid) %}
-    {% set ab = nm[:2] %}
-    <th class="num">{{ ab }}-Inc</th>
-    <th class="num">{{ ab }}-Exp</th>
-    <th class="num">{{ ab }}-XIn</th>
-    <th class="num">{{ ab }}-XO</th>
-    <th class="num">{{ ab }}-Ref</th>
+    {% set nm = asset_name_map.get(aid, aid) %}{% set ab = nm[:2] %}
+    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Inc</th>
+    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Exp</th>
+    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-XIn</th>
+    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-XO</th>
+    <th style="position:sticky;top:0;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;text-align:right;">{{ ab }}-Ref</th>
     {% endfor %}
   </tr>
-</table>
-</div>
-
-<div class="tbl-body-wrap">
-<table class="tbl-hdr">
-  {% for p in periods %}
-  {% set row = pivot[p] %}
+  </thead>
+  <tbody>
+  {% for p in periods %}{% set row = pivot[p] %}
   <tr>
-    <td>{{ p }}</td>
-    {% for aid in asset_ids %}
-    {% set v = row.get(aid, (none, none, none, none, none)) %}
-    <td class="{{ 'pos' if v[0] else '' }} num">{{ '%.2f' % v[0] if v[0] else '' }}</td>
-    <td class="{{ 'neg' if v[1] else '' }} num">{{ '%.2f' % v[1] if v[1] else '' }}</td>
-    <td class="{{ 'pos' if v[2] else '' }} num">{{ '%.2f' % v[2] if v[2] else '' }}</td>
-    <td class="{{ 'neg' if v[3] else '' }} num">{{ '%.2f' % v[3] if v[3] else '' }}</td>
-    <td class="{{ 'pos' if v[4] else '' }} num">{{ '%.2f' % v[4] if v[4] else '' }}</td>
+    <td style="padding:4px 5px;border-bottom:1px solid #f0f0f0;">{{ p }}</td>
+    {% for aid in asset_ids %}{% set v = row.get(aid, (none,none,none,none,none)) %}
+    <td class="{{ 'pos' if v[0] else '' }} num">{{ '%.2f'%v[0] if v[0] else '' }}</td>
+    <td class="{{ 'neg' if v[1] else '' }} num">{{ '%.2f'%v[1] if v[1] else '' }}</td>
+    <td class="{{ 'pos' if v[2] else '' }} num">{{ '%.2f'%v[2] if v[2] else '' }}</td>
+    <td class="{{ 'neg' if v[3] else '' }} num">{{ '%.2f'%v[3] if v[3] else '' }}</td>
+    <td class="{{ 'pos' if v[4] else '' }} num">{{ '%.2f'%v[4] if v[4] else '' }}</td>
     {% endfor %}
   </tr>
   {% endfor %}
-  {% if not periods %}
-  <tr><td colspan="3" style="color:#999; font-style:italic; padding:8px;">No data</td></tr>
-  {% endif %}
+  {% if not periods %}<tr><td colspan="3" style="color:#999;font-style:italic;padding:8px;">No data</td></tr>{% endif %}
+  </tbody>
 </table>
 </div>
-
-<script>
-var hw = document.querySelector('.tbl-header-wrap');
-var bw = document.querySelector('.tbl-body-wrap');
-bw.addEventListener('scroll', function() { hw.scrollLeft = bw.scrollLeft; });
-</script>
 
 {% endblock %}
