@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div style="overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:8px;">
-<table style="border-collapse:separate; border-spacing:0; font-size:12px; white-space:nowrap;">
+<table style="border-collapse:separate; border-spacing:0; font-size:12px; white-space:nowrap; margin-top:8px;">
   <thead>
   <tr>
     <th style="position:sticky;top:44px;background:#fff;z-index:2;padding:6px 5px;border-bottom:2px solid #ddd;">{{ period_col | capitalize }}</th>
@@ -32,6 +31,5 @@
   {% if not periods %}<tr><td colspan="3" style="color:#999;font-style:italic;padding:8px;">No data</td></tr>{% endif %}
   </tbody>
 </table>
-</div>
 
 {% endblock %}
