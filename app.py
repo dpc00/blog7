@@ -23,17 +23,18 @@ app.secret_key = "blog7-balance-log"
 
 # ── Platform detection ────────────────────────────────────────────────────────
 
-ANDROID = Path("/sdcard/Blog6").exists()
+_BLOG7_DATA = Path("/sdcard/Android/data/com.termux/files/blog7")
+ANDROID = _BLOG7_DATA.exists()
 if ANDROID:
-    DB_PATH     = Path("/sdcard/Blog6/blog6.db")
-    DB_BAK      = Path("/sdcard/Blog6/blog6_backup.db")
-    TOKEN_FILE  = Path("/sdcard/Blog6/ns_token.txt")
-    CREDS_FILE  = Path("/sdcard/Blog6/ns_creds.txt")
-    RCLONE_CONF = Path("/sdcard/Blog6/rclone.conf")
-    SYNC_LOG    = Path("/sdcard/Blog6/sync.log")
+    DB_PATH     = _BLOG7_DATA / "blog7.db"
+    DB_BAK      = _BLOG7_DATA / "blog7_backup.db"
+    TOKEN_FILE  = _BLOG7_DATA / "ns_token.txt"
+    CREDS_FILE  = _BLOG7_DATA / "ns_creds.txt"
+    RCLONE_CONF = _BLOG7_DATA / "rclone.conf"
+    SYNC_LOG    = _BLOG7_DATA / "sync.log"
 else:
-    DB_PATH     = Path.home() / "projects/finance/blog6.db"
-    DB_BAK      = Path.home() / "projects/finance/blog6_backup.db"
+    DB_PATH     = Path.home() / "projects/finance/blog7.db"
+    DB_BAK      = Path.home() / "projects/finance/blog7_backup.db"
     TOKEN_FILE  = Path.home() / "projects/finance/ns_token_laptop.txt"
     CREDS_FILE  = Path.home() / "projects/finance/ns_creds.txt"
     RCLONE_CONF = Path.home() / "projects/finance/rclone.conf"
@@ -364,7 +365,7 @@ db.init_schema()
 
 # ── Google Drive sync ─────────────────────────────────────────────────────────
 
-GD_FILENAME = "blog6.db"
+GD_FILENAME = "blog7.db"
 
 def _sync_log(msg):
     try:
@@ -460,7 +461,7 @@ def _sync_db_with_gd(local_path):
     try:
         file_id, gd_time = _gd_find_file()
         if not file_id:
-            _sync_log("blog6.db not found on GD")
+            _sync_log("blog7.db not found on GD")
             return False
         local_time = None
         if local_path.exists():
