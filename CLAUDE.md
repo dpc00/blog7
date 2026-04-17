@@ -15,16 +15,18 @@ Flask-based personal finance tracker. Runs on both Android phone (Termux) and Wi
 cd /sdcard/projects/blog7
 python app.py
 ```
-Access at `http://localhost:5000` on the phone browser.
+this line is wrong: Access at `http://localhost:5000` on the phone browser.
 
 ### Laptop
 ```bash
 cd ~/projects/blog7
 python app.py
 ```
-Access at `http://localhost:5000` or from phone browser at `http://10.0.0.56:5000` (home WiFi only).
+this line is wrong: Access at `http://localhost:5000` or from phone browser at `http://10.0.0.56:5000` (home WiFi only).
 
 ## File paths
+
+Many of these paths are not correct:
 
 | File | Phone | Laptop |
 |------|-------|--------|
@@ -42,19 +44,21 @@ Access at `http://localhost:5000` or from phone browser at `http://10.0.0.56:500
 
 ## ADB (phone access from laptop without Termux)
 
-Phone has wireless debugging enabled. Pair first (code expires quickly):
+Phone has wireless debugging enabled (occasionaly). Pair first (code expires quickly):
 ```bash
 adb pair 10.0.0.53:<pairing-port> <6-digit-code>
 adb connect 10.0.0.53:33551
 ```
-Connection port is `33551`. Pairing port and code come from phone's Developer Options > Wireless Debugging > Pair device.
+Connection port is `33551` (no, that is bunk). Pairing port and code come from phone's Developer Options > Wireless Debugging > Pair device.
 
+This may be true:
 Note: ADB shell cannot kill Termux processes (permission denied). To stop Flask/sshd/crond, use Termux directly or Force Stop Termux via Settings > Apps.
 
 ## git / pybackup
 
 - Repo: `https://github.com/dpc00/blog7`
 - On phone the repo lives at `/sdcard/projects/blog7` (moved from `~/blog7`)
+- On laptop the repo is at ~/projects/blog7
 - pybackup auto-discovers it there and handles git push/pull automatically
 - On laptop, push changes here; pybackup pulls them to the phone on its next cycle
 
@@ -64,3 +68,4 @@ Note: ADB shell cannot kill Termux processes (permission denied). To stop Flask/
 - Only uploads if local DB is newer than GD copy
 - Uses rclone.conf for OAuth token; token auto-refreshes
 - If sync shows "Backed up locally", check `blog7_sync.log` — likely GD is already newer
+- lot's of trouble with GD timestamps
