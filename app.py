@@ -710,6 +710,7 @@ def update():
                 else:
                     tag = 'in' if acc >= prev else 'ex'
                 db.log_txn(a['id'], item['num'], acc, tag)
+    _update_summary_tables()
     flash("Updated.", "ok")
     return redirect(url_for('balances'))
 
@@ -786,6 +787,7 @@ def ooba():
 def delete_txn(txn_id):
     asset_id = request.args.get('asset', type=int, default=_NS_ASSET_ID)
     db.execute("DELETE FROM transactions WHERE id=?", [txn_id])
+    _update_summary_tables()
     return redirect(url_for('balances', asset=asset_id))
 
 @app.route('/calcs')
