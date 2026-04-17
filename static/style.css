@@ -47,7 +47,8 @@ hr { border: none; border-top: 1px solid #ddd; margin: 10px 0; }
 /* Recent transactions */
 .recent { font-size: 12px; margin-top: 4px; }
 .recent-hdr { display: flex; gap: 4px; font-weight: bold; color: #555;
-              padding: 4px 0 4px; border-bottom: 1px solid #ddd; }
+              padding: 4px 0 4px; border-bottom: 1px solid #ddd;
+              position: sticky; top: 44px; background: #fff; z-index: 5; }
 .recent-row { display: flex; gap: 4px; padding: 3px 0; border-bottom: 1px solid #f0f0f0;
               align-items: center; }
 .c-day  { width: 90px; color: #555; }
