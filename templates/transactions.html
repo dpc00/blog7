@@ -9,6 +9,7 @@
 
 <div class="tbl-wrap">
 <table>
+  <thead>
   <tr>
     <th>{{ sort_link('Date', 'day') }}</th>
     <th>{{ sort_link('Desc', 'label') }}</th>
@@ -17,6 +18,7 @@
     <th>{{ sort_link('Amt', 'amt') }}</th>
     <th>{{ sort_link('Bal', 'balance') }}</th>
   </tr>
+  </thead>
   {% for r in rows %}
   <tr>
     <td>{{ r.day }}</td>
