@@ -78,7 +78,8 @@ hr { border: none; border-top: 1px solid #ddd; margin: 10px 0; }
 .dl-item { color: #e65100; font-size: 14px; margin: 4px 0; }
 
 /* Tables */
-.tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
+.tbl-wrap { overflow: auto; -webkit-overflow-scrolling: touch; margin-top: 8px;
+            max-height: calc(100vh - 80px); }
 table { border-collapse: collapse; font-size: 12px; }
 th { padding: 6px 5px; text-align: left; font-weight: bold;
      border-bottom: 2px solid #ddd; white-space: nowrap;
