@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var TAB_H = document.querySelector('.tabs').offsetHeight;
 
   var fixDiv = document.createElement('div');
-  fixDiv.style.cssText = 'position:fixed;top:'+TAB_H+'px;left:0;right:0;overflow:hidden;background:#fff;z-index:5;display:none;border-bottom:2px solid #ddd;';
+  fixDiv.style.cssText = 'position:fixed;top:'+TAB_H+'px;left:0;right:0;background:#fff;z-index:5;display:none;border-bottom:2px solid #ddd;';
   var fixTbl = document.createElement('table');
   fixTbl.style.cssText = 'border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;';
   fixTbl.appendChild(hdr.cloneNode(true));
@@ -43,16 +43,20 @@ document.addEventListener('DOMContentLoaded', function() {
   function sync() {
     fixTbl.style.transform = 'translateX('+tbl.getBoundingClientRect().left+'px)';
   }
-  function update() {
-    if (hdr.getBoundingClientRect().bottom < TAB_H) {
-      fixDiv.style.display = 'block'; sync();
-    } else {
+
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
       fixDiv.style.display = 'none';
+    } else {
+      fixDiv.style.display = 'block';
+      sync();
     }
-  }
-  window.addEventListener('scroll', update);
+  }, { rootMargin: '-'+TAB_H+'px 0px 0px 0px', threshold: 0 });
+  observer.observe(hdr);
+
   var wrap = tbl.closest('.tbl-wrap');
   if (wrap) wrap.addEventListener('scroll', function() { if (fixDiv.style.display!='none') sync(); });
+  window.addEventListener('scroll', function() { if (fixDiv.style.display!='none') sync(); });
 });
 </script>
 </body>
