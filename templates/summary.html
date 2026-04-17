@@ -3,22 +3,21 @@
 
 <div class="tbl-wrap">
 <table>
+  <thead>
   <tr>
     <th>{{ period_col | capitalize }}</th>
     {% for aid in asset_ids %}
-    <th class="num" colspan="5">{{ asset_name_map.get(aid, aid) }}</th>
+    {% set nm = asset_name_map.get(aid, aid) %}
+    {% set ab = nm[:2] %}
+    <th class="num">{{ ab }}-Inc</th>
+    <th class="num">{{ ab }}-Exp</th>
+    <th class="num">{{ ab }}-XIn</th>
+    <th class="num">{{ ab }}-XO</th>
+    <th class="num">{{ ab }}-Ref</th>
     {% endfor %}
   </tr>
-  <tr>
-    <th></th>
-    {% for aid in asset_ids %}
-    <th class="num">Inc</th>
-    <th class="num">Exp</th>
-    <th class="num">XIn</th>
-    <th class="num">XOut</th>
-    <th class="num">Ref</th>
-    {% endfor %}
-  </tr>
+  </thead>
+  <tbody>
   {% for p in periods %}
   {% set row = pivot[p] %}
   <tr>
@@ -36,6 +35,7 @@
   {% if not periods %}
   <tr><td colspan="3" style="color:#999; font-style:italic; padding:8px;">No data</td></tr>
   {% endif %}
+  </tbody>
 </table>
 </div>
 
