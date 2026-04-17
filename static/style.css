@@ -78,8 +78,11 @@ hr { border: none; border-top: 1px solid #ddd; margin: 10px 0; }
 .dl-item { color: #e65100; font-size: 14px; margin: 4px 0; }
 
 /* Tables */
-.tbl-wrap { overflow: auto; -webkit-overflow-scrolling: touch; margin-top: 8px;
-            height: calc(100vh - 80px); }
+.tbl-wrap { overflow: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
+.tbl-header-wrap { overflow: hidden; }
+.tbl-body-wrap   { overflow: auto; -webkit-overflow-scrolling: touch;
+                   height: calc(100vh - 120px); }
+.tbl-hdr { border-collapse: separate; border-spacing: 0; font-size: 12px; }
 table { border-collapse: separate; border-spacing: 0; font-size: 12px; }
 th { padding: 6px 5px; text-align: left; font-weight: bold;
      border-bottom: 2px solid #ddd; white-space: nowrap; }

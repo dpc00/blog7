@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="tbl-wrap">
-<table>
-  <thead>
+<div class="tbl-header-wrap">
+<table class="tbl-hdr">
   <tr>
     <th>{{ period_col | capitalize }}</th>
     {% for aid in asset_ids %}
@@ -16,8 +15,11 @@
     <th class="num">{{ ab }}-Ref</th>
     {% endfor %}
   </tr>
-  </thead>
-  <tbody>
+</table>
+</div>
+
+<div class="tbl-body-wrap">
+<table class="tbl-hdr">
   {% for p in periods %}
   {% set row = pivot[p] %}
   <tr>
@@ -35,8 +37,13 @@
   {% if not periods %}
   <tr><td colspan="3" style="color:#999; font-style:italic; padding:8px;">No data</td></tr>
   {% endif %}
-  </tbody>
 </table>
 </div>
+
+<script>
+var hw = document.querySelector('.tbl-header-wrap');
+var bw = document.querySelector('.tbl-body-wrap');
+bw.addEventListener('scroll', function() { hw.scrollLeft = bw.scrollLeft; });
+</script>
 
 {% endblock %}
