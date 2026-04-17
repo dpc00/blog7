@@ -424,15 +424,34 @@ def _gd_headers():
         return None
     return {"Authorization": f"Bearer {access_token}"}
 
+GD_FOLDER = "Blog7"
+
+def _gd_folder_id():
+    """Return the Drive folder ID for GD_FOLDER, or None."""
+    headers = _gd_headers()
+    if not headers:
+        return None
+    r = requests.get(
+        "https://www.googleapis.com/drive/v3/files",
+        headers=headers,
+        params={"q": f"name='{GD_FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false",
+                "fields": "files(id)", "spaces": "drive"},
+        timeout=15)
+    files = r.json().get("files", []) if r.status_code == 200 else []
+    return files[0]["id"] if files else None
+
 def _gd_find_file():
     headers = _gd_headers()
     if not headers:
         return None, None
+    folder_id = _gd_folder_id()
+    q = f"name='{GD_FILENAME}' and trashed=false"
+    if folder_id:
+        q += f" and '{folder_id}' in parents"
     r = requests.get(
         "https://www.googleapis.com/drive/v3/files",
         headers=headers,
-        params={"q": f"name='{GD_FILENAME}' and trashed=false",
-                "fields": "files(id,name,modifiedTime)", "spaces": "drive"},
+        params={"q": q, "fields": "files(id,name,modifiedTime)", "spaces": "drive"},
         timeout=15)
     if r.status_code != 200:
         _sync_log(f"find failed: {r.status_code}")
@@ -457,12 +476,16 @@ def _gd_upload(file_id, src_path):
     return False
 
 def _gd_create_file(src_path):
-    """Create a new file on GD and upload src_path contents. Returns file_id or None."""
+    """Create a new file in GD_FOLDER and upload src_path contents. Returns file_id or None."""
     headers = _gd_headers()
+    meta = {"name": GD_FILENAME}
+    folder_id = _gd_folder_id()
+    if folder_id:
+        meta["parents"] = [folder_id]
     r = requests.post(
         "https://www.googleapis.com/drive/v3/files",
         headers=headers,
-        json={"name": GD_FILENAME},
+        json=meta,
         timeout=15)
     if r.status_code != 200:
         _sync_log(f"create failed: {r.status_code}")
