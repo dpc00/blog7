@@ -434,7 +434,7 @@ def _gd_folder_id():
     r = requests.get(
         "https://www.googleapis.com/drive/v3/files",
         headers=headers,
-        params={"q": f"name='{GD_FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false",
+        params={"q": f"name='{GD_FOLDER}' and mimeType='application/vnd.google-apps.folder' and 'root' in parents and trashed=false",
                 "fields": "files(id)", "spaces": "drive"},
         timeout=15)
     files = r.json().get("files", []) if r.status_code == 200 else []
