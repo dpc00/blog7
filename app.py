@@ -372,6 +372,37 @@ db.init_schema()
 
 GD_FILENAME = "blog7.db"
 
+# ── Sync-state sidecar ───────────────────────────────────────────────────────
+
+SYNC_STATE_VERSION = 1
+
+def _read_sync_state(path):
+    """Return parsed dict or None if missing/unreadable."""
+    import json
+    try:
+        return json.loads(Path(path).read_text())
+    except (FileNotFoundError, ValueError):
+        return None
+
+def _write_sync_state(path, revision_id, gd_modified_time, local_mtime, device):
+    """Atomic-ish write of sync-state sidecar."""
+    import json
+    payload = {
+        "version": SYNC_STATE_VERSION,
+        "revision_id": revision_id,
+        "gd_modified_time": gd_modified_time.isoformat(),
+        "local_mtime": local_mtime,
+        "device": device,
+        "written_at": datetime.now(timezone.utc).isoformat(),
+    }
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    tmp = Path(str(path) + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2))
+    tmp.replace(path)
+
+def _device_id():
+    return "phone" if ANDROID else "laptop"
+
 def _sync_log(msg):
     try:
         with open(str(SYNC_LOG), "a") as f:
@@ -445,28 +476,51 @@ def _gd_folder_id():
     files = r.json().get("files", []) if r.status_code == 200 else []
     return files[0]["id"] if files else None
 
-def _gd_find_file():
+def _gd_db_folder_id():
+    """Return the Drive folder ID for Blog7/db, or None."""
     headers = _gd_headers()
     if not headers:
-        return None, None
-    folder_id = _gd_folder_id()
-    q = f"name='{GD_FILENAME}' and trashed=false"
-    if folder_id:
-        q += f" and '{folder_id}' in parents"
+        return None
+    parent = _gd_folder_id()
+    if not parent:
+        return None
     r = requests.get(
         "https://www.googleapis.com/drive/v3/files",
         headers=headers,
-        params={"q": q, "fields": "files(id,name,modifiedTime)", "spaces": "drive"},
+        params={"q": (f"name='db' and mimeType='application/vnd.google-apps.folder' "
+                      f"and '{parent}' in parents and trashed=false"),
+                "fields": "files(id)", "spaces": "drive"},
+        timeout=15)
+    files = r.json().get("files", []) if r.status_code == 200 else []
+    return files[0]["id"] if files else None
+
+def _gd_find_file(filename=None, parent_id=None):
+    headers = _gd_headers()
+    if not headers:
+        return None, None, None
+    if filename is None:
+        filename = GD_FILENAME
+    if parent_id is None:
+        parent_id = _gd_db_folder_id()
+    q = f"name='{filename}' and trashed=false"
+    if parent_id:
+        q += f" and '{parent_id}' in parents"
+    r = requests.get(
+        "https://www.googleapis.com/drive/v3/files",
+        headers=headers,
+        params={"q": q,
+                "fields": "files(id,name,modifiedTime,headRevisionId)",
+                "spaces": "drive"},
         timeout=15)
     if r.status_code != 200:
         _sync_log(f"find failed: {r.status_code}")
-        return None, None
+        return None, None, None
     files = r.json().get("files", [])
     if not files:
-        return None, None
+        return None, None, None
     f = files[0]
     mt = datetime.fromisoformat(f["modifiedTime"].replace("Z", "+00:00"))
-    return f["id"], mt
+    return f["id"], mt, f.get("headRevisionId")
 
 def _gd_upload(file_id, src_path):
     headers = _gd_headers()
@@ -474,51 +528,58 @@ def _gd_upload(file_id, src_path):
         r = requests.patch(
             f"https://www.googleapis.com/upload/drive/v3/files/{file_id}",
             headers={**headers, "Content-Type": "application/octet-stream"},
-            params={"uploadType": "media"}, data=f, timeout=30)
+            params={"uploadType": "media", "fields": "id,modifiedTime,headRevisionId"},
+            data=f, timeout=60)
     if r.status_code == 200:
-        return True
+        body = r.json()
+        mt = datetime.fromisoformat(body["modifiedTime"].replace("Z", "+00:00"))
+        return True, mt, body.get("headRevisionId")
     _sync_log(f"upload failed: {r.status_code}")
-    return False
+    return False, None, None
 
-def _gd_create_file(src_path):
-    """Create a new file in GD_FOLDER and upload src_path contents. Returns file_id or None."""
+def _gd_create_file(src_path, filename=None, parent_id=None):
     headers = _gd_headers()
-    meta = {"name": GD_FILENAME}
-    folder_id = _gd_folder_id()
-    if folder_id:
-        meta["parents"] = [folder_id]
+    if filename is None:
+        filename = GD_FILENAME
+    if parent_id is None:
+        parent_id = _gd_db_folder_id()
+    meta = {"name": filename}
+    if parent_id:
+        meta["parents"] = [parent_id]
     r = requests.post(
         "https://www.googleapis.com/drive/v3/files",
-        headers=headers,
-        json=meta,
-        timeout=15)
+        headers=headers, json=meta, timeout=15)
     if r.status_code != 200:
         _sync_log(f"create failed: {r.status_code}")
-        return None
+        return None, None, None
     file_id = r.json().get("id")
-    if file_id and _gd_upload(file_id, src_path):
-        return file_id
-    return None
+    if not file_id:
+        return None, None, None
+    ok, mt, rev = _gd_upload(file_id, src_path)
+    return (file_id, mt, rev) if ok else (None, None, None)
 
 def _sync_db_with_gd(local_path):
-    """Push local DB to GD if local is newer. Never auto-download."""
+    """Push local DB to GD if local is newer. Record sync-state on success."""
     try:
-        file_id, gd_time = _gd_find_file()
+        file_id, gd_time, gd_rev = _gd_find_file()
         if not file_id:
             _sync_log(f"{GD_FILENAME} not found on GD — creating")
-            file_id = _gd_create_file(local_path)
+            file_id, gd_time, gd_rev = _gd_create_file(local_path)
             if file_id:
                 _sync_log("created and uploaded")
+                _write_sync_state(SYNC_STATE_PATH, gd_rev, gd_time,
+                                  local_path.stat().st_mtime, _device_id())
                 return True
             return False
-        local_time = None
-        if local_path.exists():
-            local_time = datetime.fromtimestamp(local_path.stat().st_mtime, tz=timezone.utc)
+        local_time = datetime.fromtimestamp(local_path.stat().st_mtime, tz=timezone.utc)
         _sync_log(f"gd={gd_time}  local={local_time}")
-        if local_time and local_time > gd_time:
+        if local_time > gd_time:
             _sync_log("pushing to GD")
-            if _gd_upload(file_id, local_path):
+            ok, new_time, new_rev = _gd_upload(file_id, local_path)
+            if ok:
                 _sync_log("push done")
+                _write_sync_state(SYNC_STATE_PATH, new_rev, new_time,
+                                  local_path.stat().st_mtime, _device_id())
                 return True
         else:
             _sync_log("already in sync or GD newer — skipping")
