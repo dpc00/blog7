@@ -543,9 +543,10 @@ def _gd_create_file(src_path, filename=None, parent_id=None):
         filename = GD_FILENAME
     if parent_id is None:
         parent_id = _gd_db_folder_id()
-    meta = {"name": filename}
-    if parent_id:
-        meta["parents"] = [parent_id]
+    if not parent_id:
+        _sync_log("create aborted: Blog7/db folder not resolvable (likely quota/transient); refusing to create at root")
+        return None, None, None
+    meta = {"name": filename, "parents": [parent_id]}
     r = requests.post(
         "https://www.googleapis.com/drive/v3/files",
         headers=headers, json=meta, timeout=15)
