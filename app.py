@@ -28,24 +28,22 @@ def _css_version():
     except OSError:
         return {'css_v': 0}
 
-# ── Platform detection ────────────────────────────────────────────────────────
+# ── Platform detection & data root ───────────────────────────────────────────
 
-_BLOG7_DATA = Path("/sdcard/Android/data/com.termux/files/blog7")
-ANDROID = _BLOG7_DATA.exists()
+_ANDROID_ROOT = Path("/sdcard/Android/data/com.termux/files/blog7")
+ANDROID = _ANDROID_ROOT.exists()
 if ANDROID:
-    DB_PATH     = _BLOG7_DATA / "blog7.db"
-    DB_BAK      = _BLOG7_DATA / "blog7_backup.db"
-    TOKEN_FILE  = _BLOG7_DATA / "ns_token.txt"
-    CREDS_FILE  = _BLOG7_DATA / "ns_creds.txt"
-    RCLONE_CONF = _BLOG7_DATA / "rclone.conf"
-    SYNC_LOG    = _BLOG7_DATA / "sync.log"
+    DATA_ROOT = _ANDROID_ROOT
 else:
-    DB_PATH     = Path.home() / "projects/finance/blog7.db"
-    DB_BAK      = Path.home() / "projects/finance/blog7_backup.db"
-    TOKEN_FILE  = Path.home() / "projects/finance/ns_token_laptop.txt"
-    CREDS_FILE  = Path.home() / "projects/finance/ns_creds.txt"
-    RCLONE_CONF = Path.home() / "projects/finance/rclone.conf"
-    SYNC_LOG    = Path.home() / "projects/finance/blog7_sync.log"
+    DATA_ROOT = Path.home() / "blog7-data"
+
+DB_PATH         = DATA_ROOT / "db" / "blog7.db"
+DB_BAK          = DATA_ROOT / "db" / "blog7_backup.db"
+SYNC_STATE_PATH = DATA_ROOT / "db" / "blog7.db.sync-state.json"
+TOKEN_FILE      = DATA_ROOT / "secrets" / "ns_token.txt"
+CREDS_FILE      = DATA_ROOT / "secrets" / "ns_creds.txt"
+RCLONE_CONF     = DATA_ROOT / "secrets" / "rclone.conf"
+SYNC_LOG        = DATA_ROOT / "sync.log"
 
 # ── NS API constants ──────────────────────────────────────────────────────────
 
@@ -554,11 +552,13 @@ def _update_summary_tables():
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
         FROM transactions GROUP BY year, asset_id""")
     db.execute("""DELETE FROM daily WHERE day NOT IN (
-        SELECT DISTINCT day FROM daily ORDER BY day DESC LIMIT 90)""")
+        SELECT DISTINCT day FROM daily ORDER BY day DESC LIMIT 40)""")
     db.execute("""DELETE FROM weekly WHERE week NOT IN (
-        SELECT DISTINCT week FROM weekly ORDER BY week DESC LIMIT 12)""")
+        SELECT DISTINCT week FROM weekly ORDER BY week DESC LIMIT 40)""")
     db.execute("""DELETE FROM monthly WHERE month NOT IN (
-        SELECT DISTINCT month FROM monthly ORDER BY month DESC LIMIT 12)""")
+        SELECT DISTINCT month FROM monthly ORDER BY month DESC LIMIT 40)""")
+    db.execute("""DELETE FROM yearly WHERE year NOT IN (
+        SELECT DISTINCT year FROM yearly ORDER BY year DESC LIMIT 40)""")
 
 def _ns_parse_ts(s: str) -> str:
     try:
@@ -879,7 +879,7 @@ def transactions():
                            asset_name_map=asset_name_map, flow_name_map=flow_name_map,
                            sort_col=sort_col, asc=asc)
 
-_SUMMARY_LIMITS = {'daily': 60, 'weekly': 12, 'monthly': 24, 'yearly': 9999}
+_SUMMARY_LIMITS = {'daily': 40, 'weekly': 40, 'monthly': 40, 'yearly': 40}
 
 def _summary_route(tbl, period_col, title, tab):
     assets        = db.load_assets()
