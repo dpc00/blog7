@@ -39,3 +39,35 @@ def test_read_sync_state_roundtrip(tmp_path):
     out = _read_sync_state(p)
     assert out["revision_id"] == "r"
     assert out["device"] == "phone"
+
+
+def test_decide_pull_no_local_state():
+    from app import _decide_pull
+    # No local sync-state → can't tell if safe; fall back to "skip" to protect local.
+    assert _decide_pull(local_state=None, gd_revision="r1",
+                        local_db_mtime=1.0) == "skip_no_state"
+
+
+def test_decide_pull_gd_same_as_local():
+    from app import _decide_pull
+    state = {"revision_id": "r1", "local_mtime": 1.0}
+    assert _decide_pull(state, gd_revision="r1", local_db_mtime=1.0) == "skip_in_sync"
+
+
+def test_decide_pull_safe_to_pull():
+    from app import _decide_pull
+    state = {"revision_id": "r1", "local_mtime": 1.0}
+    assert _decide_pull(state, gd_revision="r2", local_db_mtime=1.0) == "pull"
+
+
+def test_decide_pull_conflict():
+    from app import _decide_pull
+    state = {"revision_id": "r1", "local_mtime": 1.0}
+    # Local db has been modified since last sync AND GD has moved.
+    assert _decide_pull(state, gd_revision="r2", local_db_mtime=5.0) == "conflict"
+
+
+def test_decide_pull_gd_unreachable():
+    from app import _decide_pull
+    state = {"revision_id": "r1", "local_mtime": 1.0}
+    assert _decide_pull(state, gd_revision=None, local_db_mtime=1.0) == "skip_unreachable"

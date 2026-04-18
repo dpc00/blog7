@@ -588,6 +588,62 @@ def _sync_db_with_gd(local_path):
         _sync_log(f"error: {e}")
     return False
 
+def _decide_pull(local_state, gd_revision, local_db_mtime):
+    """Pure decision function; returns one of:
+    skip_unreachable, skip_no_state, skip_in_sync, pull, conflict."""
+    if gd_revision is None:
+        return "skip_unreachable"
+    if local_state is None:
+        return "skip_no_state"
+    if gd_revision == local_state.get("revision_id"):
+        return "skip_in_sync"
+    # GD revision differs. Did local diverge?
+    # Allow tiny float tolerance for mtime comparison.
+    if local_db_mtime > local_state.get("local_mtime", 0) + 1.0:
+        return "conflict"
+    return "pull"
+
+
+def _gd_download(file_id, dest_path):
+    headers = _gd_headers()
+    if not headers:
+        return False
+    r = requests.get(
+        f"https://www.googleapis.com/drive/v3/files/{file_id}",
+        headers=headers, params={"alt": "media"}, timeout=60, stream=True)
+    if r.status_code != 200:
+        _sync_log(f"download failed: {r.status_code}")
+        return False
+    tmp = Path(str(dest_path) + ".tmp")
+    with open(tmp, "wb") as f:
+        for chunk in r.iter_content(chunk_size=65536):
+            f.write(chunk)
+    tmp.replace(dest_path)
+    return True
+
+
+def _pull_db_from_gd():
+    """Best-effort pull on startup. Never raises."""
+    import os
+    if os.environ.get("BLOG7_PULL_ON_START", "1") != "1":
+        _sync_log("pull disabled by env flag")
+        return
+    try:
+        file_id, gd_time, gd_rev = _gd_find_file()
+        local_state = _read_sync_state(SYNC_STATE_PATH)
+        local_mtime = DB_PATH.stat().st_mtime if DB_PATH.exists() else 0.0
+        decision = _decide_pull(local_state, gd_rev, local_mtime)
+        _sync_log(f"pull decision: {decision}")
+        if decision != "pull":
+            return
+        if _gd_download(file_id, DB_PATH):
+            _write_sync_state(SYNC_STATE_PATH, gd_rev, gd_time,
+                              DB_PATH.stat().st_mtime, _device_id())
+            _sync_log("pull done")
+    except Exception as e:
+        _sync_log(f"pull error: {e}")
+
+
 # ── NS sync ───────────────────────────────────────────────────────────────────
 
 _ISO_MONDAY = "date(day, '-' || cast((strftime('%w', day) + 6) % 7 as text) || ' days')"
@@ -1043,4 +1099,8 @@ def _silent_reauth():
     return token or None
 
 if __name__ == '__main__':
+    try:
+        _pull_db_from_gd()
+    except Exception as _e:
+        _sync_log(f"startup pull crashed: {_e}")
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
