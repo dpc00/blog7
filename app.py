@@ -500,8 +500,12 @@ def _gd_find_file(filename=None, parent_id=None):
         return None, None, None
     if filename is None:
         filename = GD_FILENAME
+    explicit_parent = parent_id is not None
     if parent_id is None:
         parent_id = _gd_db_folder_id()
+    if not parent_id and not explicit_parent:
+        _sync_log("find aborted: Blog7/db folder not resolvable (likely quota/transient); refusing unscoped lookup")
+        return None, None, None
     q = f"name='{filename}' and trashed=false"
     if parent_id:
         q += f" and '{parent_id}' in parents"

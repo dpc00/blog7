@@ -7,6 +7,7 @@ Flask-based personal finance tracker. Runs on both Android phone (Termux) and Wi
 - Tracks balances across multiple payment accounts (Netspend, Direct Express, Colorado Quest EBT, Cash)
 - Syncs Netspend transactions via NS API
 - Backs up SQLite DB locally and pushes to Google Drive on "Save & Sync"
+- Could sync EBT Food Stamps transactions using newly developed tactics from finance project
 
 ## Running the app
 
@@ -28,16 +29,23 @@ Access locally at `http://localhost:5000`. Reachable from other home-WiFi device
 
 ## File paths
 
-Paths are chosen at runtime in `app.py` based on whether `/sdcard/Android/data/com.termux/files/blog7` exists.
+`app.py` picks `DATA_ROOT` at runtime: the phone path if `/sdcard/Android/data/com.termux/files/blog7` exists, otherwise `~/blog7-data/`. All data paths are derived from `DATA_ROOT`.
 
-| File | Phone | Laptop |
-|------|-------|--------|
-| DB | `/sdcard/Android/data/com.termux/files/blog7/blog7.db` | `~/projects/finance/blog7.db` |
-| DB backup | `/sdcard/Android/data/com.termux/files/blog7/blog7_backup.db` | `~/projects/finance/blog7_backup.db` |
-| rclone.conf | `/sdcard/Android/data/com.termux/files/blog7/rclone.conf` | `~/projects/finance/rclone.conf` |
-| NS token | `/sdcard/Android/data/com.termux/files/blog7/ns_token.txt` | `~/projects/finance/ns_token_laptop.txt` |
-| NS creds | `/sdcard/Android/data/com.termux/files/blog7/ns_creds.txt` | `~/projects/finance/ns_creds.txt` |
-| Sync log | `/sdcard/Android/data/com.termux/files/blog7/sync.log` | `~/projects/finance/blog7_sync.log` |
+| File | DATA_ROOT-relative |
+|------|--------------------|
+| DB | `db/blog7.db` |
+| DB backup | `db/blog7_backup.db` |
+| Sync-state sidecar | `db/blog7.db.sync-state.json` |
+| rclone.conf | `secrets/rclone.conf` |
+| NS token | `secrets/ns_token.txt` |
+| NS creds | `secrets/ns_creds.txt` |
+| Sync log | `sync.log` |
+
+DATA_ROOT values:
+- Phone: `/sdcard/Android/data/com.termux/files/blog7/`
+- Laptop: `~/blog7-data/`
+
+Authoritative copy of everything lives on Google Drive under `Blog7/` (see `docs/superpowers/specs/2026-04-18-gdrive-data-migration-design.md`).
 
 ## Network
 
@@ -47,7 +55,7 @@ Paths are chosen at runtime in `app.py` based on whether `/sdcard/Android/data/c
 
 ## ADB (phone access from laptop without Termux)
 
-Phone has wireless debugging enabled occasionally. Pair first (code expires quickly):
+Phone has wireless debugging enabled frequently. Pair first (code expires quickly):
 ```bash
 adb pair 10.0.0.53:<pairing-port> <6-digit-code>
 adb connect 10.0.0.53:<connect-port>
@@ -66,8 +74,9 @@ Note: ADB shell cannot (that we know of now) kill Termux processes (permission d
 
 ## Google Drive sync
 
-- "Save & Sync" button calls `/exit` route
-- Only uploads if local DB is newer than GD copy
-- Uses rclone.conf for OAuth token; token auto-refreshes
-- If sync shows "Backed up locally", check `blog7_sync.log` — likely GD is already newer
-- Known issue: GD timestamps are flaky and have caused repeated sync headaches; when in doubt, inspect `blog7_sync.log` and compare mtimes directly
+- "Save & Sync" → `/exit` route uploads `blog7.db` to `Blog7/db/` on GD, then writes a sync-state sidecar recording GD's revision id.
+- On startup, the app does a best-effort pull: if GD's revision differs from the local sync-state AND local has no unsynced edits, it downloads. Diverging edits are flagged as a conflict (phone always favors local; laptop refuses to auto-pull).
+- rclone.conf section is `[gd]` (renamed from `[G]` on 2026-04-18 to avoid Windows G:\ drive-letter collision). The app filters by `type = drive`, so the section name is cosmetic for the app but matters for CLI `rclone gd:…` commands.
+- Full design: `docs/superpowers/specs/2026-04-18-gdrive-data-migration-design.md`. Cold-data (statements, finance.db) sync scripts live at `~/blog7-data/sync_statements_{push,recover}.sh`.
+- Log: `sync.log` under DATA_ROOT.
+
