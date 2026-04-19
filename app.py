@@ -673,14 +673,6 @@ def _update_summary_tables():
         SELECT substr(day,1,4) AS year, asset_id,
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
         FROM transactions GROUP BY year, asset_id""")
-    db.execute("""DELETE FROM daily WHERE day NOT IN (
-        SELECT DISTINCT day FROM daily ORDER BY day DESC LIMIT 40)""")
-    db.execute("""DELETE FROM weekly WHERE week NOT IN (
-        SELECT DISTINCT week FROM weekly ORDER BY week DESC LIMIT 40)""")
-    db.execute("""DELETE FROM monthly WHERE month NOT IN (
-        SELECT DISTINCT month FROM monthly ORDER BY month DESC LIMIT 40)""")
-    db.execute("""DELETE FROM yearly WHERE year NOT IN (
-        SELECT DISTINCT year FROM yearly ORDER BY year DESC LIMIT 40)""")
 
 def _ns_parse_ts(s: str) -> str:
     try:
@@ -797,8 +789,6 @@ def _ns_do_sync():
         db.execute("UPDATE asset SET current_balance=? WHERE asset_id=?",
                    [final_bal, _NS_ASSET_ID])
 
-    db.execute("""DELETE FROM transactions WHERE id NOT IN (
-        SELECT id FROM transactions ORDER BY day DESC, id DESC LIMIT 60)""")
     _update_summary_tables()
 
     return len(all_txns), final_bal, None
