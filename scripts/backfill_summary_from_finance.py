@@ -9,9 +9,11 @@ import os
 import sqlite3
 import sys
 
-DATA = os.path.expanduser("~/blog7-data/db")
-BLOG7 = os.path.join(DATA, "blog7.db")
-FINANCE = os.path.join(DATA, "finance.db")
+PHONE_ROOT = "/sdcard/Android/data/com.termux/files/blog7"
+DATA_ROOT = PHONE_ROOT if os.path.isdir(PHONE_ROOT) else os.path.expanduser("~/blog7-data")
+BLOG7 = os.path.join(DATA_ROOT, "db", "blog7.db")
+FINANCE = os.path.join(DATA_ROOT, "db", "finance.db")
+print(f"DATA_ROOT={DATA_ROOT}")
 
 ISO_MONDAY = "date(day, '-' || cast((strftime('%w', day) + 6) % 7 as text) || ' days')"
 
