@@ -1,0 +1,10 @@
+# Keep Python bytecode and cache folders out of git.
+__pycache__/
+*.pyc
+
+# Keep pytest cache and temporary test folders out of git.
+.pytest_cache/
+.pytest-tmp*/
+
+# Keep local Claude/Codex lock noise out of git.
+.claude/

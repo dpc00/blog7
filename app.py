@@ -7,6 +7,7 @@ Open: http://localhost:5000
 
 import calendar
 import math
+import os
 import re
 import sqlite3
 import threading
@@ -42,6 +43,7 @@ DB_BAK          = DATA_ROOT / "db" / "blog7_backup.db"
 SYNC_STATE_PATH = DATA_ROOT / "db" / "blog7.db.sync-state.json"
 TOKEN_FILE      = DATA_ROOT / "secrets" / "ns_token.txt"
 CREDS_FILE      = DATA_ROOT / "secrets" / "ns_creds.txt"
+EBT_CREDS_FILE  = DATA_ROOT / "secrets" / "ebt_creds.json"
 RCLONE_CONF     = DATA_ROOT / "secrets" / "rclone.conf"
 SYNC_LOG        = DATA_ROOT / "sync.log"
 
@@ -59,6 +61,7 @@ _NS_HEADERS = {
     "Referer":      "https://app.netspend.com/app/dashboard?drawer=transactions&isWW=true",
 }
 _NS_ASSET_ID = 2
+_EBT_ASSET_ID = 3
 
 _NS_LOGIN_URL = "https://www.netspend.com/profile-api/login"
 _NS_LOGIN_HEADERS = {
@@ -674,6 +677,122 @@ def _update_summary_tables():
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
         FROM transactions GROUP BY year, asset_id""")
 
+
+def _ebt_desc(row):
+    merchant = row.get("merchant_name") or "EBT"
+    ttype = row.get("ttype_raw") or "Transaction"
+    return f"{ttype}: {merchant}"
+
+
+def _ebt_import_rows(rows, final_balance=None):
+    db.execute("DELETE FROM transactions WHERE asset_id=?", [_EBT_ASSET_ID])
+
+    inserted = 0
+
+    for row in rows:
+        # Rejected rows should not become live blog7 transactions.
+        if row.get("rejected"):
+            continue
+
+        day = datetime.strptime(row["date"], "%m-%d-%Y").strftime("%Y-%m-%d")
+        amt = round(row["amount_cents"] / 100, 2)
+        credit = bool(row.get("credit"))
+        signed_amt = amt if credit else -amt
+        flow = 1 if credit else 2
+        bucket = "income" if credit else "expense"
+        db.execute(
+            f"INSERT INTO transactions (id, asset_id, day, amt, flow, desc, {bucket}) VALUES (?,?,?,?,?,?,?)",
+            [row["id"], _EBT_ASSET_ID, day, signed_amt, flow, _ebt_desc(row), amt],
+        )
+        inserted += 1
+
+    if final_balance is not None:
+        db.execute(
+            "UPDATE asset SET current_balance=? WHERE asset_id=?",
+            [round(final_balance, 2), _EBT_ASSET_ID],
+        )
+
+    _update_summary_tables()
+    return inserted, final_balance
+
+
+def _load_ebt_parser():
+    import importlib.util
+
+    # Keep blog7 self-contained.
+    # The EBT CSV parser now lives inside this repo.
+    parser_path = Path(__file__).parent / "scripts" / "ebt_csv_parser.py"
+
+    if not parser_path.exists():
+        raise FileNotFoundError(f"Could not locate blog7 EBT parser: {parser_path}")
+
+    spec = importlib.util.spec_from_file_location("blog7_ebt_csv_parser", parser_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _ebt_import_csv(csv_path, final_balance=None, rejection_path=None):
+    parser = _load_ebt_parser()
+
+    # If a rejection file was supplied, load it so rejected purchases stay out
+    # of the live transaction table.
+    rejections = set()
+    if rejection_path:
+        rejections = parser.load_rejections(rejection_path)
+
+    rows = list(parser.parse_file(csv_path, rejections=rejections))
+    return _ebt_import_rows(rows, final_balance=final_balance)
+
+
+def _ebt_run_sync_script():
+    import json
+    import subprocess
+    import sys
+
+    # Keep the Flask-side wrapper simple:
+    # - choose the output folder
+    # - pass credentials if a local secrets file exists
+    # - run the separate phone-side Playwright helper
+    # - parse the JSON contract it returns
+    out_dir = DATA_ROOT / "statements" / "ebtedge"
+    script = Path(__file__).parent / "scripts" / "ebt_sync_playwright.py"
+    env = None
+    if EBT_CREDS_FILE.exists():
+        try:
+            creds = json.loads(EBT_CREDS_FILE.read_text(encoding="utf-8"))
+            env = dict(os.environ)
+            env["EBT_USER_ID"] = creds.get("user_id", "")
+            env["EBT_PASSWORD"] = creds.get("password", "")
+        except Exception:
+            env = None
+    cp = subprocess.run(
+        [sys.executable, str(script), str(out_dir)],
+        capture_output=True,
+        text=True,
+        timeout=180,
+        check=True,
+        env=env,
+    )
+    return json.loads(cp.stdout)
+
+
+def _ebt_do_sync():
+    try:
+        result = _ebt_run_sync_script()
+        csv_path = result.get("csv_path")
+        if not csv_path:
+            return 0, None, "EBT sync produced no CSV."
+        count, balance = _ebt_import_csv(
+            csv_path,
+            final_balance=result.get("final_balance"),
+            rejection_path=result.get("rejections_path"),
+        )
+        return count, balance, None
+    except Exception as exc:
+        return 0, None, f"EBT sync failed: {exc}"
+
+
 def _ns_parse_ts(s: str) -> str:
     try:
         dt = datetime.strptime(s[:25], "%m-%d-%Y %H:%M:%S %z")
@@ -843,6 +962,19 @@ def sync_ns():
         bal_str = f"  bal=${bal:.2f}" if bal is not None else ""
         flash(f"Synced {ts} — {n} entries{bal_str}", "ok")
     return redirect(url_for('balances'))
+
+
+@app.route('/sync_ebt', methods=['POST'])
+def sync_ebt():
+    n, bal, err = _ebt_do_sync()
+    if err:
+        _sync_log(err)
+        flash(err, "err")
+    else:
+        bal_str = f"  bal=${bal:.2f}" if bal is not None else ""
+        flash(f"Synced EBT - {n} entries{bal_str}", "ok")
+    return redirect(url_for('balances', asset=_EBT_ASSET_ID))
+
 
 @app.route('/login_ns', methods=['GET', 'POST'])
 def login_ns():
