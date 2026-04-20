@@ -679,9 +679,19 @@ def _update_summary_tables():
 
 
 def _ebt_desc(row):
-    merchant = row.get("merchant_name") or "EBT"
     ttype = row.get("ttype_raw") or "Transaction"
-    return f"{ttype}: {merchant}"
+    merchant = (row.get("merchant_name") or "").strip()
+
+    # For purchases, show the merchant plainly, like the better parsed finance
+    # descriptions, instead of prefixing every row with a long raw type label.
+    if merchant and "purchase" in ttype.lower():
+        return merchant
+
+    # For benefit/deposit rows, keep the type because that is the meaningful part.
+    if merchant:
+        return f"{ttype}: {merchant}"
+
+    return ttype
 
 
 def _ebt_import_rows(rows, final_balance=None):
@@ -781,11 +791,26 @@ def _ebt_do_sync():
     try:
         result = _ebt_run_sync_script()
         csv_path = result.get("csv_path")
+        final_balance = result.get("final_balance")
+        files_found = result.get("files_found") or {}
+
         if not csv_path:
+            # If we have a real balance but no CSV yet, still keep the phone's
+            # Colorado Quest balance current.
+            if final_balance is not None:
+                db.execute(
+                    "UPDATE asset SET current_balance=? WHERE asset_id=?",
+                    [round(final_balance, 2), _EBT_ASSET_ID],
+                )
+                return 0, final_balance, None
+            found_parts = [name for name, present in files_found.items() if present]
+            if found_parts:
+                return 0, None, "EBT sync found no CSV. Files found: " + ", ".join(found_parts)
             return 0, None, "EBT sync produced no CSV."
+
         count, balance = _ebt_import_csv(
             csv_path,
-            final_balance=result.get("final_balance"),
+            final_balance=final_balance,
             rejection_path=result.get("rejections_path"),
         )
         return count, balance, None
@@ -972,7 +997,10 @@ def sync_ebt():
         flash(err, "err")
     else:
         bal_str = f"  bal=${bal:.2f}" if bal is not None else ""
-        flash(f"Synced EBT - {n} entries{bal_str}", "ok")
+        if n == 0 and bal is not None:
+            flash(f"Updated EBT balance only{bal_str}", "ok")
+        else:
+            flash(f"Synced EBT - {n} entries{bal_str}", "ok")
     return redirect(url_for('balances', asset=_EBT_ASSET_ID))
 
 

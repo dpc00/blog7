@@ -90,3 +90,28 @@ def test_extract_food_balance_from_txt_reads_food_balance(tmp_path):
     balance = mod._extract_food_balance_from_txt(txt_path)
 
     assert round(balance, 2) == 0.21
+
+
+def test_pick_sync_files_can_be_reported_as_found_flags(tmp_path):
+    mod = load_script_module()
+
+    csv_path = tmp_path / "TransHistory20260418041343818.csv"
+    txt_path = tmp_path / "TransHistory20260418041343818.txt"
+
+    csv_path.write_text("csv\n", encoding="utf-8")
+    txt_path.write_text("txt\n", encoding="utf-8")
+
+    sync_files = mod._pick_sync_files(tmp_path)
+    files_found = {
+        "csv": bool(sync_files["csv_path"]),
+        "rejections": bool(sync_files["rejections_path"]),
+        "pdf": bool(sync_files["pdf_path"]),
+        "txt": bool(sync_files["txt_path"]),
+    }
+
+    assert files_found == {
+        "csv": True,
+        "rejections": False,
+        "pdf": False,
+        "txt": True,
+    }

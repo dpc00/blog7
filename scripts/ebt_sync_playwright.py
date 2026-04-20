@@ -344,6 +344,12 @@ def main() -> None:
     # Pick the best matching set of already-saved EBT files in the folder.
     sync_files = _pick_sync_files(out_dir)
     final_balance = _extract_food_balance_from_txt(sync_files["txt_path"])
+    files_found = {
+        "csv": bool(sync_files["csv_path"]),
+        "rejections": bool(sync_files["rejections_path"]),
+        "pdf": bool(sync_files["pdf_path"]),
+        "txt": bool(sync_files["txt_path"]),
+    }
 
     # Keep the JSON contract stable for the Flask side.
     result = {
@@ -351,6 +357,7 @@ def main() -> None:
         "rejections_path": str(sync_files["rejections_path"]) if sync_files["rejections_path"] else "",
         "pdf_path": str(sync_files["pdf_path"]) if sync_files["pdf_path"] else "",
         "txt_path": str(sync_files["txt_path"]) if sync_files["txt_path"] else "",
+        "files_found": files_found,
         "final_balance": final_balance,
         "state_path": str(state_path),
         "active_url": state.get("active_url"),
