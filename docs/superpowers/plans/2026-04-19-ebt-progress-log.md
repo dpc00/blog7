@@ -63,26 +63,150 @@ Add EBT update/sync work to `blog7` in a way that fits the phone app.
 
 ## What Was Verified
 
-- Focused EBT tests passed after the recent script change
+- Focused EBT route + script tests passed after the latest post-login navigation groundwork
 - Command used:
 
 ```powershell
-pytest -p no:cacheprovider C:\Users\donal\projects\blog7\tests\test_ebt_sync_route.py C:\Users\donal\projects\blog7\tests\test_ebt_import.py -q --basetemp C:\Users\donal\projects\finance\finance\.pytest-tmp-ebt-continue
+pytest -p no:cacheprovider C:\Users\donal\projects\blog7\tests\test_ebt_sync_route.py C:\Users\donal\projects\blog7\tests\test_ebt_sync_script.py -q --basetemp C:\Users\donal\projects\finance\finance\.pytest-tmp-ebt-task5
 ```
 
-- Result: `5 passed`
+- Result: `13 passed`
 
 ## Important Facts
 
 - `.gitignore` did not exist in `blog7` and has now been added
-- No commit or push was done during this work
 - The EBT path is still incomplete
+
+## Current Script State
+
+File:
+
+- `C:\Users\donal\projects\blog7\scripts\ebt_sync_playwright.py`
+
+What it can do now:
+
+- launch Chrome to `https://cardholder.ebtedge.com/`
+- forward DevTools with `adb forward tcp:9222 localabstract:chrome_devtools_remote`
+- attach to phone Chrome with Node + Playwright over CDP
+- fill the login form using:
+  - `#idp-first-time-login-loginname`
+  - `#idp-first-time-login-password`
+  - `#idp-first-time-login-signin`
+- fall back to DOM click if Playwright click is blocked
+- send Android `Back` automatically for a short time to try to dismiss the Chrome saved-password popup
+- try to click `Transactions`
+- try to click `Download`
+- try to choose `CSV`
+- try to copy a downloaded `TransHistory*.csv` file from common phone download folders into the EBT output folder
+- group sidecar files by timestamp
+- read `final_balance` from the TXT sidecar
+
+What it cannot do yet:
+
+- prove the post-login page navigation is correct end-to-end
+- prove the CSV download click path is correct end-to-end
+- reliably inspect the live post-login DOM on the current Windows run
+
+## Current Blocker
+
+The script is stuck at the post-login inspection stage.
+
+Specific things seen:
+
+- one authenticated run failed on the login click because overlapping mobile layout elements intercepted the pointer
+- that was patched with a DOM-click fallback
+- after that, the Windows-side CDP inspection path became unreliable
+- one run failed with:
+  - `No existing Chrome tab was available for EBT automation.`
+- another direct probe of:
+  - `http://127.0.0.1:9222/json`
+  - `http://127.0.0.1:9222/json/version`
+  hung on Windows
+
+So the next concrete step is:
+
+- get one clean post-login DOM snapshot after successful login
+- specifically inspect the live page after the `Transactions` click
+- confirm the real selector or text for the download flow
+
+Best current candidate selectors/text already wired in:
+
+- `Transactions`
+- `Posted Transactions`
+- `Download`
+- `Select File Type`
+- `ion-option[value="csv"]`
+- `option[value="csv"]`
+
+The exact next question is:
+
+- after login succeeds, does the page really expose `Transactions` and `Download` in the same tab and with those labels, or is there a different button/dialog path?
+
+## Credentials / Env Vars
+
+The script expects:
+
+- `EBT_USER_ID`
+- `EBT_PASSWORD`
+
+The Flask wrapper in `app.py` also looks for:
+
+- `C:\Users\donal\blog7-data\secrets\ebt_creds.json`
+
+Expected JSON shape:
+
+```json
+{
+  "user_id": "donaldchitester",
+  "password": "Arckrc00!"
+}
+```
+
+During this session, authenticated runs were done by setting:
+
+- `EBT_USER_ID=donaldchitester`
+- `EBT_PASSWORD=Arckrc00!`
+
+## Current Test Status
+
+Passing:
+
+- `tests/test_ebt_sync_route.py`
+  - route behavior
+  - balance-only behavior
+  - no-CSV message behavior
+- `tests/test_ebt_sync_script.py`
+  - file grouping
+  - rejection file grouping
+  - TXT balance extraction
+  - CSV copy helper logic
+
+Last clean focused pass:
+
+```powershell
+pytest -p no:cacheprovider C:\Users\donal\projects\blog7\tests\test_ebt_sync_route.py C:\Users\donal\projects\blog7\tests\test_ebt_sync_script.py -q --basetemp C:\Users\donal\projects\finance\finance\.pytest-tmp-ebt-task5
+```
+
+Result:
+
+- `13 passed`
+
+Known test problem:
+
+- broader pytest runs are hitting a Windows temp-folder permission problem in `pytest-of-donal`
+- that is an environment issue, not a known EBT logic regression
+
+Recent local commits:
+
+- `4e56539` `Add phone-side EBT sync groundwork`
+- `e893f74` `Refine EBT sync status handling`
+- `724fff3` `Add EBT post-login navigation groundwork`
 
 ## Still Missing
 
-- Post-login navigation
-- Transaction/history page capture
-- CSV, HTML, or other extract import into `blog7.db`
+- verified post-login DOM capture after successful login
+- confirmed selector path for statement/history download
+- proven CSV download into the EBT folder from a live authenticated session
 
 ## Readability Rule For Future Work
 

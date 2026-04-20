@@ -22,6 +22,7 @@ import shutil
 import subprocess
 import sys
 import textwrap
+import threading
 import time
 from pathlib import Path
 
@@ -236,6 +237,29 @@ def _pick_adb_serial() -> str:
     return serials[0]
 
 
+def _dismiss_android_prompt(serial: str) -> None:
+    """
+    Try to dismiss Android/Chrome popups like the saved-password prompt.
+    """
+    try:
+        _run(["adb", "-s", serial, "shell", "input", "keyevent", "4"], timeout=10)
+    except Exception:
+        pass
+
+
+def _dismiss_android_prompts_for_a_while(serial: str, seconds: int = 20) -> None:
+    """
+    During login, periodically send Back to dismiss save-password prompts.
+    """
+    def worker() -> None:
+        end_time = time.time() + seconds
+        while time.time() < end_time:
+            _dismiss_android_prompt(serial)
+            time.sleep(2)
+
+    threading.Thread(target=worker, daemon=True).start()
+
+
 def _write_node_driver(path: Path) -> None:
     path.write_text(
         textwrap.dedent(
@@ -259,9 +283,10 @@ def _write_node_driver(path: Path) -> None:
               let pages = context.pages();
               let page = pages.find(p => (p.url() || '').includes('ebtedge')) || pages[0];
 
-              // If Chrome had no open page at all, create one.
+              // If Chrome had no open page at all, we cannot rely on newPage()
+              // on this mobile CDP path, so fail with a clear error instead.
               if (!page) {{
-                page = await context.newPage();
+                throw new Error('No existing Chrome tab was available for EBT automation.');
               }}
 
               // Always go to the login page first so the script starts from a known place.
@@ -287,7 +312,13 @@ def _write_node_driver(path: Path) -> None:
                 await page.fill('{PASSWORD_INPUT}', ebtPassword);
 
                 // Click the real login button.
-                await page.click('{LOGIN_BUTTON}');
+                // A normal Playwright click can be blocked by overlapping
+                // mobile layout elements, so use DOM click as a fallback.
+                try {{
+                  await page.click('{LOGIN_BUTTON}');
+                }} catch (err) {{
+                  await page.locator('{LOGIN_BUTTON}').evaluate(el => el.click());
+                }}
                 loginAttempted = true;
 
                 // Give the site time to react before we capture state.
@@ -381,6 +412,9 @@ def _node_env() -> dict[str, str]:
     env = dict(os.environ)
     candidates = [
         Path.home() / "pw-android-test" / "node_modules",
+        Path.home() / "blog7-playwright" / "node_modules",
+        Path.home() / "projects" / "playwright-phone-test" / "node_modules",
+        Path.home() / ".cache" / "codex-runtimes" / "codex-primary-runtime" / "dependencies" / "node" / "node_modules",
         Path(__file__).resolve().parent / "node_modules",
     ]
     for candidate in candidates:
@@ -422,10 +456,16 @@ def main() -> None:
         ]
     )
     time.sleep(5)
+    _run(["adb", "-s", serial, "shell", "input", "keyevent", "66"], timeout=10)
+    time.sleep(2)
 
     # Rebuild the DevTools forward each run so Playwright has a clean port.
     subprocess.run(["adb", "-s", serial, "forward", "--remove", "tcp:9222"], capture_output=True, text=True)
     _run(["adb", "-s", serial, "forward", "tcp:9222", "localabstract:chrome_devtools_remote"])
+
+    # Chrome sometimes throws a saved-password prompt on top of the site.
+    # Start a short background dismiss loop so the browser can continue.
+    _dismiss_android_prompts_for_a_while(serial)
 
     # Write the small Node driver that actually talks to Playwright.
     driver_path = out_dir / "playwright-phone.js"
