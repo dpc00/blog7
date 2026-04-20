@@ -74,28 +74,76 @@ def _list_candidate_csvs() -> list[Path]:
     return csv_files
 
 
+def _adb_pull_latest_csv(serial: str, out_dir: Path, before_files: set[str]) -> Path | None:
+    """
+    Pull the newest TransHistory CSV from the phone's Download folder via adb.
+
+    Used when running from the laptop, where the phone's /storage paths are
+    not directly accessible.
+    """
+    phone_download = "/storage/emulated/0/Download"
+    try:
+        # List TransHistory CSV files on the phone.
+        cp = subprocess.run(
+            ["adb", "-s", serial, "shell", f"ls -1 {phone_download}/TransHistory*.csv 2>/dev/null"],
+            capture_output=True, text=True, timeout=15,
+            env={**os.environ, "MSYS_NO_PATHCONV": "1"},
+        )
+        lines = [l.strip() for l in cp.stdout.splitlines() if l.strip().endswith(".csv")]
+        if not lines:
+            return None
+
+        # Pick the newest by name (the timestamp is embedded in the filename).
+        latest_remote = sorted(lines)[-1]
+        filename = latest_remote.split("/")[-1]
+
+        if filename in before_files:
+            return None  # This CSV existed before the download was triggered.
+
+        target = out_dir / filename
+        pull = subprocess.run(
+            ["adb", "-s", serial, "pull", latest_remote, str(target)],
+            capture_output=True, text=True, timeout=30,
+            env={**os.environ, "MSYS_NO_PATHCONV": "1"},
+        )
+        if pull.returncode == 0 and target.exists():
+            return target
+    except Exception:
+        pass
+    return None
+
+
 def _copy_latest_downloaded_csv(out_dir: Path, before_files: set[str]) -> Path | None:
     """
     Copy the newest newly-downloaded CSV into the EBT output folder.
 
     We compare filenames seen before the browser click with filenames seen after.
+    Falls back to adb pull when the phone's storage paths are not locally accessible
+    (i.e. when running from the laptop rather than from Termux on the phone).
     """
     current_files = _list_candidate_csvs()
-    new_files = [path for path in current_files if path.name not in before_files]
 
-    # Fall back to the newest CSV even if the filename already existed.
-    if not new_files:
-        new_files = current_files
+    # If we can reach the phone's filesystem directly, use the local copy path.
+    if current_files or any(Path(p).exists() for p in [
+        "/storage/emulated/0/Download",
+        Path.home() / "storage" / "downloads",
+    ]):
+        new_files = [path for path in current_files if path.name not in before_files]
+        if not new_files:
+            new_files = current_files
+        if not new_files:
+            return None
+        latest = max(new_files, key=lambda path: path.stat().st_mtime)
+        target = out_dir / latest.name
+        shutil.copy2(latest, target)
+        return target
 
-    if not new_files:
-        return None
-
-    latest = max(new_files, key=lambda path: path.stat().st_mtime)
-    target = out_dir / latest.name
-
-    # Copy instead of move so we do not disturb the phone's normal Downloads area.
-    shutil.copy2(latest, target)
-    return target
+    # Phone storage not accessible locally — we must be running from the laptop.
+    # Use adb pull instead. Requires _ADB_SERIAL to be set by main().
+    serial = globals().get("_ADB_SERIAL")
+    if serial:
+        return _adb_pull_latest_csv(serial, out_dir, before_files)
+    return None
 
 
 def _pick_latest_rejections(out_dir: Path) -> Path | None:
@@ -212,14 +260,19 @@ def _run(
     timeout: int = 60,
     env: dict[str, str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
+    result = subprocess.run(
         cmd,
         capture_output=True,
         text=True,
         timeout=timeout,
-        check=True,
         env=env,
     )
+    if result.returncode != 0:
+        # Print stderr so the caller can see what went wrong.
+        if result.stderr:
+            print(result.stderr, file=sys.stderr)
+        result.check_returncode()
+    return result
 
 
 def _pick_adb_serial() -> str:
@@ -275,22 +328,33 @@ def _write_node_driver(path: Path) -> None:
               const outDir = process.argv[2];
               const browser = await chromium.connectOverCDP('http://127.0.0.1:9222');
 
-              // Reuse the first existing Chrome context.
-              const contexts = browser.contexts();
-              const context = contexts[0];
+              // Wait for a page at the EBT or FIS login URL.
+              // Chrome opens with a new-tab page first, then navigates to the EBT
+              // URL. If we grab the new-tab page too early it gets closed when Chrome
+              // navigates away from it, so we only accept a page that is already at
+              // the right destination. Retry for up to 20 seconds.
+              let page = null;
+              let context = null;
+              for (let attempt = 0; attempt < 20 && !page; attempt++) {{
+                for (const ctx of browser.contexts()) {{
+                  for (const p of ctx.pages()) {{
+                    const url = p.url() || '';
+                    if (url.includes('ebtedge') || url.includes('fisglobal')) {{
+                      page = p; context = ctx; break;
+                    }}
+                  }}
+                  if (page) break;
+                }}
+                if (!page) await new Promise(r => setTimeout(r, 1000));
+              }}
 
-              // Reuse an existing ebtEDGE tab if one is already open.
-              let pages = context.pages();
-              let page = pages.find(p => (p.url() || '').includes('ebtedge')) || pages[0];
-
-              // If Chrome had no open page at all, we cannot rely on newPage()
-              // on this mobile CDP path, so fail with a clear error instead.
+              // If Chrome had no open page at all, we cannot proceed.
               if (!page) {{
                 throw new Error('No existing Chrome tab was available for EBT automation.');
               }}
 
-              // Always go to the login page first so the script starts from a known place.
-              await page.goto('{EBT_URL}', {{ waitUntil: 'domcontentloaded', timeout: 60000 }});
+              // Chrome was launched directly to the EBT URL via am start, so it
+              // navigates there on its own. Just wait for the page to settle.
               await page.waitForTimeout(3000);
 
               // Track whether we actually tried to submit the login form.
@@ -324,9 +388,26 @@ def _write_node_driver(path: Path) -> None:
                 // Give the site time to react before we capture state.
                 await page.waitForTimeout(5000);
 
-                // After login, try to open the Transactions page.
+                // The home page shows a card for each account. Click the EBT card
+                // to navigate to the account detail page where Transactions lives.
+                // The card's clickable region has class "clickable-region".
+                const cardClickable = page.locator('.clickable-region').first();
+                if (await cardClickable.count()) {{
+                  await cardClickable.click();
+                  await page.waitForTimeout(4000);
+                }}
+
+                // The Account Summary page shows a few recent transactions with a
+                // "See More" link. Clicking it opens the full Posted Transactions
+                // view where the Download button lives.
+                // Also try a top-level "Transactions" link in case the layout changes.
+                const seeMoreLink = page.getByText('See More', {{ exact: true }});
                 const transactionsLink = page.getByText('{TRANSACTIONS_LINK_TEXT}', {{ exact: true }});
-                if (await transactionsLink.count()) {{
+                if (await seeMoreLink.count()) {{
+                  await seeMoreLink.first().click();
+                  transactionsOpened = true;
+                  await page.waitForTimeout(5000);
+                }} else if (await transactionsLink.count()) {{
                   await transactionsLink.first().click();
                   transactionsOpened = true;
                   await page.waitForTimeout(5000);
@@ -338,33 +419,63 @@ def _write_node_driver(path: Path) -> None:
                   await postedTransactions.first().waitFor({{ timeout: 15000 }});
                 }}
 
-                // Open the statement/download dialog if the button exists.
-                const downloadButton = page.getByText('{DOWNLOAD_BUTTON_TEXT}', {{ exact: true }});
-                if (await downloadButton.count()) {{
-                  await downloadButton.first().click();
+                // Open the Statements download dialog.
+                // The button has id="emailStatements" and label "Statements".
+                // Fall back to text match if the id is not present.
+                const stmtById = page.locator('#emailStatements');
+                const stmtByText = page.getByText('Statements', {{ exact: true }});
+                const stmtButton = (await stmtById.count()) ? stmtById : stmtByText;
+                if (await stmtButton.count()) {{
+                  await stmtButton.first().click();
                   downloadOpened = true;
                   await page.waitForTimeout(3000);
                 }}
 
-                // Choose CSV in the file-type select if the select appears.
-                const fileTypeLabel = page.getByText('{SELECT_FILE_TEXT}', {{ exact: true }});
-                if (await fileTypeLabel.count()) {{
-                  const csvOption = page.locator("ion-option[value='{CSV_OPTION_VALUE}'], option[value='{CSV_OPTION_VALUE}']");
-                  if (await csvOption.count()) {{
-                    await csvOption.first().click();
+                // Choose CSV using the ion-select dropdown.
+                // In Ionic 3, clicking ion-select opens an Alert dialog —
+                // the ion-option elements are not directly clickable.
+                const ionSelect = page.locator('ion-select');
+                if (await ionSelect.count()) {{
+                  // Click the select widget to open the Ionic Alert dialog.
+                  await ionSelect.first().click();
+                  await page.waitForTimeout(1500);
+
+                  // Inside the alert, find the radio button whose label includes "csv".
+                  const csvRadio = page.locator('.alert-radio-button').filter({{ hasText: /csv/i }});
+                  if (await csvRadio.count()) {{
+                    await csvRadio.first().click();
+                    await page.waitForTimeout(500);
+                  }}
+
+                  // Click OK to confirm the selection.
+                  // The OK button is typically the last button in the alert group.
+                  const okButton = page.locator('.alert-button-group button').last();
+                  if (await okButton.count()) {{
+                    await okButton.click();
                     await page.waitForTimeout(1000);
                   }}
                 }}
 
-                // Click Download again inside the dialog if it is present.
-                const downloadButtons = page.getByText('{DOWNLOAD_BUTTON_TEXT}', {{ exact: true }});
-                if (await downloadButtons.count() > 1) {{
-                  await downloadButtons.nth(1).click();
+                // After the file type is selected, look for a Download/Submit button
+                // inside the dialog to actually trigger the download.
+                const submitDownload = page.getByText('{DOWNLOAD_BUTTON_TEXT}', {{ exact: true }});
+                if (await submitDownload.count() > 0) {{
+                  await submitDownload.last().click();
                   csvRequested = true;
-                  await page.waitForTimeout(8000);
                 }} else if (downloadOpened) {{
-                  // Some layouts may reuse the same button instead of showing a second one.
                   csvRequested = true;
+                }}
+
+                // Wait for the download to complete.
+                if (csvRequested) {{
+                  await page.waitForTimeout(8000);
+                }}
+
+                // Dismiss the "File Downloaded Successfully" success dialog if it appears.
+                const successOk = page.locator('.alert-button-group button, ion-button').filter({{ hasText: /^ok$/i }});
+                if (await successOk.count()) {{
+                  await successOk.first().click();
+                  await page.waitForTimeout(1000);
                 }}
               }}
 
@@ -439,6 +550,18 @@ def main() -> None:
     serial = _pick_adb_serial()
     csv_files_before = {path.name for path in _list_candidate_csvs()}
 
+    # Expose serial globally so _copy_latest_downloaded_csv can use adb pull.
+    globals()["_ADB_SERIAL"] = serial
+
+    # Force-stop Chrome before each run so the DevTools state is clean.
+    # Without this, a previous browser.close() call can leave Chrome in a
+    # state where no pages appear in the CDP context.
+    subprocess.run(
+        ["adb", "-s", serial, "shell", "am", "force-stop", "com.android.chrome"],
+        capture_output=True, text=True,
+    )
+    time.sleep(2)
+
     # Launch Chrome to the EBT site on the phone.
     _run(
         [
@@ -455,17 +578,13 @@ def main() -> None:
             "com.android.chrome",
         ]
     )
-    time.sleep(5)
-    _run(["adb", "-s", serial, "shell", "input", "keyevent", "66"], timeout=10)
-    time.sleep(2)
+    # Give Chrome time to cold-start after force-stop. 10 seconds is safer
+    # than 5 when starting from scratch.
+    time.sleep(10)
 
     # Rebuild the DevTools forward each run so Playwright has a clean port.
     subprocess.run(["adb", "-s", serial, "forward", "--remove", "tcp:9222"], capture_output=True, text=True)
     _run(["adb", "-s", serial, "forward", "tcp:9222", "localabstract:chrome_devtools_remote"])
-
-    # Chrome sometimes throws a saved-password prompt on top of the site.
-    # Start a short background dismiss loop so the browser can continue.
-    _dismiss_android_prompts_for_a_while(serial)
 
     # Write the small Node driver that actually talks to Playwright.
     driver_path = out_dir / "playwright-phone.js"

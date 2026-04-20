@@ -202,11 +202,123 @@ Recent local commits:
 - `e893f74` `Refine EBT sync status handling`
 - `724fff3` `Add EBT post-login navigation groundwork`
 
-## Still Missing
+## Session 2026-04-19 (second sitting) — What Was Learned
 
-- verified post-login DOM capture after successful login
-- confirmed selector path for statement/history download
-- proven CSV download into the EBT folder from a live authenticated session
+### Source files analyzed
+
+Three untracked files in the repo root were downloaded from the live ebtEDGE site in a
+previous session and contain the app's static assets:
+
+- `tmp-ebtedge-index.html` — the Ionic SPA shell (no useful DOM; everything is JS-rendered)
+- `tmp-ebtedge-en.json` — the full i18n string table for the app
+- `tmp-ebtedge-main.js` — the 2 MB compiled Angular/Ionic bundle
+
+### Labels confirmed from i18n
+
+All labels already wired into the script are correct:
+
+| Script constant | Actual UI text |
+|---|---|
+| `TRANSACTIONS_LINK_TEXT` | `"Transactions"` |
+| `POSTED_TRANSACTIONS_TEXT` | `"Posted Transactions"` |
+| `DOWNLOAD_BUTTON_TEXT` | `"Download"` |
+| `SELECT_FILE_TEXT` | `"Select File Type"` |
+
+The download dialog is labeled `"Statements"` internally (`email-download.Email Download`)
+but the button that opens it from the transactions view is `"Download"` — so the script's
+button label is correct.
+
+### Bug found in the script
+
+The script tries to click `ion-option[value='csv']` directly:
+
+```javascript
+const csvOption = page.locator("ion-option[value='csv'], option[value='csv']");
+if (await csvOption.count()) {
+  await csvOption.first().click();
+```
+
+This does not work. In Ionic 3, `ion-select` opens an **Ionic Alert dialog** when clicked.
+The `ion-option` elements are light-DOM children of `ion-select` and are not directly
+clickable in the rendered page. The correct sequence is:
+
+1. Click the `ion-select` element (or its label "Select File Type") to open the alert
+2. In the alert that opens, click the radio button for CSV
+3. Click the alert's OK/Confirm button
+
+The compiled JS confirms the model binding: `selectDownloadFileType` is what the
+`downloadStatements()` function reads — and it is bound to the `ion-select`.
+
+### Fix needed in scripts/ebt_sync_playwright.py
+
+Replace the current CSV-selection block (which clicks `ion-option` directly) with:
+
+```javascript
+// Open the ion-select by clicking it — Ionic 3 shows an Alert dialog
+const ionSelect = page.locator('ion-select');
+if (await ionSelect.count()) {
+  await ionSelect.first().click();
+  await page.waitForTimeout(1500);
+
+  // The Ionic alert shows radio buttons for each option.
+  // Click the one whose text contains "csv" (case-insensitive).
+  const csvRadio = page.locator('.alert-radio-button').filter({ hasText: /csv/i });
+  if (await csvRadio.count()) {
+    await csvRadio.first().click();
+    await page.waitForTimeout(500);
+  }
+
+  // Confirm the selection — Ionic alert OK button is typically the last button.
+  const okButton = page.locator('.alert-button-group button').last();
+  if (await okButton.count()) {
+    await okButton.click();
+    await page.waitForTimeout(1000);
+  }
+}
+```
+
+This is the one concrete code change needed before the next live test.
+
+## Session 2026-04-19 (third sitting) — Full Flow Confirmed
+
+### What was fixed and discovered
+
+1. **ion-select fix applied** — `ion-option` direct click replaced with the Ionic 3 Alert dialog flow (click `ion-select` → click CSV radio → click OK).
+
+2. **Chrome DevTools page-finding fixed** — After `browser.close()`, Chrome's CDP context shows 0 pages. Fix: force-stop Chrome before each run (`am force-stop com.android.chrome`), then wait 10s for cold start. The retry loop now specifically waits for a page at the EBT or FIS login URL (not just any page), which avoids grabbing the transient new-tab page that Chrome opens momentarily.
+
+3. **`page.goto()` removed** — Chrome navigates itself after `am start`. The explicit `page.goto()` caused `ERR_ABORTED` + page-closed errors. Removed.
+
+4. **Back-key dismiss loop removed** — `_dismiss_android_prompts_for_a_while` sent Android Back every 2 seconds, which closed the Chrome tab. Removed entirely.
+
+5. **Navigation path corrected** — The real path is:
+   - Home page → click `.clickable-region` (EBT card) → Account Summary
+   - Account Summary → click "See More" (not "Transactions") → full transactions view
+   - Full transactions view → click `#emailStatements` (button labeled "Statements", not "Download")
+   - Statements dialog → `ion-select` → CSV radio → OK → download triggered
+
+6. **`_adb_pull_latest_csv` added** — When running from the laptop (phone storage not locally accessible), pulls the latest `TransHistory*.csv` from `/storage/emulated/0/Download/` via `adb pull`.
+
+7. **`_run` now prints stderr on failure** — Makes debugging Node driver errors visible.
+
+### Confirmed working end-to-end
+
+Full run output:
+```json
+{
+  "csv_path": "...tmp-ebt-live/TransHistory20260420013104496.csv",
+  "files_found": {"csv": true, ...},
+  "login_attempted": true
+}
+```
+
+CSV contained 21 real transactions. Tests still pass (13 passed).
+
+### Remaining
+
+- The "Use saved password?" Chrome prompt appears on each run — cosmetic, does not block automation
+- The script still has `_dismiss_android_prompts_for_a_while` code (unused now); can be removed later
+- The `before_files` tracking on the laptop always uses an empty set (phone paths not local); the adb pull always takes the latest CSV regardless of whether it's new
 
 ## Readability Rule For Future Work
 
