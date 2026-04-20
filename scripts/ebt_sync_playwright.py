@@ -423,6 +423,22 @@ def _write_node_driver(path: Path) -> None:
                   await postedTransactions.first().waitFor({{ timeout: 15000 }});
                 }}
 
+                // Set up a route handler to capture the /rest/download response
+                // body as a CSV file the moment the server replies.
+                // This runs in the background alongside the UI flow.
+                let interceptedCsvPath = null;
+                await page.route('**/rest/download**', async route => {{
+                  try {{
+                    const response = await route.fetch();
+                    const body = await response.body();
+                    interceptedCsvPath = outDir + '/TransHistory-download.csv';
+                    fs.writeFileSync(interceptedCsvPath, body);
+                    await route.fulfill({{ response }});
+                  }} catch (err) {{
+                    await route.continue();
+                  }}
+                }});
+
                 // Open the Statements download dialog.
                 // The button has id="emailStatements" and label "Statements".
                 // Fall back to text match if the id is not present.
@@ -437,51 +453,42 @@ def _write_node_driver(path: Path) -> None:
                   fs.writeFileSync(outDir + '/ebtedge-dialog.html', await page.content(), 'utf8');
                 }}
 
-                // Try to open the ion-select file-type dropdown using a native
-                // TouchEvent dispatched inside the browser. CDP-level touch events
-                // (Input.dispatchTouchEvent) don't reliably trigger Ionic's Angular
-                // event handlers, but browser-native TouchEvent objects do.
-                const ionSelectOpened = await page.evaluate(() => {{
-                  const btn = document.querySelector('ion-popover ion-select .item-cover');
-                  if (!btn) return false;
-                  const rect = btn.getBoundingClientRect();
-                  const cx = rect.left + rect.width / 2;
-                  const cy = rect.top + rect.height / 2;
-                  const mkTouch = (el, x, y) => new Touch({{
-                    identifier: 1, target: el, clientX: x, clientY: y,
-                    screenX: x, screenY: y, radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1,
-                  }});
-                  const t = mkTouch(btn, cx, cy);
-                  btn.dispatchEvent(new TouchEvent('touchstart', {{ touches: [t], changedTouches: [t], bubbles: true, cancelable: true }}));
-                  btn.dispatchEvent(new TouchEvent('touchend',   {{ touches: [],   changedTouches: [t], bubbles: true, cancelable: true }}));
-                  return true;
-                }});
-
-                if (ionSelectOpened) {{
+                // Try clicking the ion-select cover button with a plain Playwright
+                // click. The previous approach (native TouchEvent dispatch) did not
+                // open the Ionic Alert; a plain click may work differently on Android
+                // Chrome because Ionic 3 listens for both touch and click events.
+                const ionSelectCover = page.locator('ion-popover ion-select .item-cover');
+                let ionSelectOpened = false;
+                if (await ionSelectCover.count()) {{
+                  await ionSelectCover.first().click();
+                  ionSelectOpened = true;
                   await page.waitForTimeout(2000);
                   // Save a snapshot to check whether the Ionic Alert appeared.
-                  fs.writeFileSync(outDir + '/ebtedge-after-select-tap.html', await page.content(), 'utf8');
+                  fs.writeFileSync(outDir + '/ebtedge-after-select-click.html', await page.content(), 'utf8');
 
                   // If the Ionic Alert appeared, click the CSV radio and confirm.
                   const csvRadio = page.locator('.alert-radio-button').filter({{ hasText: /csv/i }});
                   if (await csvRadio.count()) {{
-                    await page.evaluate(() => {{
-                      // Use the same native-TouchEvent approach for the radio button.
-                      const radio = document.querySelector('.alert-radio-button');
-                      if (!radio) return;
-                      const r = radio.getBoundingClientRect();
-                      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-                      const t = new Touch({{ identifier: 1, target: radio, clientX: cx, clientY: cy, screenX: cx, screenY: cy, radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1 }});
-                      radio.dispatchEvent(new TouchEvent('touchstart', {{ touches: [t], changedTouches: [t], bubbles: true, cancelable: true }}));
-                      radio.dispatchEvent(new TouchEvent('touchend',   {{ touches: [],   changedTouches: [t], bubbles: true, cancelable: true }}));
-                    }});
+                    await csvRadio.first().click();
                     await page.waitForTimeout(500);
-                    // Click the alert OK button with a normal click — it's a plain HTML button.
+                    // The OK button is a plain HTML button — a normal evaluate click works.
                     await page.evaluate(() => {{
                       const btns = document.querySelectorAll('.alert-button-group button');
                       if (btns.length) btns[btns.length - 1].click();
                     }});
                     await page.waitForTimeout(1000);
+                  }} else {{
+                    // The Ionic Alert did not open after the click. Try setting the
+                    // ion-select's value property directly and firing ionChange so
+                    // Angular's binding updates selectDownloadFileType.
+                    await page.evaluate(() => {{
+                      const sel = document.querySelector('ion-popover ion-select');
+                      if (!sel) return;
+                      sel.value = 'csv';
+                      sel.dispatchEvent(new CustomEvent('ionChange', {{ detail: {{ value: 'csv' }}, bubbles: true }}));
+                      sel.dispatchEvent(new CustomEvent('ionSelect', {{ detail: {{ value: 'csv' }}, bubbles: true }}));
+                    }});
+                    await page.waitForTimeout(500);
                   }}
                 }}
 
@@ -554,6 +561,7 @@ def _write_node_driver(path: Path) -> None:
                 transactions_opened: transactionsOpened,
                 download_opened: downloadOpened,
                 csv_requested: csvRequested,
+                intercepted_csv_path: interceptedCsvPath,
                 pages: pageState,
                 html_path: htmlPath,
               }};
@@ -645,9 +653,13 @@ def main() -> None:
     cp = _run(["node", str(driver_path), str(out_dir)], timeout=120, env=_node_env())
     state = json.loads(cp.stdout)
 
-    # If the browser likely triggered a CSV download, try to copy it into out_dir.
+    # If the route handler intercepted the download, use that file directly.
+    # It lands in out_dir so no copy is needed. Otherwise fall back to adb pull.
     copied_csv = None
-    if state.get("csv_requested"):
+    intercepted = state.get("intercepted_csv_path")
+    if intercepted and Path(intercepted).exists():
+        copied_csv = Path(intercepted)
+    elif state.get("csv_requested"):
         copied_csv = _copy_latest_downloaded_csv(out_dir, csv_files_before)
 
     # Save the state snapshot for later debugging on the phone.
