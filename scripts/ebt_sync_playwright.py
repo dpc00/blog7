@@ -357,6 +357,10 @@ def _write_node_driver(path: Path) -> None:
               // navigates there on its own. Just wait for the page to settle.
               await page.waitForTimeout(3000);
 
+              // Enable touch emulation so page.touchscreen.tap() works.
+              const cdpSession = await context.newCDPSession(page);
+              await cdpSession.send('Emulation.setTouchEmulationEnabled', {{ enabled: true, maxTouchPoints: 1 }});
+
               // Track whether we actually tried to submit the login form.
               let loginAttempted = false;
               let transactionsOpened = false;
@@ -429,41 +433,88 @@ def _write_node_driver(path: Path) -> None:
                   await stmtButton.first().click();
                   downloadOpened = true;
                   await page.waitForTimeout(3000);
+                  // Save a snapshot of the dialog for debugging.
+                  fs.writeFileSync(outDir + '/ebtedge-dialog.html', await page.content(), 'utf8');
                 }}
 
-                // Choose CSV using the ion-select dropdown.
-                // In Ionic 3, clicking ion-select opens an Alert dialog —
-                // the ion-option elements are not directly clickable.
-                const ionSelect = page.locator('ion-select');
-                if (await ionSelect.count()) {{
-                  // Click the select widget to open the Ionic Alert dialog.
-                  await ionSelect.first().click();
-                  await page.waitForTimeout(1500);
+                // Try to open the ion-select file-type dropdown using a native
+                // TouchEvent dispatched inside the browser. CDP-level touch events
+                // (Input.dispatchTouchEvent) don't reliably trigger Ionic's Angular
+                // event handlers, but browser-native TouchEvent objects do.
+                const ionSelectOpened = await page.evaluate(() => {{
+                  const btn = document.querySelector('ion-popover ion-select .item-cover');
+                  if (!btn) return false;
+                  const rect = btn.getBoundingClientRect();
+                  const cx = rect.left + rect.width / 2;
+                  const cy = rect.top + rect.height / 2;
+                  const mkTouch = (el, x, y) => new Touch({{
+                    identifier: 1, target: el, clientX: x, clientY: y,
+                    screenX: x, screenY: y, radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1,
+                  }});
+                  const t = mkTouch(btn, cx, cy);
+                  btn.dispatchEvent(new TouchEvent('touchstart', {{ touches: [t], changedTouches: [t], bubbles: true, cancelable: true }}));
+                  btn.dispatchEvent(new TouchEvent('touchend',   {{ touches: [],   changedTouches: [t], bubbles: true, cancelable: true }}));
+                  return true;
+                }});
 
-                  // Inside the alert, find the radio button whose label includes "csv".
+                if (ionSelectOpened) {{
+                  await page.waitForTimeout(2000);
+                  // Save a snapshot to check whether the Ionic Alert appeared.
+                  fs.writeFileSync(outDir + '/ebtedge-after-select-tap.html', await page.content(), 'utf8');
+
+                  // If the Ionic Alert appeared, click the CSV radio and confirm.
                   const csvRadio = page.locator('.alert-radio-button').filter({{ hasText: /csv/i }});
                   if (await csvRadio.count()) {{
-                    await csvRadio.first().click();
+                    await page.evaluate(() => {{
+                      // Use the same native-TouchEvent approach for the radio button.
+                      const radio = document.querySelector('.alert-radio-button');
+                      if (!radio) return;
+                      const r = radio.getBoundingClientRect();
+                      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+                      const t = new Touch({{ identifier: 1, target: radio, clientX: cx, clientY: cy, screenX: cx, screenY: cy, radiusX: 1, radiusY: 1, rotationAngle: 0, force: 1 }});
+                      radio.dispatchEvent(new TouchEvent('touchstart', {{ touches: [t], changedTouches: [t], bubbles: true, cancelable: true }}));
+                      radio.dispatchEvent(new TouchEvent('touchend',   {{ touches: [],   changedTouches: [t], bubbles: true, cancelable: true }}));
+                    }});
                     await page.waitForTimeout(500);
-                  }}
-
-                  // Click OK to confirm the selection.
-                  // The OK button is typically the last button in the alert group.
-                  const okButton = page.locator('.alert-button-group button').last();
-                  if (await okButton.count()) {{
-                    await okButton.click();
+                    // Click the alert OK button with a normal click — it's a plain HTML button.
+                    await page.evaluate(() => {{
+                      const btns = document.querySelectorAll('.alert-button-group button');
+                      if (btns.length) btns[btns.length - 1].click();
+                    }});
                     await page.waitForTimeout(1000);
                   }}
                 }}
 
-                // After the file type is selected, look for a Download/Submit button
-                // inside the dialog to actually trigger the download.
-                const submitDownload = page.getByText('{DOWNLOAD_BUTTON_TEXT}', {{ exact: true }});
-                if (await submitDownload.count() > 0) {{
-                  await submitDownload.last().click();
+                // Trigger the download.
+                // Path 1: set the file type directly on the Angular component and call
+                //         downloadStatements(). This is the most reliable path when
+                //         ng.probe is available (Angular debug/development builds).
+                // Path 2: fall back to clicking the Download button in the popover.
+                const downloaded = await page.evaluate(() => {{
+                  const dlEl = document.querySelector('download');
+                  if (!dlEl || !window.ng || !window.ng.probe) return false;
+                  const probe = window.ng.probe(dlEl);
+                  if (!probe || !probe.componentInstance) return false;
+                  // Set CSV before calling download — without this the server rejects the request.
+                  probe.componentInstance.selectDownloadFileType = 'csv';
+                  if (probe.changeDetectorRef && probe.changeDetectorRef.detectChanges) {{
+                    probe.changeDetectorRef.detectChanges();
+                  }}
+                  probe.componentInstance.downloadStatements();
+                  return true;
+                }});
+                if (downloaded) {{
                   csvRequested = true;
-                }} else if (downloadOpened) {{
-                  csvRequested = true;
+                }} else {{
+                  // ng.probe unavailable — click the Download button directly.
+                  // The file type should have been selected via the ion-select UI above.
+                  const submitDownload = page.locator('ion-popover button[size="small"]').first();
+                  if (await submitDownload.count()) {{
+                    await submitDownload.click();
+                    csvRequested = true;
+                  }} else if (downloadOpened) {{
+                    csvRequested = true;
+                  }}
                 }}
 
                 // Wait for the download to complete.
