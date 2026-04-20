@@ -30,6 +30,11 @@ EBT_URL = "https://cardholder.ebtedge.com/"
 LOGIN_NAME_INPUT = "#idp-first-time-login-loginname"
 PASSWORD_INPUT = "#idp-first-time-login-password"
 LOGIN_BUTTON = "#idp-first-time-login-signin"
+TRANSACTIONS_LINK_TEXT = "Transactions"
+POSTED_TRANSACTIONS_TEXT = "Posted Transactions"
+DOWNLOAD_BUTTON_TEXT = "Download"
+SELECT_FILE_TEXT = "Select File Type"
+CSV_OPTION_VALUE = "csv"
 STAMP_RE = re.compile(r"(\d{14,})")
 BALANCE_BLOCK_RE = re.compile(
     r"Cash:\s*Food:\s*\$([0-9,]+\.[0-9]{2})\s*\$([0-9,]+\.[0-9]{2})",
@@ -47,6 +52,49 @@ def _pick_latest_csv(out_dir: Path) -> Path | None:
 
     # Return the newest CSV file by modified time.
     return max(csv_files, key=lambda path: path.stat().st_mtime)
+
+
+def _list_candidate_csvs() -> list[Path]:
+    """
+    Look in the usual phone download folders for transaction-history CSV files.
+    """
+    candidates = [
+        Path("/storage/emulated/0/Download"),
+        Path.home() / "storage" / "downloads",
+        Path.home() / "downloads",
+    ]
+    csv_files: list[Path] = []
+
+    for folder in candidates:
+        if not folder.exists():
+            continue
+        csv_files.extend(folder.glob("TransHistory*.csv"))
+
+    return csv_files
+
+
+def _copy_latest_downloaded_csv(out_dir: Path, before_files: set[str]) -> Path | None:
+    """
+    Copy the newest newly-downloaded CSV into the EBT output folder.
+
+    We compare filenames seen before the browser click with filenames seen after.
+    """
+    current_files = _list_candidate_csvs()
+    new_files = [path for path in current_files if path.name not in before_files]
+
+    # Fall back to the newest CSV even if the filename already existed.
+    if not new_files:
+        new_files = current_files
+
+    if not new_files:
+        return None
+
+    latest = max(new_files, key=lambda path: path.stat().st_mtime)
+    target = out_dir / latest.name
+
+    # Copy instead of move so we do not disturb the phone's normal Downloads area.
+    shutil.copy2(latest, target)
+    return target
 
 
 def _pick_latest_rejections(out_dir: Path) -> Path | None:
@@ -222,6 +270,9 @@ def _write_node_driver(path: Path) -> None:
 
               // Track whether we actually tried to submit the login form.
               let loginAttempted = false;
+              let transactionsOpened = false;
+              let downloadOpened = false;
+              let csvRequested = false;
 
               // Only attempt login when credentials were provided by the Flask wrapper.
               if (ebtUserId && ebtPassword) {{
@@ -241,6 +292,49 @@ def _write_node_driver(path: Path) -> None:
 
                 // Give the site time to react before we capture state.
                 await page.waitForTimeout(5000);
+
+                // After login, try to open the Transactions page.
+                const transactionsLink = page.getByText('{TRANSACTIONS_LINK_TEXT}', {{ exact: true }});
+                if (await transactionsLink.count()) {{
+                  await transactionsLink.first().click();
+                  transactionsOpened = true;
+                  await page.waitForTimeout(5000);
+                }}
+
+                // Wait for the transaction-history area if it appears.
+                const postedTransactions = page.getByText('{POSTED_TRANSACTIONS_TEXT}', {{ exact: true }});
+                if (await postedTransactions.count()) {{
+                  await postedTransactions.first().waitFor({{ timeout: 15000 }});
+                }}
+
+                // Open the statement/download dialog if the button exists.
+                const downloadButton = page.getByText('{DOWNLOAD_BUTTON_TEXT}', {{ exact: true }});
+                if (await downloadButton.count()) {{
+                  await downloadButton.first().click();
+                  downloadOpened = true;
+                  await page.waitForTimeout(3000);
+                }}
+
+                // Choose CSV in the file-type select if the select appears.
+                const fileTypeLabel = page.getByText('{SELECT_FILE_TEXT}', {{ exact: true }});
+                if (await fileTypeLabel.count()) {{
+                  const csvOption = page.locator("ion-option[value='{CSV_OPTION_VALUE}'], option[value='{CSV_OPTION_VALUE}']");
+                  if (await csvOption.count()) {{
+                    await csvOption.first().click();
+                    await page.waitForTimeout(1000);
+                  }}
+                }}
+
+                // Click Download again inside the dialog if it is present.
+                const downloadButtons = page.getByText('{DOWNLOAD_BUTTON_TEXT}', {{ exact: true }});
+                if (await downloadButtons.count() > 1) {{
+                  await downloadButtons.nth(1).click();
+                  csvRequested = true;
+                  await page.waitForTimeout(8000);
+                }} else if (downloadOpened) {{
+                  // Some layouts may reuse the same button instead of showing a second one.
+                  csvRequested = true;
+                }}
               }}
 
               // Refresh the page list after any navigation or login click.
@@ -264,6 +358,9 @@ def _write_node_driver(path: Path) -> None:
                 active_title: await page.title(),
                 active_url: page.url(),
                 login_attempted: loginAttempted,
+                transactions_opened: transactionsOpened,
+                download_opened: downloadOpened,
+                csv_requested: csvRequested,
                 pages: pageState,
                 html_path: htmlPath,
               }};
@@ -306,6 +403,7 @@ def main() -> None:
 
     # Pick the authorized phone connection that adb can already see.
     serial = _pick_adb_serial()
+    csv_files_before = {path.name for path in _list_candidate_csvs()}
 
     # Launch Chrome to the EBT site on the phone.
     _run(
@@ -337,12 +435,19 @@ def main() -> None:
     cp = _run(["node", str(driver_path), str(out_dir)], timeout=120, env=_node_env())
     state = json.loads(cp.stdout)
 
+    # If the browser likely triggered a CSV download, try to copy it into out_dir.
+    copied_csv = None
+    if state.get("csv_requested"):
+        copied_csv = _copy_latest_downloaded_csv(out_dir, csv_files_before)
+
     # Save the state snapshot for later debugging on the phone.
     state_path = out_dir / "state.json"
     state_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
     # Pick the best matching set of already-saved EBT files in the folder.
     sync_files = _pick_sync_files(out_dir)
+    if copied_csv:
+        sync_files["csv_path"] = copied_csv
     final_balance = _extract_food_balance_from_txt(sync_files["txt_path"])
     files_found = {
         "csv": bool(sync_files["csv_path"]),

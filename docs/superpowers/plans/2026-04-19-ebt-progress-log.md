@@ -48,6 +48,8 @@ Add EBT update/sync work to `blog7` in a way that fits the phone app.
 - the phone-side EBT helper now reads the Food balance from the TXT sidecar and returns it as `final_balance`
 - if EBT sync has a real balance but no CSV yet, `blog7` now updates the Colorado Quest balance anyway instead of failing
 - the phone-side EBT helper now reports which EBT sidecar files were actually found in the folder
+- the phone-side EBT helper now attempts post-login navigation to `Transactions`
+- it now tries to open the `Download` flow, request `CSV`, and copy a downloaded `TransHistory*.csv` file into the EBT output folder
 
 ### In tests
 

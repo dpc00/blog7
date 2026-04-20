@@ -115,3 +115,45 @@ def test_pick_sync_files_can_be_reported_as_found_flags(tmp_path):
         "pdf": False,
         "txt": True,
     }
+
+
+def test_copy_latest_downloaded_csv_copies_new_csv_into_output_folder(tmp_path, monkeypatch):
+    mod = load_script_module()
+
+    downloads_dir = tmp_path / "downloads"
+    out_dir = tmp_path / "out"
+    downloads_dir.mkdir()
+    out_dir.mkdir()
+
+    newer_csv = downloads_dir / "TransHistory20260419050000000.csv"
+    newer_csv.write_text("csv\n", encoding="utf-8")
+
+    monkeypatch.setattr(mod, "_list_candidate_csvs", lambda: [newer_csv])
+
+    copied = mod._copy_latest_downloaded_csv(out_dir, before_files=set())
+
+    assert copied == out_dir / newer_csv.name
+    assert copied.exists()
+    assert copied.read_text(encoding="utf-8") == "csv\n"
+
+
+def test_copy_latest_downloaded_csv_ignores_old_names_when_new_one_exists(tmp_path, monkeypatch):
+    mod = load_script_module()
+
+    downloads_dir = tmp_path / "downloads"
+    out_dir = tmp_path / "out"
+    downloads_dir.mkdir()
+    out_dir.mkdir()
+
+    old_csv = downloads_dir / "TransHistory20260418041343818.csv"
+    new_csv = downloads_dir / "TransHistory20260419060000000.csv"
+    old_csv.write_text("old\n", encoding="utf-8")
+    time.sleep(0.05)
+    new_csv.write_text("new\n", encoding="utf-8")
+
+    monkeypatch.setattr(mod, "_list_candidate_csvs", lambda: [old_csv, new_csv])
+
+    copied = mod._copy_latest_downloaded_csv(out_dir, before_files={old_csv.name})
+
+    assert copied == out_dir / new_csv.name
+    assert copied.read_text(encoding="utf-8") == "new\n"
