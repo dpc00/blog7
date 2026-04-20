@@ -650,15 +650,32 @@ def main() -> None:
     _write_node_driver(driver_path)
 
     # Run the Node driver with the same environment so it can read EBT credentials.
-    cp = _run(["node", str(driver_path), str(out_dir)], timeout=120, env=_node_env())
-    state = json.loads(cp.stdout)
+    # If Node crashes after the route handler already saved the CSV, we still want
+    # to pick up that file — so capture output even on failure.
+    cp = subprocess.run(
+        ["node", str(driver_path), str(out_dir)],
+        capture_output=True, text=True, timeout=120, env=_node_env(),
+    )
+    if cp.returncode != 0 and cp.stderr:
+        print(cp.stderr, file=sys.stderr)
+    state = {}
+    if cp.stdout.strip():
+        try:
+            state = json.loads(cp.stdout)
+        except json.JSONDecodeError:
+            pass
 
     # If the route handler intercepted the download, use that file directly.
     # It lands in out_dir so no copy is needed. Otherwise fall back to adb pull.
+    # Also check for the intercepted file on disk even if state is empty (Node crash).
     copied_csv = None
+    intercepted_on_disk = out_dir / "TransHistory-download.csv"
     intercepted = state.get("intercepted_csv_path")
     if intercepted and Path(intercepted).exists():
         copied_csv = Path(intercepted)
+    elif intercepted_on_disk.exists() and intercepted_on_disk.stat().st_mtime > time.time() - 300:
+        # File written in the last 5 minutes — treat it as the current run's output.
+        copied_csv = intercepted_on_disk
     elif state.get("csv_requested"):
         copied_csv = _copy_latest_downloaded_csv(out_dir, csv_files_before)
 
