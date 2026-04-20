@@ -283,7 +283,7 @@ def _pick_adb_serial() -> str:
         if not line or line.startswith("List of devices attached"):
             continue
         parts = line.split()
-        if len(parts) >= 2 and parts[1] == "device" and not parts[0].startswith("emulator-"):
+        if len(parts) >= 2 and parts[1] == "device":
             serials.append(parts[0])
     if not serials:
         raise RuntimeError("No authorized adb device available for Playwright attach.")
