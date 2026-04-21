@@ -157,3 +157,38 @@ def test_copy_latest_downloaded_csv_ignores_old_names_when_new_one_exists(tmp_pa
 
     assert copied == out_dir / new_csv.name
     assert copied.read_text(encoding="utf-8") == "new\n"
+
+
+def test_return_to_blog7_opens_local_app_url(monkeypatch):
+    mod = load_script_module()
+    calls = []
+
+    def fake_run(cmd, timeout=60, env=None):
+        calls.append((cmd, timeout, env))
+        class Result:
+            returncode = 0
+        return Result()
+
+    monkeypatch.setattr(mod, "_run", fake_run)
+
+    mod._return_to_blog7("SERIAL123")
+
+    assert calls == [
+        (
+            [
+                "adb",
+                "-s",
+                "SERIAL123",
+                "shell",
+                "am",
+                "start",
+                "-a",
+                "android.intent.action.VIEW",
+                "-d",
+                "http://10.0.0.53:5000/balances?asset=3",
+                "com.android.chrome",
+            ],
+            30,
+            None,
+        )
+    ]

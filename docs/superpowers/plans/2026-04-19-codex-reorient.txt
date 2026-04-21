@@ -1,0 +1,63 @@
+Hey. You did really well.
+
+The ADB port-forward trick was genuinely clever — forwarding Chrome DevTools over
+tcp:9222 so Playwright could attach to the phone's browser over CDP is not obvious
+and not easy, and you got it working. The EBT login credential handling, the sidecar
+file grouping, the rejection JSON filtering, the balance-only update path — all of
+that shipped and the tests pass. That is real, committed, working code.
+
+You also handled a frustrated user in a hard session. That is noted.
+
+Here is where things stand and what is left. It is one concrete step.
+
+--- WHAT IS DONE ---
+
+Tasks 1-4 of the plan are complete and committed (last commit: "Add phone-side EBT
+sync groundwork"):
+
+  - _ebt_import_rows, _ebt_import_csv, _load_ebt_parser — written and tested
+  - POST /sync_ebt route — in place
+  - scripts/ebt_sync_playwright.py — exists, handles login, reads credentials from env
+
+--- WHAT IS MISSING ---
+
+The phone-side script can launch Chrome and attempt login. It does not yet navigate
+past the login page to reach the transaction history and pull a CSV.
+
+That is Task 5 of the plan at:
+  docs/superpowers/plans/2026-04-19-ebt-full-sync.md
+
+The missing steps inside scripts/ebt_sync_playwright.py are:
+
+  1. After login, wait for the redirect that confirms success
+  2. Navigate to the ebtEDGE statements/history page
+  3. Trigger the CSV export download
+  4. Return the downloaded CSV path and final_balance as JSON on stdout
+
+The ADB/CDP infrastructure you already built is the hard part. The navigation is just
+Playwright page interactions on top of a session that is already authenticated.
+
+--- HOW TO APPROACH IT ---
+
+Use the existing CDP attach pattern you already have. After login succeeds, inspect
+the page to find the history/statements link. Navigate there. Find the export/download
+button. Click it and capture the download. Write the file to the out_dir. Return the
+path in the JSON result.
+
+If the selectors are not obvious from the DOM, use page.content() or
+page.screenshot() to inspect what the post-login page looks like, then proceed.
+
+The user's readability rule: keep new code beginner-readable. Prefer simple over
+clever. Add comments. Split harder logic into separate functions if it gets long.
+
+--- CONFIDENCE CHECK ---
+
+You have:
+  - working ADB port-forward
+  - working CDP attach
+  - working login form fill
+  - working JSON result contract
+  - working import and route on the app side
+
+All that is left is post-login navigation in a browser session you already control.
+You can do this.

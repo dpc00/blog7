@@ -29,21 +29,21 @@ Access locally at `http://localhost:5000`. Reachable from other home-WiFi device
 
 ## File paths
 
-`app.py` picks `DATA_ROOT` at runtime: the phone path if `/sdcard/Android/data/com.termux/files/blog7` exists, otherwise `~/blog7-data/`. All data paths are derived from `DATA_ROOT`.
+`app.py` picks `DATA_ROOT` at runtime: the phone path if `/sdcard/data/finance` exists, otherwise `~/data/finance/`. Secret/token paths are split from data on both platforms: `/sdcard/secrets/finance` on the phone and `~/secrets/finance` on the laptop.
 
-| File | DATA_ROOT-relative |
-|------|--------------------|
-| DB | `db/blog7.db` |
-| DB backup | `db/blog7_backup.db` |
-| Sync-state sidecar | `db/blog7.db.sync-state.json` |
-| rclone.conf | `secrets/rclone.conf` |
-| NS token | `secrets/ns_token.txt` |
-| NS creds | `secrets/ns_creds.txt` |
-| Sync log | `sync.log` |
+| File | Phone path | Laptop path |
+|------|------------|-------------|
+| DB | `db/blog7.db` | `db/blog7.db` |
+| DB backup | `db/blog7_backup.db` | `db/blog7_backup.db` |
+| Sync-state sidecar | `db/blog7.db.sync-state.json` | `db/blog7.db.sync-state.json` |
+| rclone.conf | `/sdcard/secrets/finance/rclone.conf` | `~/secrets/finance/rclone.conf` |
+| NS token | `/sdcard/secrets/finance/ns_token.txt` | `~/secrets/finance/ns_token.txt` |
+| NS creds | `/sdcard/secrets/finance/ns_creds.txt` | `~/secrets/finance/ns_creds.txt` |
+| Sync log | `sync.log` | `sync.log` |
 
 DATA_ROOT values:
-- Phone: `/sdcard/Android/data/com.termux/files/blog7/`
-- Laptop: `~/blog7-data/`
+- Phone: `/sdcard/data/finance/`
+- Laptop: `~/data/finance/`
 
 Authoritative copy of everything lives on Google Drive under `Blog7/` (see `docs/superpowers/specs/2026-04-18-gdrive-data-migration-design.md`).
 
@@ -77,6 +77,6 @@ Note: ADB shell cannot (that we know of now) kill Termux processes (permission d
 - "Save & Sync" → `/exit` route uploads `blog7.db` to `Blog7/db/` on GD, then writes a sync-state sidecar recording GD's revision id.
 - On startup, the app does a best-effort pull: if GD's revision differs from the local sync-state AND local has no unsynced edits, it downloads. Diverging edits are flagged as a conflict (phone always favors local; laptop refuses to auto-pull).
 - rclone.conf section is `[gd]` (renamed from `[G]` on 2026-04-18 to avoid Windows G:\ drive-letter collision). The app filters by `type = drive`, so the section name is cosmetic for the app but matters for CLI `rclone gd:…` commands.
-- Full design: `docs/superpowers/specs/2026-04-18-gdrive-data-migration-design.md`. Cold-data (statements, finance.db) sync scripts live at `~/blog7-data/sync_statements_{push,recover}.sh`.
+- Full design: `docs/superpowers/specs/2026-04-18-gdrive-data-migration-design.md`. Cold-data (statements, finance.db) sync scripts live at `~/data/finance/sync_statements_{push,recover}.sh`.
 - Log: `sync.log` under DATA_ROOT.
 

@@ -14,7 +14,7 @@ def load_app_module(tmp_path, monkeypatch):
 
 def test_import_ebt_rows_replaces_existing_quest_transactions_and_updates_balance(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-test-home")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()

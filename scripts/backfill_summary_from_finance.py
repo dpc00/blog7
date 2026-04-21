@@ -9,8 +9,8 @@ import os
 import sqlite3
 import sys
 
-PHONE_ROOT = "/sdcard/Android/data/com.termux/files/blog7"
-DATA_ROOT = PHONE_ROOT if os.path.isdir(PHONE_ROOT) else os.path.expanduser("~/blog7-data")
+PHONE_ROOT = "/sdcard/data/finance"
+DATA_ROOT = PHONE_ROOT if os.path.isdir(PHONE_ROOT) else os.path.expanduser("~/data/finance")
 BLOG7 = os.path.join(DATA_ROOT, "db", "blog7.db")
 FINANCE = os.path.join(DATA_ROOT, "db", "finance.db")
 print(f"DATA_ROOT={DATA_ROOT}")

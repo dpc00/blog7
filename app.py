@@ -9,7 +9,9 @@ import calendar
 import math
 import os
 import re
+import shutil
 import sqlite3
+import subprocess
 import threading
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -31,20 +33,19 @@ def _css_version():
 
 # ── Platform detection & data root ───────────────────────────────────────────
 
-_ANDROID_ROOT = Path("/sdcard/Android/data/com.termux/files/blog7")
+_ANDROID_ROOT = Path("/sdcard/data/finance")
+_ANDROID_SECRETS_ROOT = Path("/sdcard/secrets/finance")
 ANDROID = _ANDROID_ROOT.exists()
-if ANDROID:
-    DATA_ROOT = _ANDROID_ROOT
-else:
-    DATA_ROOT = Path.home() / "blog7-data"
+DATA_ROOT = _ANDROID_ROOT if ANDROID else Path.home() / "data" / "finance"
+SECRETS_ROOT = _ANDROID_SECRETS_ROOT if ANDROID else (Path.home() / "secrets" / "finance")
 
 DB_PATH         = DATA_ROOT / "db" / "blog7.db"
 DB_BAK          = DATA_ROOT / "db" / "blog7_backup.db"
 SYNC_STATE_PATH = DATA_ROOT / "db" / "blog7.db.sync-state.json"
-TOKEN_FILE      = DATA_ROOT / "secrets" / "ns_token.txt"
-CREDS_FILE      = DATA_ROOT / "secrets" / "ns_creds.txt"
-EBT_CREDS_FILE  = DATA_ROOT / "secrets" / "ebt_creds.json"
-RCLONE_CONF     = DATA_ROOT / "secrets" / "rclone.conf"
+TOKEN_FILE      = SECRETS_ROOT / "ns_token.txt"
+CREDS_FILE      = SECRETS_ROOT / "ns_creds.txt"
+EBT_CREDS_FILE  = SECRETS_ROOT / "ebt_creds.json"
+RCLONE_CONF     = SECRETS_ROOT / "rclone.conf"
 SYNC_LOG        = DATA_ROOT / "sync.log"
 
 # ── NS API constants ──────────────────────────────────────────────────────────
@@ -413,187 +414,115 @@ def _sync_log(msg):
     except Exception:
         pass
 
-def _gd_load_token():
-    import json, configparser
-    if not RCLONE_CONF.exists():
-        return None
-    cp = configparser.ConfigParser()
-    cp.read(str(RCLONE_CONF))
-    for section in cp.sections():
-        if cp.get(section, "type", fallback="") == "drive":
-            return json.loads(cp.get(section, "token"))
-    return None
+GD_DB_REMOTE = "GD:data/finance/db/blog7.db"
 
-def _gd_refresh_token(token):
-    CLIENT_ID     = "202264815644.apps.googleusercontent.com"
-    CLIENT_SECRET = "X4Z3ca8xfWDb1Voo-F9a7ZxJ"
-    r = requests.post("https://oauth2.googleapis.com/token", data={
-        "client_id": CLIENT_ID, "client_secret": CLIENT_SECRET,
-        "refresh_token": token["refresh_token"], "grant_type": "refresh_token",
-    }, timeout=15)
-    if r.status_code == 200:
-        data = r.json()
-        token["access_token"] = data["access_token"]
-        token["expiry"] = (datetime.now(timezone.utc) +
-                           timedelta(seconds=data["expires_in"])).isoformat()
-        import json, configparser
+
+def _rclone_base_cmd():
+    cmd = ["rclone"]
+    if RCLONE_CONF.exists():
+        cmd += ["--config", str(RCLONE_CONF)]
+    return cmd
+
+
+def _rclone_drive_remote():
+    import configparser
+
+    if RCLONE_CONF.exists():
         cp = configparser.ConfigParser()
         cp.read(str(RCLONE_CONF))
         for section in cp.sections():
             if cp.get(section, "type", fallback="") == "drive":
-                cp.set(section, "token", json.dumps(token))
-        with open(str(RCLONE_CONF), "w") as f:
-            cp.write(f)
-    return token
+                return section
+    return "GD"
 
-def _gd_get_token():
-    token = _gd_load_token()
-    if not token:
+
+def _gd_db_remote():
+    return f"{_rclone_drive_remote()}:data/finance/db/{GD_FILENAME}"
+
+
+def _rclone_run(args, timeout=60):
+    return subprocess.run(
+        _rclone_base_cmd() + list(args),
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+        check=False,
+    )
+
+
+def _rclone_remote_mtime(remote_path):
+    import json
+
+    cp = _rclone_run(["lsjson", remote_path], timeout=30)
+    if cp.returncode != 0:
+        stderr = (cp.stderr or "").strip()
+        if stderr:
+            _sync_log(f"rclone lsjson failed: {stderr}")
         return None
-    expiry = token.get("expiry", "")
-    if expiry:
-        exp_time = datetime.fromisoformat(expiry.replace("Z", "+00:00"))
-        if datetime.now(timezone.utc) >= exp_time:
-            token = _gd_refresh_token(token)
-    return token.get("access_token")
-
-def _gd_headers():
-    access_token = _gd_get_token()
-    if not access_token:
-        return None
-    return {"Authorization": f"Bearer {access_token}"}
-
-GD_FOLDER = "Blog7"
-
-def _gd_folder_id():
-    """Return the Drive folder ID for GD_FOLDER, or None."""
-    headers = _gd_headers()
-    if not headers:
-        return None
-    r = requests.get(
-        "https://www.googleapis.com/drive/v3/files",
-        headers=headers,
-        params={"q": f"name='{GD_FOLDER}' and mimeType='application/vnd.google-apps.folder' and 'root' in parents and trashed=false",
-                "fields": "files(id)", "spaces": "drive"},
-        timeout=15)
-    files = r.json().get("files", []) if r.status_code == 200 else []
-    return files[0]["id"] if files else None
-
-def _gd_db_folder_id():
-    """Return the Drive folder ID for Blog7/db, or None."""
-    headers = _gd_headers()
-    if not headers:
-        return None
-    parent = _gd_folder_id()
-    if not parent:
-        return None
-    r = requests.get(
-        "https://www.googleapis.com/drive/v3/files",
-        headers=headers,
-        params={"q": (f"name='db' and mimeType='application/vnd.google-apps.folder' "
-                      f"and '{parent}' in parents and trashed=false"),
-                "fields": "files(id)", "spaces": "drive"},
-        timeout=15)
-    files = r.json().get("files", []) if r.status_code == 200 else []
-    return files[0]["id"] if files else None
-
-def _gd_find_file(filename=None, parent_id=None):
-    headers = _gd_headers()
-    if not headers:
-        return None, None, None
-    if filename is None:
-        filename = GD_FILENAME
-    explicit_parent = parent_id is not None
-    if parent_id is None:
-        parent_id = _gd_db_folder_id()
-    if not parent_id and not explicit_parent:
-        _sync_log("find aborted: Blog7/db folder not resolvable (likely quota/transient); refusing unscoped lookup")
-        return None, None, None
-    q = f"name='{filename}' and trashed=false"
-    if parent_id:
-        q += f" and '{parent_id}' in parents"
-    r = requests.get(
-        "https://www.googleapis.com/drive/v3/files",
-        headers=headers,
-        params={"q": q,
-                "fields": "files(id,name,modifiedTime,headRevisionId)",
-                "spaces": "drive"},
-        timeout=15)
-    if r.status_code != 200:
-        _sync_log(f"find failed: {r.status_code}")
-        return None, None, None
-    files = r.json().get("files", [])
-    if not files:
-        return None, None, None
-    f = files[0]
-    mt = datetime.fromisoformat(f["modifiedTime"].replace("Z", "+00:00"))
-    return f["id"], mt, f.get("headRevisionId")
-
-def _gd_upload(file_id, src_path):
-    headers = _gd_headers()
-    with open(str(src_path), "rb") as f:
-        r = requests.patch(
-            f"https://www.googleapis.com/upload/drive/v3/files/{file_id}",
-            headers={**headers, "Content-Type": "application/octet-stream"},
-            params={"uploadType": "media", "fields": "id,modifiedTime,headRevisionId"},
-            data=f, timeout=60)
-    if r.status_code == 200:
-        body = r.json()
-        mt = datetime.fromisoformat(body["modifiedTime"].replace("Z", "+00:00"))
-        return True, mt, body.get("headRevisionId")
-    _sync_log(f"upload failed: {r.status_code}")
-    return False, None, None
-
-def _gd_create_file(src_path, filename=None, parent_id=None):
-    headers = _gd_headers()
-    if filename is None:
-        filename = GD_FILENAME
-    if parent_id is None:
-        parent_id = _gd_db_folder_id()
-    if not parent_id:
-        _sync_log("create aborted: Blog7/db folder not resolvable (likely quota/transient); refusing to create at root")
-        return None, None, None
-    meta = {"name": filename, "parents": [parent_id]}
-    r = requests.post(
-        "https://www.googleapis.com/drive/v3/files",
-        headers=headers, json=meta, timeout=15)
-    if r.status_code != 200:
-        _sync_log(f"create failed: {r.status_code}")
-        return None, None, None
-    file_id = r.json().get("id")
-    if not file_id:
-        return None, None, None
-    ok, mt, rev = _gd_upload(file_id, src_path)
-    return (file_id, mt, rev) if ok else (None, None, None)
-
-def _sync_db_with_gd(local_path):
-    """Push local DB to GD if local is newer. Record sync-state on success."""
     try:
-        file_id, gd_time, gd_rev = _gd_find_file()
-        if not file_id:
+        payload = json.loads(cp.stdout or "[]")
+    except ValueError:
+        _sync_log("rclone lsjson returned invalid JSON")
+        return None
+    if isinstance(payload, dict):
+        payload = [payload]
+    if not payload:
+        return None
+    mod_time = payload[0].get("ModTime")
+    if not mod_time:
+        return None
+    return datetime.fromisoformat(mod_time.replace("Z", "+00:00"))
+
+
+def _rclone_copyto(src, dst):
+    src_str = str(src)
+    dst_str = str(dst)
+    if isinstance(dst, Path):
+        dst.parent.mkdir(parents=True, exist_ok=True)
+    cp = _rclone_run(["copyto", src_str, dst_str], timeout=120)
+    if cp.returncode == 0:
+        return True
+    stderr = (cp.stderr or cp.stdout or "").strip()
+    if stderr:
+        _sync_log(f"rclone copyto failed: {stderr}")
+    return False
+
+def _sync_db_with_gd_status(local_path):
+    """Return 'pushed', 'in_sync', or 'failed' for the GD sync attempt."""
+    try:
+        gd_remote = _gd_db_remote()
+        gd_time = _rclone_remote_mtime(gd_remote)
+        if gd_time is None:
             _sync_log(f"{GD_FILENAME} not found on GD — creating")
-            file_id, gd_time, gd_rev = _gd_create_file(local_path)
-            if file_id:
+            if _rclone_copyto(local_path, gd_remote):
+                gd_time = _rclone_remote_mtime(gd_remote) or datetime.now(timezone.utc)
                 _sync_log("created and uploaded")
-                _write_sync_state(SYNC_STATE_PATH, gd_rev, gd_time,
+                _write_sync_state(SYNC_STATE_PATH, gd_time.isoformat(), gd_time,
                                   local_path.stat().st_mtime, _device_id())
-                return True
-            return False
+                return "pushed"
+            return "failed"
         local_time = datetime.fromtimestamp(local_path.stat().st_mtime, tz=timezone.utc)
         _sync_log(f"gd={gd_time}  local={local_time}")
         if local_time > gd_time:
             _sync_log("pushing to GD")
-            ok, new_time, new_rev = _gd_upload(file_id, local_path)
-            if ok:
+            if _rclone_copyto(local_path, gd_remote):
+                new_time = _rclone_remote_mtime(gd_remote) or datetime.now(timezone.utc)
                 _sync_log("push done")
-                _write_sync_state(SYNC_STATE_PATH, new_rev, new_time,
+                _write_sync_state(SYNC_STATE_PATH, new_time.isoformat(), new_time,
                                   local_path.stat().st_mtime, _device_id())
-                return True
+                return "pushed"
+            return "failed"
         else:
             _sync_log("already in sync or GD newer — skipping")
+            return "in_sync"
     except Exception as e:
         _sync_log(f"error: {e}")
-    return False
+    return "failed"
+
+
+def _sync_db_with_gd(local_path):
+    """Push local DB to GD if local is newer. Record sync-state on success."""
+    return _sync_db_with_gd_status(local_path) == "pushed"
 
 def _decide_pull(local_state, gd_revision, local_db_mtime):
     """Pure decision function; returns one of:
@@ -610,25 +539,6 @@ def _decide_pull(local_state, gd_revision, local_db_mtime):
         return "conflict"
     return "pull"
 
-
-def _gd_download(file_id, dest_path):
-    headers = _gd_headers()
-    if not headers:
-        return False
-    r = requests.get(
-        f"https://www.googleapis.com/drive/v3/files/{file_id}",
-        headers=headers, params={"alt": "media"}, timeout=60, stream=True)
-    if r.status_code != 200:
-        _sync_log(f"download failed: {r.status_code}")
-        return False
-    tmp = Path(str(dest_path) + ".tmp")
-    with open(tmp, "wb") as f:
-        for chunk in r.iter_content(chunk_size=65536):
-            f.write(chunk)
-    tmp.replace(dest_path)
-    return True
-
-
 def _pull_db_from_gd():
     """Best-effort pull on startup. Never raises."""
     import os
@@ -636,14 +546,17 @@ def _pull_db_from_gd():
         _sync_log("pull disabled by env flag")
         return
     try:
-        file_id, gd_time, gd_rev = _gd_find_file()
+        gd_remote = _gd_db_remote()
+        gd_time = _rclone_remote_mtime(gd_remote)
+        gd_rev = gd_time.isoformat() if gd_time else None
         local_state = _read_sync_state(SYNC_STATE_PATH)
         local_mtime = DB_PATH.stat().st_mtime if DB_PATH.exists() else 0.0
         decision = _decide_pull(local_state, gd_rev, local_mtime)
         _sync_log(f"pull decision: {decision}")
         if decision != "pull":
             return
-        if _gd_download(file_id, DB_PATH):
+        if _rclone_copyto(gd_remote, DB_PATH):
+            gd_time = _rclone_remote_mtime(gd_remote) or gd_time or datetime.now(timezone.utc)
             _write_sync_state(SYNC_STATE_PATH, gd_rev, gd_time,
                               DB_PATH.stat().st_mtime, _device_id())
             _sync_log("pull done")
@@ -1209,8 +1122,8 @@ def exit_app():
         backed_up = True
     except Exception:
         backed_up = False
-    synced = _sync_db_with_gd(DB_PATH)
-    return render_template('exit.html', backed_up=backed_up, synced=synced)
+    sync_status = _sync_db_with_gd_status(DB_PATH)
+    return render_template('exit.html', backed_up=backed_up, sync_status=sync_status)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 

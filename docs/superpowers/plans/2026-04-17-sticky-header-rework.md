@@ -1,5 +1,22 @@
 # Sticky Header Rework Implementation Plan
 
+## Outcome
+
+Implemented and confirmed working on the phone.
+
+The reliable Android Chrome fix was narrower than the original plan: instead of trying to make whole-page scrolling and sticky offsets behave everywhere, the wide `transactions` and summary tables were moved into a dedicated `.table-shell` scroll container. Their headers now stick to the top of that container with `top: 0`, while the tab bar stays sticky at the page level.
+
+Final implementation notes:
+- `templates/transactions.html` and `templates/summary.html` wrap their tables in `<div class="table-shell">`
+- `static/style.css` defines `.table-shell` with `overflow: auto`, `max-width: 100%`, touch scrolling, and a mobile `max-height`
+- `thead th` and `.recent-hdr` no longer depend on a hardcoded `top: 44px`
+- `templates/base.html` measures the actual tabs height into `--tabs-height` for mobile sizing
+
+Phone deployment notes:
+- Source files were pushed directly to `/sdcard/projects/blog7` via `adb push`
+- Termux app launch remains `cd /sdcard/projects/blog7 && python app.py`
+- SSH to Termux was verified as `u0_a552@10.0.0.53:8022`
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Make the tabs and table headers stay frozen at the top of the viewport when scrolling, on both Balances (`/`) and Transactions (`/transactions`).

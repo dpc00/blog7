@@ -24,5 +24,16 @@
     {% endwith %}
     {% block content %}{% endblock %}
   </div>
+  <script>
+    (() => {
+      const tabs = document.querySelector('.tabs');
+      if (!tabs) return;
+      const setTabsHeight = () => {
+        document.documentElement.style.setProperty('--tabs-height', `${tabs.offsetHeight}px`);
+      };
+      setTabsHeight();
+      window.addEventListener('resize', setTabsHeight);
+    })();
+  </script>
 </body>
 </html>

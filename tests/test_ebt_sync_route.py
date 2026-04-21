@@ -14,7 +14,7 @@ def load_app_module(tmp_path, monkeypatch):
 
 def test_sync_ebt_route_flashes_success(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-route-test-home")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()
@@ -37,7 +37,7 @@ def test_sync_ebt_route_flashes_success(monkeypatch):
 
 def test_ebt_do_sync_uses_csv_path_from_script(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-route-test-home-sync")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()
@@ -69,7 +69,7 @@ def test_ebt_do_sync_uses_csv_path_from_script(monkeypatch):
 
 def test_sync_ebt_route_flashes_error(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-route-test-home-error")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()
@@ -88,7 +88,7 @@ def test_sync_ebt_route_flashes_error(monkeypatch):
 
 def test_ebt_do_sync_updates_balance_when_only_balance_is_available(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-route-test-home-balance-only")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()
@@ -110,7 +110,7 @@ def test_ebt_do_sync_updates_balance_when_only_balance_is_available(monkeypatch)
 
 def test_sync_ebt_route_flashes_balance_only_message(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-route-test-home-balance-flash")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()
@@ -129,7 +129,7 @@ def test_sync_ebt_route_flashes_balance_only_message(monkeypatch):
 
 def test_ebt_do_sync_reports_found_sidecar_files_when_csv_is_missing(monkeypatch):
     temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-route-test-home-found-files")
-    db_path = temp_home / "blog7-data" / "db" / "blog7.db"
+    db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()

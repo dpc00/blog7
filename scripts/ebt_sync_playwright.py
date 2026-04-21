@@ -28,6 +28,7 @@ from pathlib import Path
 
 
 EBT_URL = "https://cardholder.ebtedge.com/"
+BLOG7_RETURN_URL = os.environ.get("BLOG7_RETURN_URL", "http://10.0.0.53:5000/balances?asset=3")
 LOGIN_NAME_INPUT = "#idp-first-time-login-loginname"
 PASSWORD_INPUT = "#idp-first-time-login-password"
 LOGIN_BUTTON = "#idp-first-time-login-signin"
@@ -311,6 +312,28 @@ def _dismiss_android_prompts_for_a_while(serial: str, seconds: int = 20) -> None
             time.sleep(2)
 
     threading.Thread(target=worker, daemon=True).start()
+
+
+def _return_to_blog7(serial: str) -> None:
+    """
+    Put Chrome back on the local blog7 app after the EBT run.
+    """
+    _run(
+        [
+            "adb",
+            "-s",
+            serial,
+            "shell",
+            "am",
+            "start",
+            "-a",
+            "android.intent.action.VIEW",
+            "-d",
+            BLOG7_RETURN_URL,
+            "com.android.chrome",
+        ],
+        timeout=30,
+    )
 
 
 def _write_node_driver(path: Path) -> None:
@@ -707,6 +730,10 @@ def main() -> None:
         "active_url": state.get("active_url"),
         "login_attempted": state.get("login_attempted", False),
     }
+    try:
+        _return_to_blog7(serial)
+    except Exception:
+        pass
     print(json.dumps(result))
 
 

@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="padding: 20px 0; color: #2e7d32; font-size: 16px;">
-  {% if synced %}Synced to Google Drive.{% else %}Backed up locally.{% endif %}
+  {% if sync_status == "pushed" %}
+  Synced to Google Drive.
+  {% elif sync_status == "in_sync" %}
+  Already synced to Google Drive.
+  {% else %}
+  Backed up locally.
+  {% endif %}
 </div>
 {% endblock %}
