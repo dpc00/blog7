@@ -24,12 +24,14 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 app = Flask(__name__)
 app.secret_key = "blog7-balance-log"
 
+
 @app.context_processor
 def _css_version():
     try:
-        return {'css_v': int(Path(app.static_folder, 'style.css').stat().st_mtime)}
+        return {"css_v": int(Path(app.static_folder, "style.css").stat().st_mtime)}
     except OSError:
-        return {'css_v': 0}
+        return {"css_v": 0}
+
 
 # ── Platform detection & data root ───────────────────────────────────────────
 
@@ -37,45 +39,55 @@ _ANDROID_ROOT = Path("/sdcard/data/finance")
 _ANDROID_SECRETS_ROOT = Path("/sdcard/secrets/finance")
 ANDROID = _ANDROID_ROOT.exists()
 DATA_ROOT = _ANDROID_ROOT if ANDROID else Path.home() / "data" / "finance"
-SECRETS_ROOT = _ANDROID_SECRETS_ROOT if ANDROID else (Path.home() / "secrets" / "finance")
+SECRETS_ROOT = (
+    _ANDROID_SECRETS_ROOT if ANDROID else (Path.home() / "secrets" / "finance")
+)
 
-DB_PATH         = DATA_ROOT / "db" / "blog7.db"
-DB_BAK          = DATA_ROOT / "db" / "blog7_backup.db"
+DB_PATH = DATA_ROOT / "db" / "blog7.db"
+DB_BAK = DATA_ROOT / "db" / "blog7_backup.db"
 SYNC_STATE_PATH = DATA_ROOT / "db" / "blog7.db.sync-state.json"
-TOKEN_FILE      = SECRETS_ROOT / "ns_token.txt"
-CREDS_FILE      = SECRETS_ROOT / "ns_creds.txt"
-EBT_CREDS_FILE  = SECRETS_ROOT / "ebt_creds.json"
-RCLONE_CONF     = SECRETS_ROOT / "rclone.conf"
-SYNC_LOG        = DATA_ROOT / "sync.log"
+TOKEN_FILE = SECRETS_ROOT / "ns_token.txt"
+CREDS_FILE = SECRETS_ROOT / "ns_creds.txt"
+EBT_CREDS_FILE = SECRETS_ROOT / "ebt_creds.json"
+RCLONE_CONF = SECRETS_ROOT / "rclone.conf"
+SYNC_LOG = DATA_ROOT / "sync.log"
 
 # ── NS API constants ──────────────────────────────────────────────────────────
 
-_NS_BASE    = "https://app.netspend.com"
+_NS_BASE = "https://app.netspend.com"
 _NS_HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                   "AppleWebKit/537.36 (KHTML, like Gecko) "
-                   "Chrome/146.0.0.0 Safari/537.36"),
-    "x-ns-client":  ("app=spectrum; platform=web; brand=netspend; "
-                     "platformType=web; version=oac-v2.2.3; distributor=walgreens"),
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/146.0.0.0 Safari/537.36"
+    ),
+    "x-ns-client": (
+        "app=spectrum; platform=web; brand=netspend; "
+        "platformType=web; version=oac-v2.2.3; distributor=walgreens"
+    ),
     "x-ns-variant": "variant://app.netspend.com",
-    "Accept":       "*/*",
-    "Referer":      "https://app.netspend.com/app/dashboard?drawer=transactions&isWW=true",
+    "Accept": "*/*",
+    "Referer": "https://app.netspend.com/app/dashboard?drawer=transactions&isWW=true",
 }
 _NS_ASSET_ID = 2
 _EBT_ASSET_ID = 3
 
 _NS_LOGIN_URL = "https://www.netspend.com/profile-api/login"
 _NS_LOGIN_HEADERS = {
-    "User-Agent":    ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                      "AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/146.0.0.0 Safari/537.36"),
-    "X-NS-Client":  ("app=Account Center; platform=web; platformType=web; "
-                     "brand=netspend; version=2026.14.0.1050"),
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/146.0.0.0 Safari/537.36"
+    ),
+    "X-NS-Client": (
+        "app=Account Center; platform=web; platformType=web; "
+        "brand=netspend; version=2026.14.0.1050"
+    ),
     "X-NS-Variant": "variant://app.netspend.com",
     "Content-Type": "application/json",
-    "Accept":       "*/*",
-    "Origin":       "https://www.netspend.com",
-    "Referer":      "https://www.netspend.com/account/login",
+    "Accept": "*/*",
+    "Origin": "https://www.netspend.com",
+    "Referer": "https://www.netspend.com/account/login",
 }
 _NS_DEVICE_FP = (
     "0400Luv3xeLea5WVebKatfMjIK+o2BtaQUX7izSgdqJyWOudfK6lKCA3NHB/2N0bi+myX3RYz0I/Q1vG"
@@ -142,16 +154,19 @@ _NS_DEVICE_FP = (
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
 
+
 def nc(d: float) -> float:
     return round(d * 100) / 100
+
 
 def ncs(d: float) -> str:
     return f"{nc(d):,.2f}"
 
+
 def dl(dom: int) -> float:
     """Days until next occurrence of day-of-month dom."""
     now = datetime.now()
-    nd  = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    nd = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     while True:
         days_in_month = calendar.monthrange(nd.year, nd.month)[1]
         actual_day = min(dom, days_in_month)
@@ -161,14 +176,15 @@ def dl(dom: int) -> float:
         nd += relativedelta(months=1)
     return (nd - now).total_seconds() / 86400.0
 
+
 def txtpa(txt: str) -> list:
     """Parse amount expression with optional flow-type suffix."""
     if not txt:
         return []
-    pattern = re.compile(r'([+\-]?\s*[\d,]*\.?\d+)\s*(ex|in|ti|to|rr)?', re.IGNORECASE)
+    pattern = re.compile(r"([+\-]?\s*[\d,]*\.?\d+)\s*(ex|in|ti|to|rr)?", re.IGNORECASE)
     results = []
     for m in pattern.finditer(txt):
-        raw = m.group(1).replace(' ', '').replace(',', '')
+        raw = m.group(1).replace(" ", "").replace(",", "")
         try:
             num = float(raw)
         except ValueError:
@@ -176,11 +192,13 @@ def txtpa(txt: str) -> list:
         if not math.isfinite(num):
             continue
         tag_raw = m.group(2)
-        tag = tag_raw.lower() if tag_raw else ('in' if num >= 0 else 'ex')
-        results.append({'num': num, 'tag': tag})
+        tag = tag_raw.lower() if tag_raw else ("in" if num >= 0 else "ex")
+        results.append({"num": num, "tag": tag})
     return results
 
+
 # ── DB ────────────────────────────────────────────────────────────────────────
+
 
 class QueryResult:
     def __init__(self, data, fieldnames):
@@ -204,8 +222,9 @@ class QueryResult:
                 return self._data[self._fieldnames[key]]
             raise
 
+
 def qr_factory(cursor, row):
-    cds  = [col[0] for col in cursor.description]
+    cds = [col[0] for col in cursor.description]
     data = {col: row[idx] for idx, col in enumerate(cds)}
     return QueryResult(data, cds)
 
@@ -236,68 +255,93 @@ class DB:
 
     def tblexists(self, nm: str) -> bool:
         row = self.fetchone(
-            "SELECT COUNT() AS cnt FROM sqlite_master WHERE type='table' AND name=?", [nm])
+            "SELECT COUNT() AS cnt FROM sqlite_master WHERE type='table' AND name=?",
+            [nm],
+        )
         return bool(row and row.cnt > 0)
 
     def init_schema(self):
-        self.execute("""CREATE TABLE IF NOT EXISTS asset (
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS asset (
             asset_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL, type TEXT NOT NULL,
-            current_balance REAL DEFAULT 0)""")
+            current_balance REAL DEFAULT 0)"""
+        )
         try:
             self.execute("ALTER TABLE asset ADD COLUMN current_balance REAL DEFAULT 0")
         except Exception:
             pass
         if self.fetchone("SELECT COUNT(*) AS c FROM asset").c == 0:
-            for nm, tp in [("Direct Express", "Prepaid Debit Card"),
-                           ("Netspend",       "Prepaid Debit Card"),
-                           ("Colorado Quest", "EBT card"),
-                           ("Cash",           "Wallet")]:
+            for nm, tp in [
+                ("Direct Express", "Prepaid Debit Card"),
+                ("Netspend", "Prepaid Debit Card"),
+                ("Colorado Quest", "EBT card"),
+                ("Cash", "Wallet"),
+            ]:
                 self.execute("INSERT INTO asset (name,type) VALUES (?,?)", [nm, tp])
 
-        self.execute("""CREATE TABLE IF NOT EXISTS source (
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS source (
             source_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT, type TEXT, day INTEGER, amount REAL, asset_id INTEGER)""")
+            name TEXT, type TEXT, day INTEGER, amount REAL, asset_id INTEGER)"""
+        )
         if self.fetchone("SELECT COUNT(*) AS c FROM source").c == 0:
             for nm, tp, day, amt, aid in [
-                ("SSA",   "SSI",              26, 648, 2),
-                ("CODHS", "OAP",              27, 189, 2),
-                ("SSA",   "Early Retirement", 31, 366, 2),
-                ("CODHS", "FS",                8, 109, 3),
+                ("SSA", "SSI", 26, 648, 2),
+                ("CODHS", "OAP", 27, 189, 2),
+                ("SSA", "Early Retirement", 31, 366, 2),
+                ("CODHS", "FS", 8, 109, 3),
             ]:
                 self.execute(
                     "INSERT INTO source (name,type,day,amount,asset_id) VALUES (?,?,?,?,?)",
-                    [nm, tp, day, amt, aid])
+                    [nm, tp, day, amt, aid],
+                )
 
-        self.execute("""CREATE TABLE IF NOT EXISTS nums (
-            name TEXT PRIMARY KEY, num REAL, ts TIMESTAMP)""")
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS nums (
+            name TEXT PRIMARY KEY, num REAL, ts TIMESTAMP)"""
+        )
 
-        self.execute("""CREATE TABLE IF NOT EXISTS flow_types (
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS flow_types (
             flow INTEGER PRIMARY KEY, code TEXT NOT NULL,
-            name TEXT, sign INTEGER NOT NULL DEFAULT 1)""")
+            name TEXT, sign INTEGER NOT NULL DEFAULT 1)"""
+        )
         if self.fetchone("SELECT COUNT(*) AS c FROM flow_types").c == 0:
             for flow, code, name, sign in [
-                (1, 'in', 'income',        1),
-                (2, 'ex', 'expense',      -1),
-                (3, 'ti', 'transfer_in',   1),
-                (4, 'to', 'transfer_out', -1),
-                (5, 'rr', 'refund_return', 1),
+                (1, "in", "income", 1),
+                (2, "ex", "expense", -1),
+                (3, "ti", "transfer_in", 1),
+                (4, "to", "transfer_out", -1),
+                (5, "rr", "refund_return", 1),
             ]:
                 self.execute(
                     "INSERT INTO flow_types (flow,code,name,sign) VALUES (?,?,?,?)",
-                    [flow, code, name, sign])
+                    [flow, code, name, sign],
+                )
 
-        self.execute("""CREATE TABLE IF NOT EXISTS transactions (
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS transactions (
             id TEXT PRIMARY KEY, asset_id INTEGER NOT NULL,
             day DATE NOT NULL, amt REAL NOT NULL, flow INTEGER NOT NULL,
-            balance REAL, desc TEXT)""")
+            balance REAL, desc TEXT)"""
+        )
         for col, coltype in [
-            ("income", "REAL"), ("expense", "REAL"),
-            ("transfer_in", "REAL"), ("transfer_out", "REAL"),
-            ("refund_return", "REAL"), ("ttype", "TEXT"),
-            ("comp", "TEXT"), ("pprocs", "TEXT"), ("stnum", "TEXT"),
-            ("amcode", "TEXT"), ("bwnum", "TEXT"), ("isite", "TEXT"),
-            ("mcode", "TEXT"), ("address", "TEXT"), ("phone", "TEXT"),
+            ("income", "REAL"),
+            ("expense", "REAL"),
+            ("transfer_in", "REAL"),
+            ("transfer_out", "REAL"),
+            ("refund_return", "REAL"),
+            ("ttype", "TEXT"),
+            ("comp", "TEXT"),
+            ("pprocs", "TEXT"),
+            ("stnum", "TEXT"),
+            ("amcode", "TEXT"),
+            ("bwnum", "TEXT"),
+            ("isite", "TEXT"),
+            ("mcode", "TEXT"),
+            ("address", "TEXT"),
+            ("phone", "TEXT"),
         ]:
             try:
                 self.execute(f"ALTER TABLE transactions ADD COLUMN {col} {coltype}")
@@ -305,46 +349,64 @@ class DB:
                 pass
 
         for tbl in ("daily", "weekly", "monthly", "yearly"):
-            info = {r[1]: r[5] for r in self.conn.execute(
-                f"PRAGMA table_info({tbl})").fetchall()}
+            info = {
+                r[1]: r[5]
+                for r in self.conn.execute(f"PRAGMA table_info({tbl})").fetchall()
+            }
             if info and ("f_in" in info or info.get("asset_id", 0) == 0):
                 self.execute(f"DROP TABLE {tbl}")
 
-        self.execute("""CREATE TABLE IF NOT EXISTS daily (
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS daily (
             day TEXT NOT NULL, asset_id INTEGER NOT NULL,
             income REAL, expense REAL, transfer_in REAL, transfer_out REAL, refund_return REAL,
-            PRIMARY KEY (day, asset_id))""")
-        self.execute("""CREATE TABLE IF NOT EXISTS weekly (
+            PRIMARY KEY (day, asset_id))"""
+        )
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS weekly (
             week TEXT NOT NULL, asset_id INTEGER NOT NULL,
             income REAL, expense REAL, transfer_in REAL, transfer_out REAL, refund_return REAL,
-            PRIMARY KEY (week, asset_id))""")
-        self.execute("""CREATE TABLE IF NOT EXISTS monthly (
+            PRIMARY KEY (week, asset_id))"""
+        )
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS monthly (
             month TEXT NOT NULL, asset_id INTEGER NOT NULL,
             income REAL, expense REAL, transfer_in REAL, transfer_out REAL, refund_return REAL,
-            PRIMARY KEY (month, asset_id))""")
-        self.execute("""CREATE TABLE IF NOT EXISTS yearly (
+            PRIMARY KEY (month, asset_id))"""
+        )
+        self.execute(
+            """CREATE TABLE IF NOT EXISTS yearly (
             year TEXT NOT NULL, asset_id INTEGER NOT NULL,
             income REAL, expense REAL, transfer_in REAL, transfer_out REAL, refund_return REAL,
-            PRIMARY KEY (year, asset_id))""")
+            PRIMARY KEY (year, asset_id))"""
+        )
 
     def load_assets(self) -> list:
         rows = self.fetchall("SELECT * FROM asset ORDER BY asset_id")
-        return [{'id': r.asset_id, 'name': r.name,
-                 'ebt': 1 if r.type == 'EBT card' else 0,
-                 'balance': r.current_balance or 0.0}
-                for r in rows]
+        return [
+            {
+                "id": r.asset_id,
+                "name": r.name,
+                "ebt": 1 if r.type == "EBT card" else 0,
+                "balance": r.current_balance or 0.0,
+            }
+            for r in rows
+        ]
 
     def save_asset_balance(self, asset_id: int, balance: float):
-        self.execute("UPDATE asset SET current_balance=? WHERE asset_id=?",
-                     [balance, asset_id])
+        self.execute(
+            "UPDATE asset SET current_balance=? WHERE asset_id=?", [balance, asset_id]
+        )
 
     def load_number(self, name: str) -> float:
         row = self.fetchone("SELECT num FROM nums WHERE name=?", [name])
         return row.num if row else 0.0
 
     def save_number(self, name: str, num: float):
-        self.execute("INSERT OR REPLACE INTO nums (name,num,ts) VALUES (?,?,?)",
-                     [name, num, datetime.now().isoformat()])
+        self.execute(
+            "INSERT OR REPLACE INTO nums (name,num,ts) VALUES (?,?,?)",
+            [name, num, datetime.now().isoformat()],
+        )
 
     def log_txn(self, asset_id: int, amt: float, balance: float, flow_code: str):
         row = self.fetchone("SELECT flow FROM flow_types WHERE code=?", [flow_code])
@@ -353,20 +415,36 @@ class DB:
         self.execute(
             "INSERT OR IGNORE INTO transactions (id, asset_id, day, amt, flow, balance, desc)"
             " VALUES (?,?,?,?,?,?,?)",
-            [txn_id, asset_id, datetime.now().strftime("%Y-%m-%d"),
-             amt, flow, balance, None])
+            [
+                txn_id,
+                asset_id,
+                datetime.now().strftime("%Y-%m-%d"),
+                amt,
+                flow,
+                balance,
+                None,
+            ],
+        )
 
     def load_sources(self, excl_asset_ids: list) -> list:
         if excl_asset_ids:
-            ph = ','.join('?' * len(excl_asset_ids))
+            ph = ",".join("?" * len(excl_asset_ids))
             rows = self.fetchall(
                 f"SELECT * FROM source WHERE asset_id NOT IN ({ph}) ORDER BY source_id",
-                excl_asset_ids)
+                excl_asset_ids,
+            )
         else:
             rows = self.fetchall("SELECT * FROM source ORDER BY source_id")
-        return [{'id': r.source_id, 'name': r.name, 'type': r.type,
-                 'day': r.day, 'amount': r.amount}
-                for r in rows]
+        return [
+            {
+                "id": r.source_id,
+                "name": r.name,
+                "type": r.type,
+                "day": r.day,
+                "amount": r.amount,
+            }
+            for r in rows
+        ]
 
 
 db = DB(DB_PATH)
@@ -380,17 +458,21 @@ GD_FILENAME = "blog7.db"
 
 SYNC_STATE_VERSION = 1
 
+
 def _read_sync_state(path):
     """Return parsed dict or None if missing/unreadable."""
     import json
+
     try:
         return json.loads(Path(path).read_text())
     except (FileNotFoundError, ValueError):
         return None
 
+
 def _write_sync_state(path, revision_id, gd_modified_time, local_mtime, device):
     """Atomic-ish write of sync-state sidecar."""
     import json
+
     payload = {
         "version": SYNC_STATE_VERSION,
         "revision_id": revision_id,
@@ -404,8 +486,10 @@ def _write_sync_state(path, revision_id, gd_modified_time, local_mtime, device):
     tmp.write_text(json.dumps(payload, indent=2))
     tmp.replace(path)
 
+
 def _device_id():
     return "phone" if ANDROID else "laptop"
+
 
 def _sync_log(msg):
     try:
@@ -413,6 +497,7 @@ def _sync_log(msg):
             f.write(f"{datetime.now()}: {msg}\n")
     except Exception:
         pass
+
 
 GD_DB_REMOTE = "GD:data/finance/db/blog7.db"
 
@@ -487,6 +572,7 @@ def _rclone_copyto(src, dst):
         _sync_log(f"rclone copyto failed: {stderr}")
     return False
 
+
 def _sync_db_with_gd_status(local_path):
     """Return 'pushed', 'in_sync', or 'failed' for the GD sync attempt."""
     try:
@@ -497,8 +583,13 @@ def _sync_db_with_gd_status(local_path):
             if _rclone_copyto(local_path, gd_remote):
                 gd_time = _rclone_remote_mtime(gd_remote) or datetime.now(timezone.utc)
                 _sync_log("created and uploaded")
-                _write_sync_state(SYNC_STATE_PATH, gd_time.isoformat(), gd_time,
-                                  local_path.stat().st_mtime, _device_id())
+                _write_sync_state(
+                    SYNC_STATE_PATH,
+                    gd_time.isoformat(),
+                    gd_time,
+                    local_path.stat().st_mtime,
+                    _device_id(),
+                )
                 return "pushed"
             return "failed"
         local_time = datetime.fromtimestamp(local_path.stat().st_mtime, tz=timezone.utc)
@@ -508,8 +599,13 @@ def _sync_db_with_gd_status(local_path):
             if _rclone_copyto(local_path, gd_remote):
                 new_time = _rclone_remote_mtime(gd_remote) or datetime.now(timezone.utc)
                 _sync_log("push done")
-                _write_sync_state(SYNC_STATE_PATH, new_time.isoformat(), new_time,
-                                  local_path.stat().st_mtime, _device_id())
+                _write_sync_state(
+                    SYNC_STATE_PATH,
+                    new_time.isoformat(),
+                    new_time,
+                    local_path.stat().st_mtime,
+                    _device_id(),
+                )
                 return "pushed"
             return "failed"
         else:
@@ -523,6 +619,7 @@ def _sync_db_with_gd_status(local_path):
 def _sync_db_with_gd(local_path):
     """Push local DB to GD if local is newer. Record sync-state on success."""
     return _sync_db_with_gd_status(local_path) == "pushed"
+
 
 def _decide_pull(local_state, gd_revision, local_db_mtime):
     """Pure decision function; returns one of:
@@ -539,9 +636,11 @@ def _decide_pull(local_state, gd_revision, local_db_mtime):
         return "conflict"
     return "pull"
 
+
 def _pull_db_from_gd():
     """Best-effort pull on startup. Never raises."""
     import os
+
     if os.environ.get("BLOG7_PULL_ON_START", "1") != "1":
         _sync_log("pull disabled by env flag")
         return
@@ -556,9 +655,12 @@ def _pull_db_from_gd():
         if decision != "pull":
             return
         if _rclone_copyto(gd_remote, DB_PATH):
-            gd_time = _rclone_remote_mtime(gd_remote) or gd_time or datetime.now(timezone.utc)
-            _write_sync_state(SYNC_STATE_PATH, gd_rev, gd_time,
-                              DB_PATH.stat().st_mtime, _device_id())
+            gd_time = (
+                _rclone_remote_mtime(gd_remote) or gd_time or datetime.now(timezone.utc)
+            )
+            _write_sync_state(
+                SYNC_STATE_PATH, gd_rev, gd_time, DB_PATH.stat().st_mtime, _device_id()
+            )
             _sync_log("pull done")
     except Exception as e:
         _sync_log(f"pull error: {e}")
@@ -568,27 +670,36 @@ def _pull_db_from_gd():
 
 _ISO_MONDAY = "date(day, '-' || cast((strftime('%w', day) + 6) % 7 as text) || ' days')"
 
+
 def _update_summary_tables():
-    db.execute(f"""
+    db.execute(
+        f"""
         INSERT OR REPLACE INTO daily (day, asset_id, income, expense, transfer_in, transfer_out, refund_return)
         SELECT day, asset_id,
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
-        FROM transactions GROUP BY day, asset_id""")
-    db.execute(f"""
+        FROM transactions GROUP BY day, asset_id"""
+    )
+    db.execute(
+        f"""
         INSERT OR REPLACE INTO weekly (week, asset_id, income, expense, transfer_in, transfer_out, refund_return)
         SELECT {_ISO_MONDAY} AS week, asset_id,
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
-        FROM transactions GROUP BY week, asset_id""")
-    db.execute("""
+        FROM transactions GROUP BY week, asset_id"""
+    )
+    db.execute(
+        """
         INSERT OR REPLACE INTO monthly (month, asset_id, income, expense, transfer_in, transfer_out, refund_return)
         SELECT substr(day,1,7) AS month, asset_id,
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
-        FROM transactions GROUP BY month, asset_id""")
-    db.execute("""
+        FROM transactions GROUP BY month, asset_id"""
+    )
+    db.execute(
+        """
         INSERT OR REPLACE INTO yearly (year, asset_id, income, expense, transfer_in, transfer_out, refund_return)
         SELECT substr(day,1,4) AS year, asset_id,
                SUM(income), SUM(expense), SUM(transfer_in), SUM(transfer_out), SUM(refund_return)
-        FROM transactions GROUP BY year, asset_id""")
+        FROM transactions GROUP BY year, asset_id"""
+    )
 
 
 def _ebt_desc(row):
@@ -718,7 +829,11 @@ def _ebt_do_sync():
                 return 0, final_balance, None
             found_parts = [name for name, present in files_found.items() if present]
             if found_parts:
-                return 0, None, "EBT sync found no CSV. Files found: " + ", ".join(found_parts)
+                return (
+                    0,
+                    None,
+                    "EBT sync found no CSV. Files found: " + ", ".join(found_parts),
+                )
             return 0, None, "EBT sync produced no CSV."
 
         count, balance = _ebt_import_csv(
@@ -738,9 +853,11 @@ def _ns_parse_ts(s: str) -> str:
     except Exception:
         return datetime.strptime(s[:10], "%m-%d-%Y").strftime("%Y-%m-%dT00:00:00Z")
 
+
 def _ns_ts_after(base_ts: str, offset_secs: int) -> str:
     dt = datetime.strptime(base_ts, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
     return (dt + timedelta(seconds=offset_secs)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 
 def _ns_do_sync():
     """Returns (n, bal, err)."""
@@ -754,12 +871,12 @@ def _ns_do_sync():
         return 0, None, "Token file is empty."
 
     hdrs = {**_NS_HEADERS, "X-Ns-Access_token": token}
-    today  = datetime.now()
-    cur_d  = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    today = datetime.now()
+    cur_d = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     prev_d = cur_d - relativedelta(months=1)
 
     posted_txns = []
-    final_bal   = None
+    final_bal = None
 
     for d in [prev_d, cur_d]:
         year, month = d.year, d.month
@@ -773,7 +890,11 @@ def _ns_do_sync():
                 hdrs = {**_NS_HEADERS, "X-Ns-Access_token": token}
                 resp = requests.get(url, headers=hdrs, timeout=30)
                 if resp.status_code in (401, 403):
-                    return 0, None, "Token expired; re-login succeeded but still rejected."
+                    return (
+                        0,
+                        None,
+                        "Token expired; re-login succeeded but still rejected.",
+                    )
             resp.raise_for_status()
             stmt = resp.json()
         except requests.HTTPError as exc:
@@ -782,11 +903,13 @@ def _ns_do_sync():
             return 0, None, f"Network error: {exc}"
 
         for t in stmt.get("transactions", []):
-            ts     = _ns_parse_ts(t["date"])
+            ts = _ns_parse_ts(t["date"])
             credit = t["credit"]
-            amt    = round(t["amount"] / 100, 2) if credit else -round(t["amount"] / 100, 2)
-            bal    = round(t["running_balance"] / 100, 2)
-            memo   = t.get("memo", "") or ""
+            amt = (
+                round(t["amount"] / 100, 2) if credit else -round(t["amount"] / 100, 2)
+            )
+            bal = round(t["running_balance"] / 100, 2)
+            memo = t.get("memo", "") or ""
             posted_txns.append((ts, amt, bal, "in" if credit else "ex", memo))
 
         if (year, month) == (today.year, today.month):
@@ -796,22 +919,28 @@ def _ns_do_sync():
 
     posted_txns.sort(key=lambda x: x[0])
 
-    last_ts = posted_txns[-1][0] if posted_txns else \
-              datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    last_ts = (
+        posted_txns[-1][0]
+        if posted_txns
+        else datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    )
     pending_txns = []
     try:
         resp = requests.get(
-            f"{_NS_BASE}/webapi/v1/transactions/debit/pending",
-            headers=hdrs, timeout=30)
+            f"{_NS_BASE}/webapi/v1/transactions/debit/pending", headers=hdrs, timeout=30
+        )
         resp.raise_for_status()
         running = final_bal or 0.0
         for i, t in enumerate(resp.json().get("transactions", []), start=1):
             credit = t["credit"]
-            amt    = round(t["amount"] / 100, 2) if credit else -round(t["amount"] / 100, 2)
+            amt = (
+                round(t["amount"] / 100, 2) if credit else -round(t["amount"] / 100, 2)
+            )
             running = round(running + amt, 2)
-            memo   = t.get("memo", "") or ""
-            pending_txns.append((_ns_ts_after(last_ts, i), amt, running,
-                                 "in" if credit else "ex", memo))
+            memo = t.get("memo", "") or ""
+            pending_txns.append(
+                (_ns_ts_after(last_ts, i), amt, running, "in" if credit else "ex", memo)
+            )
         if pending_txns:
             final_bal = running
     except Exception:
@@ -822,53 +951,78 @@ def _ns_do_sync():
 
     ft_rows = db.fetchall("SELECT flow, code FROM flow_types")
     code_to_flow = {r.code: r.flow for r in ft_rows}
-    bucket_col   = {'in': 'income', 'ex': 'expense', 'ti': 'transfer_in',
-                    'to': 'transfer_out', 'rr': 'refund_return'}
+    bucket_col = {
+        "in": "income",
+        "ex": "expense",
+        "ti": "transfer_in",
+        "to": "transfer_out",
+        "rr": "refund_return",
+    }
     sq = sqids_mod.Sqids()
     day_seqno = {}
 
     for ts, amt, bal, ft_code, memo in all_txns:
-        flow   = code_to_flow.get(ft_code, 2)
-        dt_loc = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ").replace(
-                     tzinfo=timezone.utc).astimezone()
-        day    = dt_loc.strftime("%Y-%m-%d")
-        dk     = (dt_loc.year, dt_loc.month, dt_loc.day)
+        flow = code_to_flow.get(ft_code, 2)
+        dt_loc = (
+            datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ")
+            .replace(tzinfo=timezone.utc)
+            .astimezone()
+        )
+        day = dt_loc.strftime("%Y-%m-%d")
+        dk = (dt_loc.year, dt_loc.month, dt_loc.day)
         day_seqno[dk] = day_seqno.get(dk, 0) + 1
         txn_id = sq.encode([_NS_ASSET_ID, dk[0], dk[1], dk[2], day_seqno[dk]])
-        col    = bucket_col.get(ft_code, 'expense')
+        col = bucket_col.get(ft_code, "expense")
         db.execute(
             f"INSERT INTO transactions"
             f" (id, asset_id, day, amt, flow, balance, desc, {col})"
             f" VALUES (?,?,?,?,?,?,?,?)",
-            [txn_id, _NS_ASSET_ID, day, amt, flow, bal, memo or None, amt])
+            [txn_id, _NS_ASSET_ID, day, amt, flow, bal, memo or None, amt],
+        )
 
     if final_bal is not None:
-        db.execute("UPDATE asset SET current_balance=? WHERE asset_id=?",
-                   [final_bal, _NS_ASSET_ID])
+        db.execute(
+            "UPDATE asset SET current_balance=? WHERE asset_id=?",
+            [final_bal, _NS_ASSET_ID],
+        )
 
     _update_summary_tables()
 
     return len(all_txns), final_bal, None
 
+
 # ── Routes ────────────────────────────────────────────────────────────────────
 
-@app.route('/')
+
+@app.route("/")
 def balances():
     assets = db.load_assets()
-    asset_id = request.args.get('asset', type=int, default=_NS_ASSET_ID)
+    asset_id = request.args.get("asset", type=int, default=_NS_ASSET_ID)
     recent = db.fetchall(
         "SELECT id, day, amt, balance, flow FROM transactions"
-        " WHERE asset_id=? ORDER BY day DESC, rowid DESC LIMIT 15", [asset_id])
-    ft_rows   = db.fetchall("SELECT flow, code FROM flow_types")
+        " WHERE asset_id=? ORDER BY day DESC, rowid DESC LIMIT 15",
+        [asset_id],
+    )
+    ft_rows = db.fetchall("SELECT flow, code FROM flow_types")
     flow_code = {r.flow: r.code for r in ft_rows}
-    focused   = next((a for a in assets if a['id'] == asset_id), assets[0] if assets else None)
-    return render_template('balances.html', tab='balances', assets=assets,
-                           recent=recent, flow_code=flow_code, focused=focused, ncs=ncs)
+    focused = next(
+        (a for a in assets if a["id"] == asset_id), assets[0] if assets else None
+    )
+    return render_template(
+        "balances.html",
+        tab="balances",
+        assets=assets,
+        recent=recent,
+        flow_code=flow_code,
+        focused=focused,
+        ncs=ncs,
+    )
 
-@app.route('/update', methods=['POST'])
+
+@app.route("/update", methods=["POST"])
 def update():
     assets = db.load_assets()
-    bal_map = {a['id']: a['balance'] for a in assets}
+    bal_map = {a["id"]: a["balance"] for a in assets}
     for a in assets:
         field_val = request.form.get(f"bal_{a['id']}", "").strip()
         items = txtpa(field_val)
@@ -876,33 +1030,34 @@ def update():
             continue
         acc = 0.0
         for item in items:
-            prev = bal_map[a['id']] if acc == 0.0 else acc
-            acc  = nc(acc + item['num'])
-            if bal_map[a['id']] != acc:
-                bal_map[a['id']] = acc
-                db.save_asset_balance(a['id'], acc)
-                if item['tag'] in ('ti', 'to', 'rr'):
-                    tag = item['tag']
+            prev = bal_map[a["id"]] if acc == 0.0 else acc
+            acc = nc(acc + item["num"])
+            if bal_map[a["id"]] != acc:
+                bal_map[a["id"]] = acc
+                db.save_asset_balance(a["id"], acc)
+                if item["tag"] in ("ti", "to", "rr"):
+                    tag = item["tag"]
                 else:
-                    tag = 'in' if acc >= prev else 'ex'
-                db.log_txn(a['id'], item['num'], acc, tag)
+                    tag = "in" if acc >= prev else "ex"
+                db.log_txn(a["id"], item["num"], acc, tag)
     _update_summary_tables()
     flash("Updated.", "ok")
-    return redirect(url_for('balances'))
+    return redirect(url_for("balances"))
 
-@app.route('/sync_ns', methods=['POST'])
+
+@app.route("/sync_ns", methods=["POST"])
 def sync_ns():
     n, bal, err = _ns_do_sync()
     if err:
         flash(err, "err")
     else:
-        ts      = datetime.now().strftime("%m/%d %H:%M")
+        ts = datetime.now().strftime("%m/%d %H:%M")
         bal_str = f"  bal=${bal:.2f}" if bal is not None else ""
         flash(f"Synced {ts} — {n} entries{bal_str}", "ok")
-    return redirect(url_for('balances'))
+    return redirect(url_for("balances"))
 
 
-@app.route('/sync_ebt', methods=['POST'])
+@app.route("/sync_ebt", methods=["POST"])
 def sync_ebt():
     n, bal, err = _ebt_do_sync()
     if err:
@@ -914,208 +1069,260 @@ def sync_ebt():
             flash(f"Updated EBT balance only{bal_str}", "ok")
         else:
             flash(f"Synced EBT - {n} entries{bal_str}", "ok")
-    return redirect(url_for('balances', asset=_EBT_ASSET_ID))
+    return redirect(url_for("balances", asset=_EBT_ASSET_ID))
 
 
-@app.route('/login_ns', methods=['GET', 'POST'])
+@app.route("/login_ns", methods=["GET", "POST"])
 def login_ns():
-    if request.method == 'GET':
+    if request.method == "GET":
         un, pw = _read_creds()
-        return render_template('login.html', tab='balances', prefill_un=un or '')
-    un = request.form.get('username', '').strip()
-    pw = request.form.get('password', '').strip()
+        return render_template("login.html", tab="balances", prefill_un=un or "")
+    un = request.form.get("username", "").strip()
+    pw = request.form.get("password", "").strip()
     if not un or not pw:
         flash("Enter username and password.", "err")
-        return redirect(url_for('login_ns'))
+        return redirect(url_for("login_ns"))
     try:
         data = _do_login_request(un, pw)
     except Exception as exc:
         flash(f"Login error: {exc}", "err")
-        return redirect(url_for('login_ns'))
+        return redirect(url_for("login_ns"))
     token = data.get("token", "")
     if data.get("ooba_required"):
-        session['ooba_token']    = token
-        session['ooba_username'] = un
-        session['ooba_password'] = pw
-        return redirect(url_for('ooba'))
+        session["ooba_token"] = token
+        session["ooba_username"] = un
+        session["ooba_password"] = pw
+        return redirect(url_for("ooba"))
     if token:
         TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
         TOKEN_FILE.write_text(token)
         CREDS_FILE.write_text(f"{un}\n{pw}\n")
         flash("Logged in.", "ok")
-        return redirect(url_for('balances'))
+        return redirect(url_for("balances"))
     flash(f"Unexpected response: {data}", "err")
-    return redirect(url_for('login_ns'))
+    return redirect(url_for("login_ns"))
 
-@app.route('/ooba', methods=['GET', 'POST'])
+
+@app.route("/ooba", methods=["GET", "POST"])
 def ooba():
-    if request.method == 'GET':
-        return render_template('ooba.html', tab='balances')
-    code          = request.form.get('code', '').strip()
-    partial_token = session.get('ooba_token', '')
+    if request.method == "GET":
+        return render_template("ooba.html", tab="balances")
+    code = request.form.get("code", "").strip()
+    partial_token = session.get("ooba_token", "")
     try:
         resp = requests.post(
             "https://www.netspend.com/profile-api/ooba/verify",
             headers={**_NS_LOGIN_HEADERS, "X-Ns-Access_token": partial_token},
-            json={"ooba_passcode": code}, timeout=30)
+            json={"ooba_passcode": code},
+            timeout=30,
+        )
         resp.raise_for_status()
         data = resp.json()
     except Exception as exc:
         flash(f"Verification error: {exc}", "err")
-        return redirect(url_for('ooba'))
+        return redirect(url_for("ooba"))
     token = data.get("token") or partial_token
     if token:
         TOKEN_FILE.write_text(token)
-        un = session.get('ooba_username', '')
-        pw = session.get('ooba_password', '')
+        un = session.get("ooba_username", "")
+        pw = session.get("ooba_password", "")
         if un and pw:
             CREDS_FILE.write_text(f"{un}\n{pw}\n")
         flash("Logged in.", "ok")
-        return redirect(url_for('balances'))
+        return redirect(url_for("balances"))
     flash(f"Verification failed: {data}", "err")
-    return redirect(url_for('ooba'))
+    return redirect(url_for("ooba"))
 
-@app.route('/delete_txn/<path:txn_id>')
+
+@app.route("/delete_txn/<path:txn_id>")
 def delete_txn(txn_id):
-    asset_id = request.args.get('asset', type=int, default=_NS_ASSET_ID)
+    asset_id = request.args.get("asset", type=int, default=_NS_ASSET_ID)
     db.execute("DELETE FROM transactions WHERE id=?", [txn_id])
     _update_summary_tables()
-    return redirect(url_for('balances', asset=asset_id))
+    return redirect(url_for("balances", asset=asset_id))
 
-@app.route('/calcs')
+
+@app.route("/calcs")
 def calcs():
-    assets  = db.load_assets()
-    ebt_ids = [a['id'] for a in assets if a['ebt']]
+    assets = db.load_assets()
+    ebt_ids = [a["id"] for a in assets if a["ebt"]]
     sources = db.load_sources(ebt_ids)
 
     if ebt_ids:
-        ph   = ','.join('?' * len(ebt_ids))
+        ph = ",".join("?" * len(ebt_ids))
         excl = f" AND asset_id NOT IN ({ph})"
     else:
         excl = ""
 
     def spendable():
-        return sum(a['balance'] for a in assets if not a['ebt'])
+        return sum(a["balance"] for a in assets if not a["ebt"])
 
     dl_rows = db.fetchall(
-        f"SELECT day FROM source WHERE day IS NOT NULL AND day != ''{excl}", ebt_ids)
+        f"SELECT day FROM source WHERE day IS NOT NULL AND day != ''{excl}", ebt_ids
+    )
     days_left_vals = [dl(int(r.day)) for r in dl_rows if r.day and int(r.day) > 0]
-    maxdl  = sum(days_left_vals) / len(days_left_vals) if days_left_vals else 30.0
-    spend  = spendable()
+    maxdl = sum(days_left_vals) / len(days_left_vals) if days_left_vals else 30.0
+    spend = spendable()
     dallow = spend / maxdl if maxdl > 0 else 0.0
 
     rows = db.fetchall(
         "SELECT day AS ts, SUM(CASE WHEN flow IN (2,5) THEN amt ELSE 0 END) AS net"
-        " FROM transactions WHERE day IS NOT NULL" + excl +
-        " GROUP BY day HAVING net != 0 ORDER BY day ASC", ebt_ids)
-    rc    = len(rows)
-    davg  = 0.0
-    dtot  = 0.0
+        " FROM transactions WHERE day IS NOT NULL"
+        + excl
+        + " GROUP BY day HAVING net != 0 ORDER BY day ASC",
+        ebt_ids,
+    )
+    rc = len(rows)
+    davg = 0.0
+    dtot = 0.0
     dtot_label = ""
     if rc >= 1:
-        sc   = min(29, rc - 1)
-        te   = sum(rows[i].net for i in range(rc - sc - 1, rc))
+        sc = min(29, rc - 1)
+        te = sum(rows[i].net for i in range(rc - sc - 1, rc))
         davg = -te / (sc + 1)
         dtot = -rows[-1].net
         dtot_label = rows[-1].ts
 
     tleft = spend / davg if davg > 0 else 999.0
-    inec  = (davg - dallow) * maxdl
+    inec = (davg - dallow) * maxdl
 
     dl_items = []
     for s in sources:
-        if s['day'] and int(s['day']) > 0:
-            days = dl(int(s['day']))
-            dl_items.append(f"{int(round(days))} days left until {s['name']} {s['type']}")
+        if s["day"] and int(s["day"]) > 0:
+            days = dl(int(s["day"]))
+            dl_items.append(
+                f"{int(round(days))} days left until {s['name']} {s['type']}"
+            )
 
     calcs_data = [
-        ("DAllow",  "Daily Allowance",  ncs(dallow),  "pink"),
-        ("INec",    "Income Needed",    ncs(inec),    "green"),
-        ("TLeft",   "Days Left",        ncs(tleft),   "red"),
-        ("DAvgExp", "Avg Daily Exp",    ncs(davg),    "teal"),
-        ("DTotExp", "Today Expense",    ncs(dtot),    "blue"),
-        ("MaxDL",   "Max Days Left",    ncs(maxdl),   "grey"),
+        ("DAllow", "Daily Allowance", ncs(dallow), "pink"),
+        ("INec", "Income Needed", ncs(inec), "green"),
+        ("TLeft", "Days Left", ncs(tleft), "red"),
+        ("DAvgExp", "Avg Daily Exp", ncs(davg), "teal"),
+        ("DTotExp", "Today Expense", ncs(dtot), "blue"),
+        ("MaxDL", "Max Days Left", ncs(maxdl), "grey"),
     ]
-    for key, val in [("DAllow", dallow), ("INec", inec), ("TLeft", tleft),
-                     ("DAvgExp", davg), ("DTotExp", dtot), ("MaxDL", maxdl)]:
+    for key, val in [
+        ("DAllow", dallow),
+        ("INec", inec),
+        ("TLeft", tleft),
+        ("DAvgExp", davg),
+        ("DTotExp", dtot),
+        ("MaxDL", maxdl),
+    ]:
         db.save_number(key, val)
-    return render_template('calcs.html', tab='calcs', calcs=calcs_data,
-                           dl_items=dl_items, dtot_label=dtot_label)
+    return render_template(
+        "calcs.html",
+        tab="calcs",
+        calcs=calcs_data,
+        dl_items=dl_items,
+        dtot_label=dtot_label,
+    )
 
-@app.route('/transactions')
+
+@app.route("/transactions")
 def transactions():
-    allowed = {'day', 'label', 'asset_id', 'flow', 'amt', 'balance'}
-    sort_col = request.args.get('sort', 'day')
+    allowed = {"day", "label", "asset_id", "flow", "amt", "balance"}
+    sort_col = request.args.get("sort", "day")
     if sort_col not in allowed:
-        sort_col = 'day'
-    asc       = request.args.get('asc', '0') == '1'
-    direction = 'ASC' if asc else 'DESC'
+        sort_col = "day"
+    asc = request.args.get("asc", "0") == "1"
+    direction = "ASC" if asc else "DESC"
 
-    assets        = db.load_assets()
-    asset_name_map = {a['id']: a['name'] for a in assets}
-    ft_rows        = db.fetchall("SELECT flow, name FROM flow_types")
-    flow_name_map  = {r.flow: r.name for r in ft_rows}
+    assets = db.load_assets()
+    asset_name_map = {a["id"]: a["name"] for a in assets}
+    ft_rows = db.fetchall("SELECT flow, name FROM flow_types")
+    flow_name_map = {r.flow: r.name for r in ft_rows}
 
     rows = db.fetchall(
         f"SELECT id, day, COALESCE(comp, desc) AS label, asset_id, flow, amt, balance"
-        f" FROM transactions ORDER BY {sort_col} {direction}, rowid DESC")
+        f" FROM transactions ORDER BY {sort_col} {direction}, rowid DESC"
+    )
 
-    return render_template('transactions.html', tab='transactions', rows=rows,
-                           asset_name_map=asset_name_map, flow_name_map=flow_name_map,
-                           sort_col=sort_col, asc=asc)
+    return render_template(
+        "transactions.html",
+        tab="transactions",
+        rows=rows,
+        asset_name_map=asset_name_map,
+        flow_name_map=flow_name_map,
+        sort_col=sort_col,
+        asc=asc,
+    )
 
-_SUMMARY_LIMITS = {'daily': 40, 'weekly': 40, 'monthly': 40, 'yearly': 40}
+
+_SUMMARY_LIMITS = {"daily": 40, "weekly": 40, "monthly": 40, "yearly": 40}
+
 
 def _summary_route(tbl, period_col, title, tab):
-    assets        = db.load_assets()
-    asset_name_map = {a['id']: a['name'] for a in assets}
+    assets = db.load_assets()
+    asset_name_map = {a["id"]: a["name"] for a in assets}
     limit = _SUMMARY_LIMITS.get(tbl, 60)
     # Get most recent N distinct periods, then fetch all rows for those periods
     periods_q = db.fetchall(
-        f"SELECT DISTINCT {period_col} FROM {tbl} ORDER BY {period_col} DESC LIMIT ?", [limit])
+        f"SELECT DISTINCT {period_col} FROM {tbl} ORDER BY {period_col} DESC LIMIT ?",
+        [limit],
+    )
     if not periods_q:
         rows = []
     else:
-        placeholders = ','.join('?' * len(periods_q))
-        period_vals  = [r[period_col] for r in periods_q]
+        placeholders = ",".join("?" * len(periods_q))
+        period_vals = [r[period_col] for r in periods_q]
         rows = db.fetchall(
             f"SELECT {period_col}, asset_id, income, expense, transfer_in, transfer_out, refund_return"
             f" FROM {tbl} WHERE {period_col} IN ({placeholders}) ORDER BY {period_col} DESC",
-            period_vals)
+            period_vals,
+        )
 
     # Collect ordered periods; always show all assets as columns
-    asset_ids = [a['id'] for a in assets]
-    periods   = []
-    pivot     = {}
+    asset_ids = [a["id"] for a in assets]
+    periods = []
+    pivot = {}
     for r in rows:
         p = r[period_col]
         if p not in pivot:
             pivot[p] = {}
             periods.append(p)
-        pivot[p][r.asset_id] = (r.income, r.expense, r.transfer_in, r.transfer_out, r.refund_return)
+        pivot[p][r.asset_id] = (
+            r.income,
+            r.expense,
+            r.transfer_in,
+            r.transfer_out,
+            r.refund_return,
+        )
 
-    return render_template('summary.html', tab=tab, title=title,
-                           period_col=period_col, periods=periods,
-                           asset_ids=asset_ids, pivot=pivot,
-                           asset_name_map=asset_name_map)
+    return render_template(
+        "summary.html",
+        tab=tab,
+        title=title,
+        period_col=period_col,
+        periods=periods,
+        asset_ids=asset_ids,
+        pivot=pivot,
+        asset_name_map=asset_name_map,
+    )
 
-@app.route('/daily')
+
+@app.route("/daily")
 def daily():
-    return _summary_route('daily', 'day', 'Daily', 'daily')
+    return _summary_route("daily", "day", "Daily", "daily")
 
-@app.route('/weekly')
+
+@app.route("/weekly")
 def weekly():
-    return _summary_route('weekly', 'week', 'Weekly', 'weekly')
+    return _summary_route("weekly", "week", "Weekly", "weekly")
 
-@app.route('/monthly')
+
+@app.route("/monthly")
 def monthly():
-    return _summary_route('monthly', 'month', 'Monthly', 'monthly')
+    return _summary_route("monthly", "month", "Monthly", "monthly")
 
-@app.route('/yearly')
+
+@app.route("/yearly")
 def yearly():
-    return _summary_route('yearly', 'year', 'Yearly', 'yearly')
+    return _summary_route("yearly", "year", "Yearly", "yearly")
 
-@app.route('/exit')
+
+@app.route("/exit")
 def exit_app():
     try:
         shutil.copy2(str(DB_PATH), str(DB_BAK))
@@ -1123,9 +1330,11 @@ def exit_app():
     except Exception:
         backed_up = False
     sync_status = _sync_db_with_gd_status(DB_PATH)
-    return render_template('exit.html', backed_up=backed_up, sync_status=sync_status)
+    return render_template("exit.html", backed_up=backed_up, sync_status=sync_status)
+
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 def _read_creds():
     if not CREDS_FILE.exists():
@@ -1135,18 +1344,25 @@ def _read_creds():
         return lines[0].strip(), lines[1].strip()
     return None, None
 
+
 def _do_login_request(username, password):
     """Blocking login — returns response dict or raises."""
     s = requests.Session()
     s.headers.update(_NS_LOGIN_HEADERS)
     s.get("https://www.netspend.com/account/login", timeout=15)
-    resp = s.post(_NS_LOGIN_URL, json={
-        "username": username, "password": password,
-        "auth_type": "password",
-        "device_fingerprint": _NS_DEVICE_FP,
-    }, timeout=30)
+    resp = s.post(
+        _NS_LOGIN_URL,
+        json={
+            "username": username,
+            "password": password,
+            "auth_type": "password",
+            "device_fingerprint": _NS_DEVICE_FP,
+        },
+        timeout=30,
+    )
     resp.raise_for_status()
     return resp.json()
+
 
 def _silent_reauth():
     """Re-login with saved creds. Returns new token str, or None on failure."""
@@ -1165,9 +1381,10 @@ def _silent_reauth():
         TOKEN_FILE.write_text(token)
     return token or None
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     try:
         _pull_db_from_gd()
     except Exception as _e:
         _sync_log(f"startup pull crashed: {_e}")
-    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)

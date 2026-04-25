@@ -1,20 +1,7 @@
-# Keep Python bytecode and cache folders out of git.
-__pycache__/
 *.pyc
-
-# Keep pytest cache and temporary test folders out of git.
-.pytest_cache/
-.pytest-tmp*/
-test-runtime/
-tmp-pytest/
-
-# Keep local Claude/Codex lock noise out of git.
+*.w
 .claude/
-
-# Keep local browser automation artifacts out of git.
-.playwright-mcp/
-TransHistory*.csv
-tmp-ebt-live/
-tmp-ebtedge-*.json
-tmp-ebtedge-*.html
-tmp-ebtedge-*.js
+.playwright*/
+.pytest*/
+__pycache__/
+tmp*/
