@@ -1,6 +1,8 @@
 *.pyc
 *.w
-.claude/
+.claude/*
+!.claude/memory/
+!.claude/memory/**
 .playwright*/
 .pytest*/
 __pycache__/
