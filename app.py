@@ -296,10 +296,10 @@ class DB:
                     [nm, tp, day, amt, aid],
                 )
 
-        self.execute(
-            """CREATE TABLE IF NOT EXISTS nums (
-            name TEXT PRIMARY KEY, num REAL, ts TIMESTAMP)"""
-        )
+        try:
+            self.execute("DROP TABLE IF EXISTS nums")
+        except Exception:
+            pass
 
         self.execute(
             """CREATE TABLE IF NOT EXISTS flow_types (
@@ -395,16 +395,6 @@ class DB:
     def save_asset_balance(self, asset_id: int, balance: float):
         self.execute(
             "UPDATE asset SET current_balance=? WHERE asset_id=?", [balance, asset_id]
-        )
-
-    def load_number(self, name: str) -> float:
-        row = self.fetchone("SELECT num FROM nums WHERE name=?", [name])
-        return row.num if row else 0.0
-
-    def save_number(self, name: str, num: float):
-        self.execute(
-            "INSERT OR REPLACE INTO nums (name,num,ts) VALUES (?,?,?)",
-            [name, num, datetime.now().isoformat()],
         )
 
     def log_txn(self, asset_id: int, amt: float, balance: float, flow_code: str):
@@ -1044,15 +1034,6 @@ def calcs():
         ("DTotExp", "Today Expense", ncs(dtot), "blue"),
         ("MaxDL", "Max Days Left", ncs(maxdl), "grey"),
     ]
-    for key, val in [
-        ("DAllow", dallow),
-        ("INec", inec),
-        ("TLeft", tleft),
-        ("DAvgExp", davg),
-        ("DTotExp", dtot),
-        ("MaxDL", maxdl),
-    ]:
-        db.save_number(key, val)
     return render_template(
         "calcs.html",
         tab="calcs",
