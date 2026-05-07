@@ -1145,6 +1145,11 @@ def yearly():
     return _summary_route("yearly", "year", "Yearly", "yearly")
 
 
+@app.route("/ping")
+def ping():
+    return "", 204
+
+
 @app.route("/exit")
 def exit_app():
     try:
@@ -1154,6 +1159,17 @@ def exit_app():
         backed_up = False
     sync_status = _sync_db_with_gd_status(DB_PATH)
     return render_template("exit.html", backed_up=backed_up, sync_status=sync_status)
+
+
+@app.route("/kill", methods=["POST"])
+def kill_app():
+    import signal
+    def _shutdown():
+        import time
+        time.sleep(0.5)
+        os.kill(os.getpid(), signal.SIGTERM)
+    threading.Thread(target=_shutdown, daemon=True).start()
+    return "<html><body><script>sessionStorage.setItem('stopped','1');window.location.replace('about:blank');</script></body></html>"
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
