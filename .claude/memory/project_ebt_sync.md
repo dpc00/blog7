@@ -4,11 +4,11 @@ description: Current state of the EBT sync feature — fully working end-to-end 
 type: project
 originSessionId: 6a8b20c8-ee7e-4acb-b1c5-0447a9f76f2e
 ---
-EBT sync is fully working end-to-end on phone as of 2026-04-19 session 5.
+EBT sync via Playwright/ADB was abandoned — the approach was a dead end.
 
-**Why:** Needed to automate EBT transaction import into blog7 finance tracker.
+**Why:** Required ADB running under Termux on the phone to drive Playwright to access the EBTEdge site. That dependency chain was fundamentally broken and useless in practice. All EBT sync code removed from app.py in commit `b570165`.
 
-**How to apply:** No major work needed until May 8 (next EBT benefit load date). Minor polish items remain.
+**How to apply:** Do not attempt to revive the Playwright/ADB/EBTEdge approach. Any future EBT sync needs a completely different strategy.
 
 ## What works
 
