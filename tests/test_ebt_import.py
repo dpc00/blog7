@@ -5,15 +5,15 @@ import importlib.util
 def load_app_module(tmp_path, monkeypatch):
     monkeypatch.setenv("USERPROFILE", str(tmp_path))
     monkeypatch.setattr("pathlib.Path.home", lambda: tmp_path)
-    app_path = Path(r"C:/Users/donal/projects/blog7/app.py")
+    app_path = Path(__file__).parent.parent / "app.py"
     spec = importlib.util.spec_from_file_location("blog7_app_ebt_test", app_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
 
 
-def test_import_ebt_rows_replaces_existing_quest_transactions_and_updates_balance(monkeypatch):
-    temp_home = Path(r"C:/Users/donal/projects/finance/finance/ebt-test-home")
+def test_import_ebt_rows_replaces_existing_quest_transactions_and_updates_balance(tmp_path, monkeypatch):
+    temp_home = tmp_path
     db_path = temp_home / "data" / "finance" / "db" / "blog7.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():

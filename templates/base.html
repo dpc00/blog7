@@ -26,6 +26,10 @@
   </div>
   <script>
     (() => {
+      // Track navigation depth within the app
+      let depth = parseInt(sessionStorage.getItem('app_nav_depth') || '0');
+      sessionStorage.setItem('app_nav_depth', (depth + 1).toString());
+
       const tabs = document.querySelector('.tabs');
       if (!tabs) return;
       const setTabsHeight = () => {

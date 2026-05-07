@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def _load_app_module(tmp_path, monkeypatch):
-    app_path = Path(r"C:\Users\donal\projects\blog7\app.py")
+    app_path = Path(__file__).parent.parent / "app.py"
     monkeypatch.setenv("HOME", str(tmp_path))
     monkeypatch.setattr("pathlib.Path.home", lambda: tmp_path)
 

@@ -865,12 +865,12 @@ def balances():
     )
 
 
-@app.route("/update", methods=["POST"])
-def update():
+def _save_balances(form_data):
     assets = db.load_assets()
     bal_map = {a["id"]: a["balance"] for a in assets}
+    changed = False
     for a in assets:
-        field_val = request.form.get(f"bal_{a['id']}", "").strip()
+        field_val = form_data.get(f"bal_{a['id']}", "").strip()
         items = txtpa(field_val)
         if not items:
             continue
@@ -886,8 +886,18 @@ def update():
                 else:
                     tag = "in" if acc >= prev else "ex"
                 db.log_txn(a["id"], item["num"], acc, tag)
-    _update_summary_tables()
-    flash("Updated.", "ok")
+                changed = True
+    if changed:
+        _update_summary_tables()
+    return changed
+
+
+@app.route("/update", methods=["POST"])
+def update():
+    if _save_balances(request.form):
+        flash("Updated.", "ok")
+    else:
+        flash("No changes.", "info")
     return redirect(url_for("balances"))
 
 
@@ -1164,12 +1174,42 @@ def exit_app():
 @app.route("/kill", methods=["POST"])
 def kill_app():
     import signal
+
+    _save_balances(request.form)
+
     def _shutdown():
+        # Clean sync on exit
+        try:
+            _sync_db_with_gd_status(DB_PATH)
+        except Exception:
+            pass
         import time
+
         time.sleep(0.5)
         os.kill(os.getpid(), signal.SIGTERM)
+
     threading.Thread(target=_shutdown, daemon=True).start()
-    return "<html><body><script>sessionStorage.setItem('stopped','1');window.location.replace('about:blank');</script></body></html>"
+
+    return """
+<html>
+<body>
+<script>
+  (function() {
+    let depth = parseInt(sessionStorage.getItem('app_nav_depth') || '0');
+    sessionStorage.removeItem('app_nav_depth');
+    sessionStorage.setItem('stopped', '1');
+    if (depth > 0) {
+      window.history.go(-depth);
+    } else {
+      window.location.replace('about:blank');
+    }
+    // Fallback if history.go doesn't work or isn't fast enough
+    setTimeout(() => { window.location.replace('about:blank'); }, 500);
+  })();
+</script>
+</body>
+</html>
+"""
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -1224,6 +1264,9 @@ def _silent_reauth():
 if __name__ == "__main__":
     try:
         _pull_db_from_gd()
+        # Re-init DB in case pull updated it
+        db.close()
+        db = DB(DB_PATH)
     except Exception as _e:
         _sync_log(f"startup pull crashed: {_e}")
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)

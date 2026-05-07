@@ -4,7 +4,7 @@ import time
 
 
 def load_script_module():
-    script_path = Path(r"C:/Users/donal/projects/blog7/scripts/ebt_sync_playwright.py")
+    script_path = Path(__file__).parent.parent / "app.py"
     spec = importlib.util.spec_from_file_location("blog7_ebt_sync_script_test", script_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

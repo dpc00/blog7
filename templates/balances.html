@@ -20,13 +20,8 @@
 
   <div class="btn-row">
     <button class="btn" type="submit">Update</button>
-    <a class="btn btn-red" href="/exit">Save &amp; Sync</a>
-  </div>
-</form>
-
-<form method="post" action="/kill" style="margin:0">
-  <div class="btn-row">
-    <button class="btn btn-red" type="submit">Stop</button>
+    <button class="btn btn-red" type="submit" formaction="{{ url_for('kill_app') }}">Stop</button>
+    <a class="btn btn-grey" href="/exit">Save &amp; Sync</a>
   </div>
 </form>
 
