@@ -1192,19 +1192,33 @@ def kill_app():
 
     return """
 <html>
-<body>
+<body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;margin:0;">
+  <div style="text-align:center;">
+    <div style="font-size:28px;font-weight:bold;margin-bottom:12px;">Stopping...</div>
+    <div style="font-size:16px;color:#bbb;">Data saved & syncing to Drive</div>
+  </div>
 <script>
   (function() {
     let depth = parseInt(sessionStorage.getItem('app_nav_depth') || '0');
     sessionStorage.removeItem('app_nav_depth');
     sessionStorage.setItem('stopped', '1');
+
+    // Attempt to close the window (works if opened via window.open or standalone)
+    window.close();
+
+    // Go back far enough to skip all app history entries plus the current /kill page
     if (depth > 0) {
-      window.history.go(-depth);
+      window.history.go(-(depth + 1));
     } else {
       window.location.replace('about:blank');
     }
-    // Fallback if history.go doesn't work or isn't fast enough
-    setTimeout(() => { window.location.replace('about:blank'); }, 500);
+
+    // Ultimate fallback if window.close and history.go didn't work
+    setTimeout(() => {
+      if (window.location.href.indexOf('about:blank') === -1) {
+        window.location.replace('about:blank');
+      }
+    }, 600);
   })();
 </script>
 </body>

@@ -2,11 +2,19 @@
 {% block content %}
 <script>
   function showStopped() {
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:3em;font-weight:bold;color:#c00;">STOPPED</div>';
+    if (sessionStorage.getItem('stopped')) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:3em;font-weight:bold;color:#c00;background:#fff;">STOPPED</div>';
+    }
   }
   window.addEventListener('pageshow', function() {
-    if (sessionStorage.getItem('stopped')) { showStopped(); return; }
-    fetch('/ping').catch(showStopped);
+    showStopped();
+    // Only check ping if we haven't explicitly stopped
+    if (!sessionStorage.getItem('stopped')) {
+      fetch('/ping').catch(() => {
+         sessionStorage.setItem('stopped', '1');
+         showStopped();
+      });
+    }
   });
 </script>
 
