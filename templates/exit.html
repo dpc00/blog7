@@ -1,14 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="padding: 20px 0; color: #2e7d32; font-size: 16px;">
-  {% if sync_status == "pushed" %}
-  Synced to Google Drive.
-  {% elif sync_status == "in_sync" %}
-  Already synced to Google Drive.
-  {% else %}
-  Backed up locally.
-  {% endif %}
-</div>
 <form method="post" action="/kill">
   <button class="btn btn-red" type="submit">Stop Server</button>
 </form>

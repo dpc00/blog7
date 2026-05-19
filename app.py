@@ -9,11 +9,10 @@ import calendar
 import math
 import os
 import re
-import shutil
 import sqlite3
 import subprocess
 import threading
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import requests
@@ -44,12 +43,9 @@ SECRETS_ROOT = (
 )
 
 DB_PATH = DATA_ROOT / "db" / "blog7.db"
-DB_BAK = DATA_ROOT / "db" / "blog7_backup.db"
-SYNC_STATE_PATH = DATA_ROOT / "db" / "blog7.db.sync-state.json"
 TOKEN_FILE = SECRETS_ROOT / "ns_token.txt"
 CREDS_FILE = SECRETS_ROOT / "ns_creds.txt"
 RCLONE_CONF = SECRETS_ROOT / "rclone.conf"
-SYNC_LOG = DATA_ROOT / "sync.log"
 
 # ── NS API constants ──────────────────────────────────────────────────────────
 
@@ -442,217 +438,6 @@ db.init_schema()
 # ── Google Drive sync ─────────────────────────────────────────────────────────
 
 GD_FILENAME = "blog7.db"
-
-# ── Sync-state sidecar ───────────────────────────────────────────────────────
-
-SYNC_STATE_VERSION = 1
-
-
-def _read_sync_state(path):
-    """Return parsed dict or None if missing/unreadable."""
-    import json
-
-    try:
-        return json.loads(Path(path).read_text())
-    except (FileNotFoundError, ValueError):
-        return None
-
-
-def _write_sync_state(path, revision_id, gd_modified_time, local_mtime, device):
-    """Atomic-ish write of sync-state sidecar."""
-    import json
-
-    payload = {
-        "version": SYNC_STATE_VERSION,
-        "revision_id": revision_id,
-        "gd_modified_time": gd_modified_time.isoformat(),
-        "local_mtime": local_mtime,
-        "device": device,
-        "written_at": datetime.now(timezone.utc).isoformat(),
-    }
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-    tmp = Path(str(path) + ".tmp")
-    tmp.write_text(json.dumps(payload, indent=2))
-    tmp.replace(path)
-
-
-def _device_id():
-    return "phone" if ANDROID else "laptop"
-
-
-def _sync_log(msg):
-    try:
-        with open(str(SYNC_LOG), "a") as f:
-            f.write(f"{datetime.now()}: {msg}\n")
-    except Exception:
-        pass
-
-
-GD_DB_REMOTE = "GD:data/finance/db/blog7.db"
-
-
-def _rclone_base_cmd():
-    cmd = ["rclone"]
-    if RCLONE_CONF.exists():
-        cmd += ["--config", str(RCLONE_CONF)]
-    return cmd
-
-
-def _rclone_drive_remote():
-    import configparser
-
-    if RCLONE_CONF.exists():
-        cp = configparser.ConfigParser()
-        cp.read(str(RCLONE_CONF))
-        for section in cp.sections():
-            if cp.get(section, "type", fallback="") == "drive":
-                return section
-    return "GD"
-
-
-def _gd_db_remote():
-    return f"{_rclone_drive_remote()}:data/finance/db/{GD_FILENAME}"
-
-
-def _rclone_run(args, timeout=60):
-    return subprocess.run(
-        _rclone_base_cmd() + list(args),
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-        check=False,
-    )
-
-
-def _rclone_remote_mtime(remote_path):
-    import json
-
-    cp = _rclone_run(["lsjson", remote_path], timeout=30)
-    if cp.returncode != 0:
-        stderr = (cp.stderr or "").strip()
-        if stderr:
-            _sync_log(f"rclone lsjson failed: {stderr}")
-        return None
-    try:
-        payload = json.loads(cp.stdout or "[]")
-    except ValueError:
-        _sync_log("rclone lsjson returned invalid JSON")
-        return None
-    if isinstance(payload, dict):
-        payload = [payload]
-    if not payload:
-        return None
-    mod_time = payload[0].get("ModTime")
-    if not mod_time:
-        return None
-    return datetime.fromisoformat(mod_time.replace("Z", "+00:00"))
-
-
-def _rclone_copyto(src, dst):
-    src_str = str(src)
-    dst_str = str(dst)
-    if isinstance(dst, Path):
-        dst.parent.mkdir(parents=True, exist_ok=True)
-    cp = _rclone_run(["copyto", src_str, dst_str], timeout=120)
-    if cp.returncode == 0:
-        return True
-    stderr = (cp.stderr or cp.stdout or "").strip()
-    if stderr:
-        _sync_log(f"rclone copyto failed: {stderr}")
-    return False
-
-
-def _sync_db_with_gd_status(local_path):
-    """Return 'pushed', 'in_sync', or 'failed' for the GD sync attempt."""
-    try:
-        gd_remote = _gd_db_remote()
-        gd_time = _rclone_remote_mtime(gd_remote)
-        if gd_time is None:
-            _sync_log(f"{GD_FILENAME} not found on GD — creating")
-            if _rclone_copyto(local_path, gd_remote):
-                gd_time = _rclone_remote_mtime(gd_remote) or datetime.now(timezone.utc)
-                _sync_log("created and uploaded")
-                _write_sync_state(
-                    SYNC_STATE_PATH,
-                    gd_time.isoformat(),
-                    gd_time,
-                    local_path.stat().st_mtime,
-                    _device_id(),
-                )
-                return "pushed"
-            return "failed"
-        local_time = datetime.fromtimestamp(local_path.stat().st_mtime, tz=timezone.utc)
-        _sync_log(f"gd={gd_time}  local={local_time}")
-        if local_time > gd_time:
-            _sync_log("pushing to GD")
-            if _rclone_copyto(local_path, gd_remote):
-                new_time = _rclone_remote_mtime(gd_remote) or datetime.now(timezone.utc)
-                _sync_log("push done")
-                _write_sync_state(
-                    SYNC_STATE_PATH,
-                    new_time.isoformat(),
-                    new_time,
-                    local_path.stat().st_mtime,
-                    _device_id(),
-                )
-                return "pushed"
-            return "failed"
-        else:
-            _sync_log("already in sync or GD newer — skipping")
-            return "in_sync"
-    except Exception as e:
-        _sync_log(f"error: {e}")
-    return "failed"
-
-
-def _sync_db_with_gd(local_path):
-    """Push local DB to GD if local is newer. Record sync-state on success."""
-    return _sync_db_with_gd_status(local_path) == "pushed"
-
-
-def _decide_pull(local_state, gd_revision, local_db_mtime):
-    """Pure decision function; returns one of:
-    skip_unreachable, skip_no_state, skip_in_sync, pull, conflict."""
-    if gd_revision is None:
-        return "skip_unreachable"
-    if local_state is None:
-        return "skip_no_state"
-    if gd_revision == local_state.get("revision_id"):
-        return "skip_in_sync"
-    # GD revision differs. Did local diverge?
-    # Allow tiny float tolerance for mtime comparison.
-    if local_db_mtime > local_state.get("local_mtime", 0) + 1.0:
-        return "conflict"
-    return "pull"
-
-
-def _pull_db_from_gd():
-    """Best-effort pull on startup. Never raises."""
-    import os
-
-    if os.environ.get("BLOG7_PULL_ON_START", "1") != "1":
-        _sync_log("pull disabled by env flag")
-        return
-    try:
-        gd_remote = _gd_db_remote()
-        gd_time = _rclone_remote_mtime(gd_remote)
-        gd_rev = gd_time.isoformat() if gd_time else None
-        local_state = _read_sync_state(SYNC_STATE_PATH)
-        local_mtime = DB_PATH.stat().st_mtime if DB_PATH.exists() else 0.0
-        decision = _decide_pull(local_state, gd_rev, local_mtime)
-        _sync_log(f"pull decision: {decision}")
-        if decision != "pull":
-            return
-        if _rclone_copyto(gd_remote, DB_PATH):
-            gd_time = (
-                _rclone_remote_mtime(gd_remote) or gd_time or datetime.now(timezone.utc)
-            )
-            _write_sync_state(
-                SYNC_STATE_PATH, gd_rev, gd_time, DB_PATH.stat().st_mtime, _device_id()
-            )
-            _sync_log("pull done")
-    except Exception as e:
-        _sync_log(f"pull error: {e}")
 
 
 # ── NS sync ───────────────────────────────────────────────────────────────────
@@ -1162,29 +947,17 @@ def ping():
 
 @app.route("/exit")
 def exit_app():
-    try:
-        shutil.copy2(str(DB_PATH), str(DB_BAK))
-        backed_up = True
-    except Exception:
-        backed_up = False
-    sync_status = _sync_db_with_gd_status(DB_PATH)
-    return render_template("exit.html", backed_up=backed_up, sync_status=sync_status)
+    return render_template("exit.html")
 
 
 @app.route("/kill", methods=["POST"])
 def kill_app():
     import signal
+    import time
 
     _save_balances(request.form)
 
     def _shutdown():
-        # Clean sync on exit
-        try:
-            _sync_db_with_gd_status(DB_PATH)
-        except Exception:
-            pass
-        import time
-
         time.sleep(0.5)
         os.kill(os.getpid(), signal.SIGTERM)
 
@@ -1276,11 +1049,4 @@ def _silent_reauth():
 
 
 if __name__ == "__main__":
-    try:
-        _pull_db_from_gd()
-        # Re-init DB in case pull updated it
-        db.close()
-        db = DB(DB_PATH)
-    except Exception as _e:
-        _sync_log(f"startup pull crashed: {_e}")
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
