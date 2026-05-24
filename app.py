@@ -539,7 +539,8 @@ def _ns_do_sync():
             amt = (
                 round(t["amount"] / 100, 2) if credit else -round(t["amount"] / 100, 2)
             )
-            bal = round(t["running_balance"] / 100, 2)
+            raw_bal = t.get("running_balance")
+            bal = round(raw_bal / 100, 2) if raw_bal is not None else None
             memo = t.get("memo", "") or ""
             posted_txns.append((ts, amt, bal, "in" if credit else "ex", memo))
 
