@@ -618,6 +618,8 @@ def _ns_do_sync():
             [final_bal, _NS_ASSET_ID],
         )
 
+    for tbl in ("daily", "weekly", "monthly", "yearly"):
+        db.execute(f"DELETE FROM {tbl} WHERE asset_id=?", [_NS_ASSET_ID])
     _update_summary_tables()
 
     return len(all_txns), final_bal, None
