@@ -1,0 +1,612 @@
+Lagging while typing plain text in large windows #6835 - GitHub
+  URL: https://github.com/sublimehq/sublime_text/issues/6835
+  Description of the bug. ST starts lagging badly after typing a few hundred characters. This seems to be related to the size of the window.
+  Category: github
+
+  --- Content ---
+  [Skip to content](https://github.com/sublimehq/sublime_text/issues/6835#start-of-content)
+  
+  You signed in with another tab or window. [Reload](https://github.com/sublimehq/sublime_text/issues/6835) to refresh your session.You signed out in another tab or window. [Reload](https://github.com/sublimehq/sublime_text/issues/6835) to refresh your session.You switched accounts on another tab or window. [Reload](https://github.com/sublimehq/sublime_text/issues/6835) to refresh your session.Dismiss alert
+  
+  {{ message }}
+  
+  [sublimehq](https://github.com/sublimehq)/ **[sublime\_text](https://github.com/sublimehq/sublime_text)** Public
+  
+  - [Notifications](https://github.com/login?return_to=%2Fsublimehq%2Fsublime_text) You must be signed in to change notification settings
+  - [Fork\\
+  44](https://github.com/login?return_to=%2Fsublimehq%2Fsublime_text)
+  - [Star\\
+  863](https://github.com/login?return_to=%2Fsublimehq%2Fsublime_text)
+  
+  
+  # Lagging while typing plain text in large windows\#6835
+  
+  [New issue](https://github.com/login?return_to=https://github.com/sublimehq/sublime_text/issues/6835)
+  
+  Copy link
+  
+  [New issue](https://github.com/login?return_to=https://github.com/sublimehq/sublime_text/issues/6835)
+  
+  Copy link
+  
+  Open
+  
+  Open
+  
+  [Lagging while typing plain text in large windows](https://github.com/sublimehq/sublime_text/issues/6835#top)#6835
+  
+  Copy link
+  
+  [![@breischl](https://avatars.githubusercontent.com/u/93974?u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4&size=80)](https://github.com/breischl)
+  
+  ## Description
+  
+  [![@breischl](https://avatars.githubusercontent.com/u/93974?u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4&size=48)](https://github.com/breischl)
+  
+  [breischl](https://github.com/breischl)
+  
+  opened [on Jan 14on Jan 14, 2026](https://github.com/sublimehq/sublime_text/issues/6835#issue-3813942981)
+  
+  Issue body actions
+  
+  ### Description of the bug
+  
+  ST starts lagging badly after typing a few hundred characters. This seems to be related to the size of the window. When the window is maximized at 2560x1440, it does that.
+  
+  ### Steps to reproduce
+  
+  1. Start ST in safe mode (`subl --safe-mode`)
+  2. Maximize window
+  3. Start typing. It starts lagging noticeably after about 100 characters
+  
+  ### Expected behavior
+  
+  Typing plain text should be snappy
+  
+  ### Actual behavior
+  
+  Noticeably lag, until it is behind by entire words when typing at a reasonable rate (60-ish WPM)
+  
+  ### Sublime Text build number
+  
+  4200
+  
+  ### Operating system & version
+  
+  MacOS 15.7.1
+  
+  ### (Linux) Desktop environment and/or window manager
+  
+  _No response_
+  
+  ### Additional information
+  
+  Hardware: Macbook Pro 2024, M4 Pro, 48GB memory
+  
+  Also did a full uninstall and reinstall, which did not help.
+  
+  ### OpenGL context information
+  
+  ```
+  
+  ```
+  
+  👍React with 👍1TeamLaugenEcken12829
+  
+  ## Activity
+  
+  [![BenjaminSchaaf](https://avatars.githubusercontent.com/u/2748981?v=4&size=80)](https://github.com/BenjaminSchaaf)
+  
+  ### BenjaminSchaaf commented on Jan 14on Jan 14, 2026
+  
+  [![@BenjaminSchaaf](https://avatars.githubusercontent.com/u/2748981?v=4&size=48)](https://github.com/BenjaminSchaaf)
+  
+  [BenjaminSchaaf](https://github.com/BenjaminSchaaf)
+  
+  [on Jan 14on Jan 14, 2026](https://github.com/sublimehq/sublime_text/issues/6835#issuecomment-3752363145)
+  
+  Member
+  
+  More actions
+  
+  Have you tried rebooting your mac?
+  
+  [![breischl](https://avatars.githubusercontent.com/u/93974?u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4&size=80)](https://github.com/breischl)
+  
+  ### breischl commented on Jan 15on Jan 15, 2026
+  
+  [![@breischl](https://avatars.githubusercontent.com/u/93974?u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4&size=48)](https://github.com/breischl)
+  
+  [breischl](https://github.com/breischl)
+  
+  [on Jan 15on Jan 15, 2026](https://github.com/sublimehq/sublime_text/issues/6835#issuecomment-3754804860)
+  
+  Author
+  
+  More actions
+  
+  I have restarted at least 3 times. This has been happening for a while, I just didn't get around to reporting it until now.
+  
+  Another data point: I tried to take a screen recording with Quicktime Player (cmd-shift-5), and that somehow works around the problem. Sublime does not lag while screen recording. But once I stop recording, it will start lagging, even in the same tab that was working fine a few seconds previously.
+  
+  I tried setting `"hardware_acceleration": "opengl"` and restarting, that did not seem to have any effect, regardless of whether I was recording the screen.
+  
+  [![BenjaminSchaaf](https://avatars.githubusercontent.com/u/2748981?v=4&size=80)](https://github.com/BenjaminSchaaf)
+  
+  ### BenjaminSchaaf commented on Jan 20on Jan 20, 2026
+  
+  [![@BenjaminSchaaf](https://avatars.githubusercontent.com/u/2748981?v=4&size=48)](https://github.com/BenjaminSchaaf)
+  
+  [BenjaminSchaaf](https://github.com/BenjaminSchaaf)
+  
+  [on Jan 20on Jan 20, 2026](https://github.com/sublimehq/sublime_text/issues/6835#issuecomment-3775542368)
+  
+  Member
+  
+  More actions
+  
+  Could you share the console output after starting Sublime Text ( _View > Show Console_)?
+  
+  [![breischl](https://avatars.githubusercontent.com/u/93974?u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4&size=80)](https://github.com/breischl)
+  
+  ### breischl commented on Jan 21on Jan 21, 2026
+  
+  [![@breischl](https://avatars.githubusercontent.com/u/93974?u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4&size=48)](https://github.com/breischl)
+  
+  [breischl](https://github.com/breischl)
+  
+  [on Jan 21on Jan 21, 2026](https://github.com/sublimehq/sublime_text/issues/6835#issuecomment-3778138798)
+  
+  Author
+  
+  More actions
+  
+  Sure thing, here's normal and safe mode starts. I re-confirmed that both of them lag.
+  
+  Console log from standard start
+  
+  ```
+  startup, version: 4200 osx arm64 channel: stable
+  executable: /Applications/Sublime Text.app/Contents/MacOS/sublime_text
+  application: /Applications/Sublime Text.app
+  working dir: /
+  packages path: /Users/brian.reischl/Library/Application Support/Sublime Text/Packages
+  state path: /Users/brian.reischl/Library/Application Support/Sublime Text/Local
+  zip path: /Applications/Sublime Text.app/Contents/MacOS/Packages
+  zip path: /Users/brian.reischl/Library/Application Support/Sublime Text/Installed Packages
+  ignored_packages: ["Vintage"]
+  pre session restore time: 0.247167
+  OpenGL Context Information:
+    GL API Version: 4.1 Metal - 89.4
+    GLSL Version: 4.10
+    Vendor: Apple
+    Renderer: Apple M4 Pro
+  startup time: 0.339137
+  first paint time: 0.353159
+  environment variables loaded using: /bin/zsh -l
+  reloading plugin Default.arithmetic
+  reloading plugin Default.auto_indent_tag
+  reloading plugin Default.block
+  reloading plugin Default.colors
+  reloading plugin Default.comment
+  reloading plugin Default.convert_color_scheme
+  reloading plugin Default.convert_syntax
+  reloading plugin Default.copy_path
+  reloading plugin Default.echo
+  reloading plugin Default.exec
+  reloading plugin Default.fold
+  reloading plugin Default.goto_line
+  reloading plugin Default.history_list
+  reloading plugin Default.html_print
+  reloading plugin Default.indentation
+  reloading plugin Default.install_package_control
+  reloading plugin Default.keymap
+  reloading plugin Default.kill_ring
+  reloading plugin Default.mark
+  reloading plugin Default.new_templates
+  reloading plugin Default.open_context_url
+  reloading plugin Default.open_in_browser
+  reloading plugin Default.pane
+  reloading plugin Default.paragraph
+  reloading plugin Default.paste_from_history
+  reloading plugin Default.profile
+  reloading plugin Default.quick_panel
+  reloading plugin Default.rename
+  reloading plugin Default.run_syntax_tests
+  reloading plugin Default.save_on_focus_lost
+  reloading plugin Default.scroll
+  reloading plugin Default.set_unsaved_view_name
+  reloading plugin Default.settings
+  reloading plugin Default.show_scope_name
+  reloading plugin Default.side_bar
+  reloading plugin Default.sort
+  reloading plugin Default.switch_file
+  reloading plugin Default.symbol
+  reloading plugin Default.transform
+  reloading plugin Default.transpose
+  reloading plugin Default.ui
+  reloading plugin CSS.css_completions
+  reloading plugin Diff.diff
+  reloading plugin HTML.encode_html_entities
+  reloading plugin HTML.html_completions
+  plugins loaded
+  ```
+  
+  Console from safe mode start
+  
+  ```
+  startup, version: 4200 osx arm64 channel: stable
+  SAFE MODE - overriding packages, state and cache paths
+  executable: /Applications/Sublime Text.app/Contents/MacOS/sublime_text
+  application: /Applications/Sublime Text.app
+  working dir: /
+  packages path: /Users/brian.reischl/Library/Application Support/Sublime Text (Safe Mode)/Packages
+  state path: /Users/brian.reischl/Library/Application Support/Sublime Text (Safe Mode)/Local
+  zip path: /Applications/Sublime Text.app/Contents/MacOS/Packages
+  zip path: /Users/brian.reischl/Library/Application Support/Sublime Text (Safe Mode)/Installed Packages
+  ignored_packages: ["Vintage"]
+  generating syntax summary
+  generating meta info summary
+  pre session restore time: 1.24282
+  OpenGL Context Information:
+    GL API Version: 4.1 Metal - 89.4
+    GLSL Version: 4.10
+    Vendor: Apple
+    Renderer: Apple M4 Pro
+  startup time: 1.28918
+  first paint time: 1.30418
+  environment variables loaded using: /bin/zsh -l
+  reloading plugin Default.arithmetic
+  reloading plugin Default.auto_indent_tag
+  reloading plugin Default.block
+  reloading plugin Default.colors
+  reloading plugin Default.comment
+  reloading plugin Default.convert_color_scheme
+  reloading plugin Default.convert_syntax
+  reloading plugin Default.copy_path
+  reloading plugin Default.echo
+  reloading plugin Default.exec
+  reloading plugin Default.fold
+  reloading plugin Default.goto_line
+  reloading plugin Default.history_list
+  reloading plugin Default.html_print
+  reloading plugin Default.indentation
+  reloading plugin Default.install_package_control
+  reloading plugin Default.keymap
+  reloading plugin Default.kill_ring
+  reloading plugin Default.mark
+  reloading plugin Default.new_templates
+  reloading plugin Default.open_context_url
+  reloading plugin Default.open_in_browser
+  reloading plugin Default.pane
+  reloading plugin Default.paragraph
+  reloading plugin Default.paste_from_history
+  reloading plugin Default.profile
+  reloading plugin Default.quick_panel
+  reloading plugin Default.rename
+  reloading plugin Default.run_syntax_tests
+  reloading plugin Default.save_on_focus_lost
+  reloading plugin Default.scroll
+  reloading plugin Default.set_unsaved_view_name
+  reloading plugin Default.settings
+  reloading plugin Default.show_scope_name
+  reloading plugin Default.side_bar
+  reloading plugin Default.sort
+  reloading plugin Default.switch_file
+  reloading plugin Default.symbol
+  reloading plugin Default.transform
+  reloading plugin Default.transpose
+  reloading plugin Default.ui
+  reloading plugin CSS.css_completions
+  reloading plugin Diff.diff
+  reloading plugin HTML.encode_html_entities
+  reloading plugin HTML.html_completions
+  plugins loaded
+  ```
+  
+  [Sign up for free](https://github.com/signup?return_to=https://github.com/sublimehq/sublime_text/issues/6835)**to join this conversation on GitHub.** Already have an account? [Sign in to comment](https://github.com/login?return_to=https://github.com/sublimehq/sublime_text/issues/6835)
+  
+  ## Metadata
+  
+  ## Metadata
+  
+  ### Assignees
+  
+  No one assigned
+  
+  ### Labels
+  
+  No labels
+  
+  No labels
+  
+  ### Type
+  
+  No type
+  
+  ### Projects
+  
+  No projects
+  
+  ### Milestone
+  
+  No milestone
+  
+  ### Relationships
+  
+  None yet
+  
+  ### Development
+  
+  No branches or pull requests
+  
+  ### Participants
+  
+  [![@breischl](https://avatars.githubusercontent.com/u/93974?s=64&u=950bda4825953d1cc4a2b1ceab45d704601e2ccd&v=4)](https://github.com/breischl)[![@BenjaminSchaaf](https://avatars.githubusercontent.com/u/2748981?s=64&v=4)](https://github.com/BenjaminSchaaf)
+  
+  ## Issue actions
+  
+  You can’t perform that action at this time.
+  --- End Content ---
+
+Sublime Text 4 is very laggy and slow while typing after installing ...
+  URL: https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083
+  Such behavior normally indicates a plugin running expensive code or such with high latencies in UI thread.
+
+  --- Content ---
+  # [Sublime Text 4 is very laggy and slow while typing after installing some plugins which worked perfectly in Sublime text 3](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  [Technical Support](https://forum.sublimetext.com/c/technical-support)
+  
+  You have selected **0** posts.
+  
+  [select all](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  [cancel selecting](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  Apr 2024
+  
+  2 / 10
+  
+  Apr 2024
+  
+  Feb 2025
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [1](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083# "post last edited on Apr 27, 2024 2:46 am")
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  I have only one package in sublime text for autocompletion because I think I want a clean editor with minimum modifications, so I installed Tabnine.
+  
+  But to my disappointment it made sublime text horribly slow each keystroke appeared after a delay of about 4-5 seconds.
+  
+  I thought the package/plugin had some issues so I tried to switch to some other AI autocompletion tool but that didn’t work well,
+  
+  I tried Codeium but it was giving suggestions which were messed up, there were two print statements in one, it kept on giving messy solutions again and again and on top of that whenever I opened up sublime 4, a terminal window would open which was a language server .download file which never downloaded properly.
+  
+  I was fed up …
+  
+  I tried Sublime Text 3 for no reason but to my surprise Tabnine and Codeium and all other plugins worked perfectly, smooth as butter …
+  
+  I have pretty decent specs on my laptop so I don’t think it’s some specs problem.
+  
+  Maybe the new interface or UI of Sublime Text 4 might be interfering with the plugins processing…
+  
+  I need to use Sublime Text 4 for latest features and I love it’s UI…
+  
+  Anyone has any solutions to this though I have tried many times myself, I am open to suggestions…
+  
+  - #### created
+  
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/20.png)Apr 2024
+  
+  - [**last reply**](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/10)
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/p/a698b9/20.png)Feb 2025
+  
+  - 9
+  
+  #### replies
+  
+  - 4.6k
+  
+  #### views
+  
+  - 3
+  
+  #### users
+  
+  - 1
+  
+  #### like
+  
+  - 2
+  
+  #### links
+  
+  - ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/32.png)6
+  
+  ![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/32/52468_2.png)3
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/p/a698b9/32.png)
+  
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/45/52468_2.png)](https://forum.sublimetext.com/u/deathaxe)
+  
+  [deathaxe](https://forum.sublimetext.com/u/deathaxe)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/2)
+  
+  Such behavior normally indicates a plugin running expensive code or such with high latencies in UI thread.
+  
+  Different behavior between ST3 and 4 may be caused by shipping different versions of a plugin. Several packages dropped support for ST3 and therefore ship older versions. A regression may have been introduced in a more recent release available on ST4, only.
+  
+  That’s most likely something the plugin author needs to investigate and fix.
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/3)
+  
+  I checked the versions of the plugins they were the same for both ST3 and ST4…
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/4)
+  
+  Is there any chance I could do something else in ST4 like changing some settings or something …
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/45/52468_2.png)](https://forum.sublimetext.com/u/deathaxe)
+  
+  [deathaxe](https://forum.sublimetext.com/u/deathaxe)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/5)
+  
+  Without knowledga about the reason, it’s hard to advice anything.
+  
+  A first step therefore probably was to investigate, which event handler consumes so much time by running _Main > Tools > Developer > Profile Plugins_.
+  
+  The result page lists all events and plugins which reacted handled them. Look for a plugin causing high “mean” times to find the culprit.
+  
+  Probably `on_query_completions` is involved.
+  
+  Writing performance may be tanked by plugins, which add huge amounts of completion items. The way legacy completion data structures are converted to new `sublime.CompletionItem` classes in ST4 may cause a performance drop in that case. Latest dev builds ship a fix which should improve situation, but finally plugins need to directly create completion items using new data classes to avoid additional conversion steps.
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/6)
+  
+  This list shows how much time each plugin has taken to respond to each event:
+  
+  on\_activated:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_deactivated:
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_hover:
+  
+  Default.symbol: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_modified:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_post\_text\_command:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Default.paste\_from\_history: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_query\_completions:
+  
+  CSS.css\_completions: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  HTML.html\_completions: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 11.616s total, mean: 0.375s, max: 1.846s
+  
+  on\_query\_context:
+  
+  Default.block: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_selection\_modified:
+  
+  Default.history\_list: 0.016s total, mean: 0.000s, max: 0.016s
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_text\_command:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_window\_command:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [1](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083# "post last edited on Apr 28, 2024 9:46 am")
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/7)
+  
+  This is what I got… I can see Tabnine’s autocompletion took around 1.846s which is I guess too much for a fast editor like Sublime…
+  
+  I checked the same in ST3, the max, mean, total time there was less than this…
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/45/52468_2.png)](https://forum.sublimetext.com/u/deathaxe)
+  
+  [deathaxe](https://forum.sublimetext.com/u/deathaxe)
+  
+  [1](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083# "post last edited on Apr 28, 2024 11:08 am")
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/8)
+  
+  Seems to be a known issue, according to
+  
+  - [https://github.com/codota/tabnine-sublime/issues/113 82](https://github.com/codota/tabnine-sublime/issues/113)
+  - [https://github.com/codota/tabnine-sublime/issues/123 58](https://github.com/codota/tabnine-sublime/issues/123)
+  
+  ST4 provides API endpoints for plugins to provide completions asynchronously, which would help reducing/avoiding UI to block while waiting for network responses, but Tabnine doesn’t seem to make use of them.
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/9)
+  
+  That means there’s nothing that I can do …
+  
+  10 months later
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/p/a698b9/45.png)](https://forum.sublimetext.com/u/Peter_Rabbit)
+  
+  [Peter\_Rabbit](https://forum.sublimetext.com/u/Peter_Rabbit)
+  
+  [Feb 2025](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/10)
+  
+  Thank you for this. Had an issue with a recently updated plugin and this helped me narrow it down. HUGE HELP!
+  
+  Reply
+  
+  ### \[en.share.topic\]
+  
+  [Share this link on Twitter](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "Share this link on Twitter")
+  
+  [Share this link on Facebook](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "Share this link on Facebook")
+  
+  [Send this link in an email](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "Send this link in an email")
+  
+  [close](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "close")
+  
+  Invalid date
+  
+  Invalid date
+  --- End Content ---
+
+SublimeText UI generally slow and laggy - Reddit
+  URL: https://www.reddit.com/r/SublimeText/comments/1huz0mi/sublimetext_ui_generally_slow_and_laggy/
+  The UI has been generally laggy. It takes a long time to switch between tabs, there is a delay between me typing and the characters showing up on screen, etc.

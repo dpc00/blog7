@@ -1,0 +1,1482 @@
+tmux slows in proportion to scrollback size, but only when status has ...
+  URL: https://github.com/tmux/tmux/issues/3352
+  After setting a large history-limit, as scrollback is filled with 78 column lines, tmux becomes increasingly sluggish to complete ...
+  Category: github
+
+  --- Content ---
+  [Skip to content](https://github.com/tmux/tmux/issues/3352#start-of-content)
+  
+  You signed in with another tab or window. [Reload](https://github.com/tmux/tmux/issues/3352) to refresh your session.You signed out in another tab or window. [Reload](https://github.com/tmux/tmux/issues/3352) to refresh your session.You switched accounts on another tab or window. [Reload](https://github.com/tmux/tmux/issues/3352) to refresh your session.Dismiss alert
+  
+  {{ message }}
+  
+  [tmux](https://github.com/tmux)/ **[tmux](https://github.com/tmux/tmux)** Public
+  
+  - Sponsor
+  
+  
+  
+  
+  
+  
+  
+  # Sponsor tmux/tmux
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ##### GitHub Sponsors
+  
+  [Learn more about Sponsors](https://github.com/sponsors)
+  
+  
+  
+  
+  
+  
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?s=80&v=4)](https://github.com/nicm)
+  
+  
+  
+  [nicm](https://github.com/nicm)
+  
+  
+  
+  [nicm](https://github.com/nicm)
+  
+  
+  
+  [Sponsor](https://github.com/sponsors/nicm)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ##### External links
+  
+  
+  
+  
+  
+  ![liberapay](https://github.githubassets.com/assets/liberapay-48108ded7267.svg)
+  
+  
+  
+  [liberapay.com/ **tmux**](https://liberapay.com/tmux)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  [Learn more about funding links in repositories](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository).
+  
+  
+  
+  
+  [Report abuse](https://github.com/contact/report-abuse?report=tmux%2Ftmux+%28Repository+Funding+Links%29)
+  
+  - [Notifications](https://github.com/login?return_to=%2Ftmux%2Ftmux) You must be signed in to change notification settings
+  - [Fork\\
+  2.6k](https://github.com/login?return_to=%2Ftmux%2Ftmux)
+  - [Star\\
+  44.9k](https://github.com/login?return_to=%2Ftmux%2Ftmux)
+  
+  
+  # tmux slows in proportion to scrollback size, but only when status has subshells\#3352
+  
+  [New issue](https://github.com/login?return_to=https://github.com/tmux/tmux/issues/3352)
+  
+  Copy link
+  
+  [New issue](https://github.com/login?return_to=https://github.com/tmux/tmux/issues/3352)
+  
+  Copy link
+  
+  Closed
+  
+  Closed
+  
+  [tmux slows in proportion to scrollback size, but only when status has subshells](https://github.com/tmux/tmux/issues/3352#top)#3352
+  
+  Copy link
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ## Description
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  opened [on Oct 16, 2022on Oct 16, 2022](https://github.com/tmux/tmux/issues/3352#issue-1410672050) · edited by [smemsh](https://github.com/smemsh)
+  
+  Edits
+  
+  Issue body actions
+  
+  After setting a large `history-limit`, as scrollback is filled with 78 column lines, tmux becomes increasingly sluggish to complete `refresh-client -S` (and everywhere else), but only if there are subshells in status format (`ie #(command ...)`). Eventually tmux becomes unusable and 100% cpu, by about 40M lines of scrollback, even with no output or interaction and just one tmux window open.
+  
+  The performance is fair enough (for that many lines) when there is no status-left defined. I do not understand why scrollback size and presence of subshells in status format are linked and cause this incredible slowdown.
+  
+  1. build latest master on linux with --enable-utempter --enable-static --enable-utf8proc --disable-systemd --sysconfdir=/etc
+  2. create rcfile:
+  
+  ```
+  set-option -g history-limit 2147483647
+  set-option -g status-left-length 99
+  
+  set-option -qg \
+  status-left "\
+  #(git -C #{pane_current_path} \
+    symbolic-ref --short HEAD) \
+  #(git -C #{pane_current_path} \
+    status -uno --porcelain \
+    | awk '{if \(!seen[$1]\) {printf\($1\); seen[$1]=1}}')\
+  #(git -C #{pane_current_path} \
+    rev-list --walk-reflogs --count refs/stash 2>/dev/null) \
+  "
+  ```
+  
+  3. start a new tmux
+  4. run
+  
+  ```
+  perl -le 'for ($i = 0; $i < 10000000; $i++) {print "a" x 78}'
+  ```
+  
+  5. try `time refresh-client -S`
+  6. repeat steps 3 and 4, yielding following run times:
+  
+  
+  10M lines: 0.13s
+  
+  
+  20M lines: 0.22s
+  
+  
+  30M lines: 0.31s
+  
+  
+  40M lines: 0.42s
+  
+  by that time cpu fans are going, takes 66 seconds to enter copy-paste mode, with lines 0/39999999 shown, scrolling painfully slow, then stops interaction altogether, cpu 100%. you can wait a long time and it seems to never stop. You can interact with tmux, just everything is very slow, on timescale of minutes or tens of seconds even for tmux prompt input to echo
+  
+  _without_ **status-left** as above,`refresh-client -S` completes instantly, no matter how many lines of scrollback!! Note that `pane_current_path` does not need to be inside git directory for this to happen, or for tmux to have ever been inside one from start.
+  
+  Not sure if this is related to [#2551](https://github.com/tmux/tmux/issues/2551) or not. After this test, it takes several minutes to exit the test window and full cpu is being used the whole time. But it will exit properly and do orderly shutdown.
+  
+  If not exiting, Tmux never recovers interactive performance after this, even if all windows that had scrollback are closed, and new empty ones opened instead, it will always be very slow even several hours later and continue to use high cpu even with one window, no scrollback, running a shell doing nothing.
+  
+  ## Activity
+  
+  [![krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=80)](https://github.com/krader1961)
+  
+  ### krader1961 commented on Oct 16, 2022on Oct 16, 2022
+  
+  [![@krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=48)](https://github.com/krader1961)
+  
+  [krader1961](https://github.com/krader1961)
+  
+  [on Oct 16, 2022on Oct 16, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280147570)
+  
+  More actions
+  
+  The primary cause of the slowdown is the virtual size of the tmux server. Your 40 million lines (78 chars + newline) requires, at a minimum, ~2.9 GB of memory. That memory requires [PTEs](https://en.wikipedia.org/wiki/Page_table) (page table entries) and related data structures. The exact amount of kernel memory required for the PTEs depends on the system architecture (i386, x86\_64, ARM64, etc.) and the OS. But a rule of thumb is one PTE for every 4 KB of virtual memory. So your 40 million line scrollback buffer probably requires at least 771485 PTEs. Assuming each PTE is 4 bytes that is 3 MB of kernel memory. Every time tmux forks to run an external command (e.g., `git` in your `status-left` definition) the kernel has to copy that 3 MB of memory. This is why the `vfork` syscall was invented. It, however, has its own problems which is why `posix_spawn` was created (and Linux has `clone`).
+  
+  Until tmux uses `posix_spawn` (on platforms where it is available) you need to limit the scrollback history to something more reasonable. Such as `set -g history-limit 10000` that I've had in my tmux config for many years and found more than adequate.
+  
+  P.S., On 32-bit architectures your `history-limit` is likely to cause the tmux server to run out of virtual memory and crash when `malloc` fails even if your system otherwise has more than 4 GB of physical memory.
+  
+  [![krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=80)](https://github.com/krader1961)
+  
+  ### krader1961 commented on Oct 16, 2022on Oct 16, 2022
+  
+  [![@krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=48)](https://github.com/krader1961)
+  
+  [krader1961](https://github.com/krader1961)
+  
+  [on Oct 16, 2022on Oct 16, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280172154)
+  
+  More actions
+  
+  In case it wasn't obvious my analysis of the memory required for that absurdly large scrollback buffer glosses over a lot of details. For example, on typical UNIX systems, on i386 and x86\_64 architectures, the PTEs are arranged in a hierarchy so that the PTEs that map individual VM pages for a process are themselves grouped into blocks of PTEs that require a PTE. Those additional PTEs obviously require memory but that is typically an order of magnitude (or two) less than the primary PTEs and thus can be ignored for a quick back of the napkin calculation.
+  
+  [![krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=80)](https://github.com/krader1961)
+  
+  ### krader1961 commented on Oct 16, 2022on Oct 16, 2022
+  
+  [![@krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=48)](https://github.com/krader1961)
+  
+  [krader1961](https://github.com/krader1961)
+  
+  [on Oct 16, 2022on Oct 16, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280224620)
+  
+  More actions
+  
+  Also, the issue of bad performance due to absurdly large `history-limit` values is reported periodically. See, for example, [#3194](https://github.com/tmux/tmux/issues/3194) and [#2380](https://github.com/tmux/tmux/issues/2380). The latter issue pointing out that the memory required for humungous scrollback buffers is also likely to result in your system swapping processes in and out of memory. Which will also cause enormous slow downs.
+  
+  [@smemsh](https://github.com/smemsh): Why do you require such a huge scrollback history? Is there a legitimate use case or did you just stumble upon this problem because you didn't want to impose a realistic limit on the amount of scrollback history "just in case" more history was useful?
+  
+  [![krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=80)](https://github.com/krader1961)
+  
+  ### krader1961 commented on Oct 16, 2022on Oct 16, 2022
+  
+  [![@krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=48)](https://github.com/krader1961)
+  
+  [krader1961](https://github.com/krader1961)
+  
+  [on Oct 16, 2022on Oct 16, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280242267)
+  
+  More actions
+  
+  [@nicm](https://github.com/nicm): It might be a good idea to augment the documentation of the `history-limit` option to note the problems associated with large values. Such as increased physical and virtual memory consumption that can impact the performance of tmux and the system as a whole. I am not suggesting including details about PTEs and the like. Only that too many individuals seem to think unlimited scrollback history has no cost so it might help to note that it does, in fact, have a cost.
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280266353) · edited by [smemsh](https://github.com/smemsh)
+  
+  Edits
+  
+  Author
+  
+  More actions
+  
+  > primary cause of the slowdown is the virtual size of the tmux server
+  
+  At 20M scrollback lines, rss is 13G (which seems large for the dataset, but setting that aside), and there is enough memory on my system at this size. The effect seems linear... it's close to half as slow and half as much memory when scrollback is 10M lines. I turned swap off just to confirm paging is not an issue here also (but it was at 40M, see below)
+  
+  > \[leading to large number of PTEs\]
+  
+  Yes my system has 4k pages, this means larger page sizes would help then? Hmm, I will try to get my system to use larger pages (2M?) for tmux process, since my processor and kernel support it, and see if this changes things. I may have to use a different malloc() though: I tried transparent\_hugepage `enabled=always`, `defrag=always` and used `GLIBC_TUNABLES=glibc.malloc.hugetlb=2` in the tmux environment when starting server (and my glibc is 2.35 so this should work), but still could not see any huge pages allocated in the tmux `/proc/<pid>/smaps` file...
+  
+  > \[those PTEs get copied when forking subshell for the status expansions\]
+  
+  The default `status-interval` is 15s, this is only one window in entire tmux lifetime, not making any new ones (which force status to redraw and thus forks to be made). How many times will these forks be happening? It's not that frequent. Watching strace with fork-following, I can see a few dozens `execve()` happening at the status-interval, which does not seem to account for this. Even copies of large number of PTEs cannot be taking this long for so few occasions.
+  
+  I did find it was being affected by VM at the tail end of the range, but disabling swap entirely, the slowdown effect is still large at both 10M and 20M lines and makes tmux feel quite slow to add these delays to everything like new window (0.15s at 10M lines, 0.24s at 20M lines).
+  
+  Even after all windows are gone and all scrollbacks empty, these delays are still present. Tmux never recovers.
+  
+  > \[large history-size is illegitimate\]
+  
+  I'm nowhere near the history limit and not describing a problem at those limits, but much lower ones (10M lines. should that be illegal in your world? 10M line limit?) Does it preallocate or something? I think being able to keep a few millions of lines without it becoming so slow is completely reasonable, I have frequently run into situations using terminals that scrolled off which I missed important errors when I was detached for a while, debug info that was way more voluminous than I thought, long running sessions that collect lots of data and otutput, grepping through things, I search later for stuff, etc.
+  
+  Why are you governing my scrollback size and determining "legitimacy" on my behalf? These are not ridiculous numbers, 10M lines is not ridiculous and effect is easily seen here. I'd rather be explicit and kill the window when it has too many lines of scrollback, or have OOM/crash kill it if I've not managed my windows, that's fine with me. A terminal should be able to handle 10M lines without slowing down to 150ms new window open or pane switch delay.
+  
+  Please also note again that this _doesn't happen from the scrollback size alone_. Tmux is fast with the same scrollback sizes above, when`status-left` is not set. It happens from when having these `#()` in my `status-left`. And those are only doing a few dozens of forks so even if it's copying many MB of PTEs I don't see why that takes quarter of a second.
+  
+  [![krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=80)](https://github.com/krader1961)
+  
+  ### krader1961 commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=48)](https://github.com/krader1961)
+  
+  [krader1961](https://github.com/krader1961)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280282509)
+  
+  More actions
+  
+  > I'm nowhere near the history limit
+  
+  You completely missed the points of my previous comments. You still haven't explained why you need such huge scrollback history. And you clearly do not understand the cost of an unreasonably large scrollback history.
+  
+  > I'm nowhere near the history limit and not describing a problem at those limits
+  
+  Which tells me you do not understand either my previous replies or how computers manage memory. Every single line in the tmux scrollback history requires memory. That physical, and virtual, memory also requires the operating system to use memory to manage that virtual memory.
+  
+  > Why are you governing my scrollback size and determining "legitimacy" on my behalf?
+  
+  Because capturing that history requires real, and virtual, storage. You seem to think that capturing an infinite scrollback history has zero cost.
+  
+  > Tmux is fast with the same scrollback sizes above, whenstatus-left is not set.
+  
+  Yes, as I explained in my previous comment that is due to the cost of the `fork()` syscall which is not relevant when you have not set a `status-left` definition that executes external programs.
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280282736)
+  
+  Author
+  
+  More actions
+  
+  I got it to use 2M pages using `GLIBC_TUNABLES=glibc.malloc.hugetlb=1` with `enabled=madvise` instead. The times decreased to 0.18s for 20M lines (25% improvement) and 0.05s for 10M lines (66% improvement).
+  
+  I don't understand why this is the case. It's only forking a few dozens of times for subshells for the status prompt. How can it take this long to copy page tables?
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280289924)
+  
+  Author
+  
+  More actions
+  
+  > You still haven't explained why you need such huge scrollback history.
+  
+  I explained why 10M or 20M is surely a reasonable size. You cited your own limit at 10k lines which is laughable, I would use that limit in a throwaway terminal but not tmux which tends to run for months and have lots of stuff going on which I refer back to later.
+  
+  10k is nuts, I would use that in just a few minutes of working on a server in some situations, you must use a system very differently than me (which is fine). That you don't concur with my usage style is, well good for you sir. I will continue to use large scrollback and close windows when they get large (but it seems memory is not returned to the system anyways even when windows close, which might also be a libc thing...)
+  
+  > And you clearly do not understand the cost of an unreasonably large scrollback history.
+  
+  The cost/benefit is up to me, not you, but your judgements about what is "reasonable" and decrees of legitimacy are appreciated for sure!
+  
+  In any case, I really don't get how the page tables could take so long to copy such a small number of times, this is a computer with quite fast memory even, the absolute amount of memory being copied does not seem large.
+  
+  I will try to determine the size taken up by just the PTEs for a scrollback-engorged tmux...
+  
+  [![nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=80)](https://github.com/nicm)
+  
+  ### nicm commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=48)](https://github.com/nicm)
+  
+  [nicm](https://github.com/nicm)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280307705)
+  
+  Member
+  
+  More actions
+  
+  You should be able to see the time spent in any syscall using `strace` (look for `clone`).
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280311807) · edited by [smemsh](https://github.com/smemsh)
+  
+  Edits
+  
+  Author
+  
+  More actions
+  
+  > You seem to think that capturing an infinite scrollback history has zero cost.
+  
+  Not infinite, we are talking about 10M or 20M lines here. I'm running into this problem now and then just from cumulative output, beyond the other situations mentioned, and it's definitely scrollback I wouldn't want to just have scroll off and disappear. It may be that even 10M is not possible due to the implementation of status formatting with subshells that fork the main tmux process, taking so long to copy these PTEs, if you are \[as you are apparently\] correct.
+  
+  I suppose one could prefork a companion process that would stay running just to render status formats, and communicate with it over a pipe...
+  
+  also puzzled why 10M lines of 80 char scrollback dirties 10G of memory (rss and vsz are nearly the same here btw), but it might be a separate question...
+  
+  [![nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=80)](https://github.com/nicm)
+  
+  ### nicm commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=48)](https://github.com/nicm)
+  
+  [nicm](https://github.com/nicm)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280316657)
+  
+  Member
+  
+  More actions
+  
+  10M x 80 plain (not extended) cells is about 6.7 gigabytes.
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280323408)
+  
+  Author
+  
+  More actions
+  
+  > I will try to determine the size taken up by just the PTEs for a scrollback-engorged tmux...
+  
+  with 20M lines of 80 char scrollback lines, using 4k pages:
+  
+  ```
+   $ grep -i pte /proc/$(pgrep -oP1 tmux)/status
+  VmPTE:     27904 kB
+  ```
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280330649) · edited by [smemsh](https://github.com/smemsh)
+  
+  Edits
+  
+  Author
+  
+  More actions
+  
+  I counted only 8 forks during a refresh-client -S after 20M of scrollback, so if PTEs are 28M for this working set, that's 224M copy total, which takes quarter of a second?? here's from that span (roughly) (including children):
+  
+  ```
+  % time     seconds  usecs/call     calls    errors syscall
+  ------ ----------- ----------- --------- --------- ----------------
+   39.51    0.423555       32581        13         3 wait4
+   39.02    0.418310       59758         7           execve
+   21.19    0.227170       45434         5           clone
+    0.06    0.000646           1       387       326 openat
+    0.05    0.000589           1       391       286 newfstatat
+    0.03    0.000341          17        20           poll
+    0.01    0.000151           1       113           mmap
+    0.01    0.000147           5        26         2 ioctl
+    0.01    0.000127           5        23        10 access
+    0.01    0.000093           1        84         1 close
+    0.01    0.000079           1        63         3 read
+  ```
+  
+  [![nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=80)](https://github.com/nicm)
+  
+  ### nicm commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=48)](https://github.com/nicm)
+  
+  [nicm](https://github.com/nicm)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280335021)
+  
+  Member
+  
+  More actions
+  
+  You will need to take up issues with performance of `fork`/`exec` with kernel developers.
+  
+  I would accept a PR to make tmux use `posix_spawn` although of course you would need to figure out if it is supported on other platforms (Solaris and Cgywin would be the ones I would be most converned with) and provide a compatibility interface if not.
+  
+  Copy mode will be an issue with large histories because we now copy the history from the target pane. We used to use the history without copying, but for that we had to freeze writing to the pane to stop new output interfering with copying, and people hated that because it would cause long-running single-threaded processes to drop TCP connections. Possibly we could add some sort of copy-on-write and reference counting to `grid_line`, although of course that would increase memory consumption a little, and probably not be trivial to implement.
+  
+  Long term, I would like it if `history-limit` was shared across panes, so tmux would collect the oldest lines from rarely used panes to allow new ones to grow, and also if it was perhaps expressed in bytes or cells rather than lines. But that is a fair bit of work and nobody has done it yet.
+  
+  In the meantime you will need to avoid total history lines getting too big.
+  
+  [![nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=80)](https://github.com/nicm)
+  
+  ### nicm commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=48)](https://github.com/nicm)
+  
+  [nicm](https://github.com/nicm)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280342882)
+  
+  Member
+  
+  More actions
+  
+  You could run your `#()` as long running processes, either separate from tmux and setting a user option or leave them as child processes but make them continually add new lines rather that exiting. That would avoid `fork` entirely.
+  
+  [![smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=80)](https://github.com/smemsh)
+  
+  ### smemsh commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@smemsh](https://avatars.githubusercontent.com/u/9385397?u=48883188f80f08e6b36d19e559b0ef291c377311&v=4&size=48)](https://github.com/smemsh)
+  
+  [smemsh](https://github.com/smemsh)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280391747)
+  
+  Author
+  
+  More actions
+  
+  I had thought that fork() created a COW version of the PTEs' own backing pages, I didn't realize the tables were "duplicated" for the new process. I'm still shocked that this duplication takes so long, but it appears to be the case.
+  
+  Thank you both for the discussion and suggestions. I will find a sweet spot with larger pages and lower scrollback limit for now, and think about a way to inject into variables used by status from out-of-band. I think a control mode connection listening for events could work (since I have to replace triggering from status-refresh itself, I will have to duplicate the triggers that would have caused a refresh, such as window-change).
+  
+  It looks like this `posix_spawn()` \-\- which can utilize page tables of parent without copy -- would be a better answer (besides setting a lower scrollback size) but I cannot attempt this now. If this changes in future I will reopen.
+  
+  Since the behavior here is essentially working as designed, I will close this issue for now, thanks.
+  
+  [![](https://avatars.githubusercontent.com/u/9385397?s=64&u=48883188f80f08e6b36d19e559b0ef291c377311&v=4)smemsh](https://github.com/smemsh)
+  
+  closed this as [completed](https://github.com/tmux/tmux/issues?q=is%3Aissue%20state%3Aclosed%20archived%3Afalse%20reason%3Acompleted) [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#event-7598997905)
+  
+  [![nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=80)](https://github.com/nicm)
+  
+  ### nicm commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?v=4&size=48)](https://github.com/nicm)
+  
+  [nicm](https://github.com/nicm)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1280553478)
+  
+  Member
+  
+  More actions
+  
+  I had a look at `posix_spawn` and although we could use it for `#()` it appears it cannot be used for creating panes because there is no way to have it set the controlling terminal.
+  
+  [![krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=80)](https://github.com/krader1961)
+  
+  ### krader1961 commented on Oct 17, 2022on Oct 17, 2022
+  
+  [![@krader1961](https://avatars.githubusercontent.com/u/7545917?u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4&size=48)](https://github.com/krader1961)
+  
+  [krader1961](https://github.com/krader1961)
+  
+  [on Oct 17, 2022on Oct 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1281743793)
+  
+  More actions
+  
+  [@nicm](https://github.com/nicm): Note that modern shells like [fish](https://fishshell.com/) and the venerable Korn shell (ksh) use `posix_spawn`. They do so in a mostly race free manner by calling `tcsetpgrp` after `posix_spawn`. In practice the race fails rarely and, fish at least, has hacky code to retry and thus further reduce the likelihood of the race being visible. I am not a fan of that code (I contributed to Fish for a few years) but it does seem to work well enough for a popular non-POSIX shell and a widely used POSIX shell. See [fish-shell/fish-shell#3149](https://github.com/fish-shell/fish-shell/issues/3149) where I argued its use should be removed. See also [https://www.mail-archive.com/ast-developers@research.att.com/msg00719.html](https://www.mail-archive.com/ast-developers@research.att.com/msg00719.html).
+  
+  It's not clear whether the added complexity, and risks, associated with using `posix_spawn` are justified for tmux. Personally, I would argue "maybe". The `posix_spawn` syscall was created for the benefit of programs with a huge virtual size, like the Oracle RDBMS, that occasionally need to run an external program. It wasn't intended for command shells (which arguably includes tmux). Which is why that API lacks proper support for managing the controlling tty.
+  
+  P.S., Long ago I was a fan of `ksh`. I now recommend not using it because it has a huge number of bugs, including at least one serious security bug that can be trivially exploited by an attacker that is unlikely to ever be fixed.
+  
+  [![github-actions](https://avatars.githubusercontent.com/in/15368?v=4&size=80)](https://github.com/apps/github-actions)
+  
+  ### github-actions commented on Nov 17, 2022on Nov 17, 2022
+  
+  [![@github-actions](https://avatars.githubusercontent.com/in/15368?v=4&size=48)](https://github.com/apps/github-actions)
+  
+  [github-actions](https://github.com/apps/github-actions) bot
+  
+  [on Nov 17, 2022on Nov 17, 2022](https://github.com/tmux/tmux/issues/3352#issuecomment-1319385042)
+  
+  More actions
+  
+  This issue has been automatically locked since there has not been any recent activity after it was closed. Please open a new issue for related bugs.
+  
+  [![](https://avatars.githubusercontent.com/in/15368?s=64&v=4)github-actions](https://github.com/apps/github-actions)
+  
+  locked as resolved and limited conversation to collaborators [on Nov 17, 2022on Nov 17, 2022](https://github.com/tmux/tmux/issues/3352#event-7838986815)
+  
+  [Sign up for free](https://github.com/signup?return_to=https://github.com/tmux/tmux/issues/3352)**to join this conversation on GitHub.** Already have an account? [Sign in to comment](https://github.com/login?return_to=https://github.com/tmux/tmux/issues/3352)
+  
+  ## Metadata
+  
+  ## Metadata
+  
+  ### Assignees
+  
+  No one assigned
+  
+  ### Labels
+  
+  No labels
+  
+  No labels
+  
+  ### Type
+  
+  No type
+  
+  ### Projects
+  
+  No projects
+  
+  ### Milestone
+  
+  No milestone
+  
+  ### Relationships
+  
+  None yet
+  
+  ### Development
+  
+  - [feat: Use posix\_spawn for JOB\_NOWAIT jobstmux/tmux](https://github.com/tmux/tmux/pull/4496)
+  
+  ### Participants
+  
+  [![@nicm](https://avatars.githubusercontent.com/u/304243?s=64&v=4)](https://github.com/nicm)[![@krader1961](https://avatars.githubusercontent.com/u/7545917?s=64&u=5b3156f2e720d6eddba1f776daf1f1c760d2a7a0&v=4)](https://github.com/krader1961)[![@smemsh](https://avatars.githubusercontent.com/u/9385397?s=64&u=48883188f80f08e6b36d19e559b0ef291c377311&v=4)](https://github.com/smemsh)
+  
+  ## Issue actions
+  
+  You can’t perform that action at this time.
+  --- End Content ---
+
+Emulator lags in unusable fashion with large output from terminal ...
+  URL: https://github.com/termux/termux-app/issues/4976
+  Problem description. Currently when using Termux with large content (e.g. large log tailing, chafa output), it's already slow to stream.
+  Category: github
+
+  --- Content ---
+  [Skip to content](https://github.com/termux/termux-app/issues/4976#start-of-content)
+  
+  You signed in with another tab or window. [Reload](https://github.com/termux/termux-app/issues/4976) to refresh your session.You signed out in another tab or window. [Reload](https://github.com/termux/termux-app/issues/4976) to refresh your session.You switched accounts on another tab or window. [Reload](https://github.com/termux/termux-app/issues/4976) to refresh your session.Dismiss alert
+  
+  {{ message }}
+  
+  [termux](https://github.com/termux)/ **[termux-app](https://github.com/termux/termux-app)** Public
+  
+  - Sponsor
+  
+  
+  
+  
+  
+  
+  
+  # Sponsor termux/termux-app
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ##### External links
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  [https://termux.dev/donate](https://termux.dev/donate)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  [Learn more about funding links in repositories](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository).
+  
+  
+  
+  
+  [Report abuse](https://github.com/contact/report-abuse?report=termux%2Ftermux-app+%28Repository+Funding+Links%29)
+  
+  - [Notifications](https://github.com/login?return_to=%2Ftermux%2Ftermux-app) You must be signed in to change notification settings
+  - [Fork\\
+  6.4k](https://github.com/login?return_to=%2Ftermux%2Ftermux-app)
+  - [Star\\
+  54k](https://github.com/login?return_to=%2Ftermux%2Ftermux-app)
+  
+  
+  # \[Bug\]: Emulator lags in unusable fashion with large output from terminal multiplexers\#4976
+  
+  [New issue](https://github.com/login?return_to=https://github.com/termux/termux-app/issues/4976)
+  
+  Copy link
+  
+  [New issue](https://github.com/login?return_to=https://github.com/termux/termux-app/issues/4976)
+  
+  Copy link
+  
+  Closed
+  
+  [#4977](https://github.com/termux/termux-app/pull/4977)
+  
+  Closed
+  
+  [\[Bug\]: Emulator lags in unusable fashion with large output from terminal multiplexers](https://github.com/termux/termux-app/issues/4976#top)#4976
+  
+  [#4977](https://github.com/termux/termux-app/pull/4977)
+  
+  Copy link
+  
+  Labels
+  
+  [bug report](https://github.com/termux/termux-app/issues?q=state%3Aopen%20label%3A%22bug%20report%22)
+  
+  [![@xJonathanLEI](https://avatars.githubusercontent.com/u/19556359?u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4&size=80)](https://github.com/xJonathanLEI)
+  
+  ## Description
+  
+  [![@xJonathanLEI](https://avatars.githubusercontent.com/u/19556359?u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4&size=48)](https://github.com/xJonathanLEI)
+  
+  [xJonathanLEI](https://github.com/xJonathanLEI)
+  
+  opened [on Feb 18on Feb 18, 2026](https://github.com/termux/termux-app/issues/4976#issue-3958630736)
+  
+  Contributor
+  
+  Issue body actions
+  
+  ### Problem description
+  
+  Currently when using Termux with large content (e.g. large log tailing, `chafa` output), it's _already_ slow to stream. For example, you'd see `chafa` images being streamed almost row by row. But once streamed, it's usable as rows streamed are buffered. Scrolling works fine.
+  
+  But when using a terminal multiplexer like `zellij` or `tmux`, content are delivered as screen updates, which involve lots of control sequences. This is the case for both the initial streaming and subsequent scrolling.
+  
+  The end result is extremely laggy. Attempting to scroll on a high-end phone (small screen at < 100 width + fast chip) gives you something less than 1 FPS. It's painfully slow and essentially unusable on these content.
+  
+  ### Steps to reproduce the behavior.
+  
+  1. Create a folder with a bunch of decently sized images.
+  2. Install `chafa` and a multiplexer of your choice (e.g. `zellij`)
+  3. Enter a multiplexer session and go to the folder.
+  4. Execute `chafa *`.
+  5. Try to scroll.
+  6. The terminal emulator is extremely laggy at probably lower than 1 FPS.
+  
+  ### What is the expected behavior?
+  
+  Terminal emulator should be reasonably smooth.
+  
+  ### System information
+  
+  - Termux application version: [`e50ac9e`](https://github.com/termux/termux-app/commit/e50ac9e019f5dd359b252bc4312f25de7b7dc8ed)
+  - Android OS version: 16
+  - Device model: Samsung Galaxy S25 Ultra
+  
+  ## Activity
+  
+  [![](https://avatars.githubusercontent.com/u/19556359?s=64&u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4)xJonathanLEI](https://github.com/xJonathanLEI)
+  
+  added
+  
+  [bug report](https://github.com/termux/termux-app/issues?q=state%3Aopen%20label%3A%22bug%20report%22)
+  
+  [on Feb 18on Feb 18, 2026](https://github.com/termux/termux-app/issues/4976#event-22889151165)
+  
+  [![xJonathanLEI](https://avatars.githubusercontent.com/u/19556359?u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4&size=80)](https://github.com/xJonathanLEI)
+  
+  ### xJonathanLEI commented on Feb 18on Feb 18, 2026
+  
+  [![@xJonathanLEI](https://avatars.githubusercontent.com/u/19556359?u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4&size=48)](https://github.com/xJonathanLEI)
+  
+  [xJonathanLEI](https://github.com/xJonathanLEI)
+  
+  [on Feb 18on Feb 18, 2026](https://github.com/termux/termux-app/issues/4976#issuecomment-3921804325)
+  
+  ContributorAuthor
+  
+  More actions
+  
+  Adding insult to injury, since Termux is usually used on mobile devices that frequently move across network boundaries multiplexers are quite important to ensure remote sessions are not interrupted. So this could be quite impactful.
+  
+  [![](https://avatars.githubusercontent.com/u/19556359?s=64&u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4)xJonathanLEI](https://github.com/xJonathanLEI)
+  
+  mentioned this [on Feb 18on Feb 18, 2026](https://github.com/termux/termux-app/issues/4976#event-4783546961)
+  
+  - [Increase read buffer size from 4KB to 64KB #4977](https://github.com/termux/termux-app/pull/4977)
+  
+  
+  [![](https://avatars.githubusercontent.com/u/277251?s=64&v=4)fornwall](https://github.com/fornwall)
+  
+  closed this as [completed](https://github.com/termux/termux-app/issues?q=is%3Aissue%20state%3Aclosed%20archived%3Afalse%20reason%3Acompleted) in [#4977](https://github.com/termux/termux-app/pull/4977) [on Feb 21on Feb 21, 2026](https://github.com/termux/termux-app/issues/4976#event-22967210175)
+  
+  [Sign up for free](https://github.com/signup?return_to=https://github.com/termux/termux-app/issues/4976)**to join this conversation on GitHub.** Already have an account? [Sign in to comment](https://github.com/login?return_to=https://github.com/termux/termux-app/issues/4976)
+  
+  ## Metadata
+  
+  ## Metadata
+  
+  ### Assignees
+  
+  No one assigned
+  
+  ### Labels
+  
+  [bug report](https://github.com/termux/termux-app/issues?q=state%3Aopen%20label%3A%22bug%20report%22)
+  
+  ### Type
+  
+  No type
+  
+  ### Projects
+  
+  No projects
+  
+  ### Milestone
+  
+  No milestone
+  
+  ### Relationships
+  
+  None yet
+  
+  ### Development
+  
+  - [Increase read buffer size from 4KB to 64KBtermux/termux-app](https://github.com/termux/termux-app/pull/4977)
+  
+  ### Participants
+  
+  [![@xJonathanLEI](https://avatars.githubusercontent.com/u/19556359?s=64&u=c38a7ebf4d233d977ab6090f14fd53dd63d5f32b&v=4)](https://github.com/xJonathanLEI)
+  
+  ## Issue actions
+  
+  You can’t perform that action at this time.
+  --- End Content ---
+
+tmux using 1G RAM even after clearing all scrollback history
+  URL: https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history
+  Now my scrollback is gone but the memory usage is not going down. This tmux was running for a long time and lots of text scrolled through it.
+
+  --- Content ---
+  ##### Collectives™ on Stack Overflow
+  
+  Find centralized, trusted content and collaborate around the technologies you use most.
+  
+  [Learn more about Collectives](https://stackoverflow.com/collectives)
+  
+  **Stack Internal**
+  
+  Knowledge at work
+  
+  Bring the best of human thought and AI automation together at your work.
+  
+  [Explore Stack Internal](https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams-compact-popover)
+  
+  # [tmux using 1G RAM even after clearing all scrollback history](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history)
+  
+  [Ask Question](https://stackoverflow.com/questions/ask)
+  
+  Asked11 years, 11 months ago
+  
+  Modified [2 months ago](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history?lastactivity "2026-02-06 08:03:25Z")
+  
+  Viewed
+  9k times
+  
+  
+  This question shows research effort; it is useful and clear
+  
+  21
+  
+  This question does not show any research effort; it is unclear or not useful
+  
+  Save this question.
+  
+  [Timeline](https://stackoverflow.com/posts/23535630/timeline)
+  
+  Show activity on this post.
+  
+  I use tmux (in fact byobu with tmux backend) on ubuntu 14.04.
+  
+  My tmux uses 1GB of memory (VIRT and RES in `top`) and I have already used the `clear-history` command.
+  
+  Now my scrollback is gone but the memory usage is not going down.
+  
+  This tmux was running for a long time and lots of text scrolled through it. `top` shows it used more than 1 hour of CPU time in total.
+  
+  What could be the reason?
+  
+  Could there be a memory leak?
+  
+  What could I try?
+  
+  I cannot restart it or do dangerous things because the session runs an experiment that takes around one week more to complete...
+  
+  - [memory](https://stackoverflow.com/questions/tagged/memory "show questions tagged 'memory'")
+  - [tmux](https://stackoverflow.com/questions/tagged/tmux "show questions tagged 'tmux'")
+  - [ubuntu-14.04](https://stackoverflow.com/questions/tagged/ubuntu-14.04 "show questions tagged 'ubuntu-14.04'")
+  - [byobu](https://stackoverflow.com/questions/tagged/byobu "show questions tagged 'byobu'")
+  
+  [Share](https://stackoverflow.com/q/23535630)
+  
+  Share a link to this question
+  
+  Copy link [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "The current license for this post: CC BY-SA 3.0")
+  
+  Short permalink to this question
+  
+  [Improve this question](https://stackoverflow.com/posts/23535630/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this question to receive notifications
+  
+  asked May 8, 2014 at 7:39
+  
+  [![peschü's user avatar](https://www.gravatar.com/avatar/c82dc779a6fcec328c22f180471829c7?s=64&d=identicon&r=PG)](https://stackoverflow.com/users/3572417/pesch%c3%bc)
+  
+  [peschü](https://stackoverflow.com/users/3572417/pesch%c3%bc)
+  
+  1,3691212 silver badges2121 bronze badges
+  
+  5
+  
+  - Is your Bash/shell history somehow overriding the history of tmux?
+  
+  
+  
+  user427390
+  
+  
+  –
+  user427390
+  
+  
+  
+  2014-08-16 01:28:47 +00:00
+  
+  [CommentedAug 16, 2014 at 1:28](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment39499675_23535630)
+  
+  - How are you displaying cpu usage? Are you using tmux-mem-cpu-load?
+  
+  
+  
+  Moonhead
+  
+  
+  –
+  [Moonhead](https://stackoverflow.com/users/2636891/moonhead "1,568 reputation")
+  
+  
+  
+  2014-09-10 20:53:45 +00:00
+  
+  [CommentedSep 10, 2014 at 20:53](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment40309626_23535630)
+  
+  - 1
+  
+  
+  
+  
+  
+  With tmux 1.9\_a, memory usage of tmux reduces from 150M to 800k after typing `reset` in the shell. It may be a workaround.
+  
+  
+  
+  Chih-Hsuan Yen
+  
+  
+  –
+  [Chih-Hsuan Yen](https://stackoverflow.com/users/3786245/chih-hsuan-yen "844 reputation")
+  
+  
+  
+  2014-11-28 20:40:05 +00:00
+  
+  [CommentedNov 28, 2014 at 20:40](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment42876331_23535630)
+  
+  - When the issue occurs again I will try with tmux-mem-cpu-load. So far it did not happen though.
+  
+  
+  
+  peschü
+  
+  
+  –
+  [peschü](https://stackoverflow.com/users/3572417/pesch%c3%bc "1,369 reputation")
+  
+  
+  
+  2014-12-01 08:18:16 +00:00
+  
+  [CommentedDec 1, 2014 at 8:18](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment42926539_23535630)
+  
+  - @peschü how can I try it with `tmux-mem-cpu-load`?
+  
+  
+  
+  alper
+  
+  
+  –
+  [alper](https://stackoverflow.com/users/2402577/alper "3,565 reputation")
+  
+  
+  
+  2022-08-08 16:54:23 +00:00
+  
+  [CommentedAug 8, 2022 at 16:54](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment129418480_23535630)
+  
+  
+  [Add a comment](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history# "Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.") \| [Expand to show all comments on this post](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history# "Expand to show all comments on this post")
+  
+  ## 6 Answers 6
+  
+  Sorted by:
+  [Reset to default](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history?answertab=scoredesc#tab-top)
+  
+  Highest score (default)
+  
+  Trending (recent votes count more)
+  
+  Date modified (newest first)
+  
+  Date created (oldest first)
+  
+  
+  This answer is useful
+  
+  10
+  
+  This answer is not useful
+  
+  Save this answer.
+  
+  Loading when this answer was accepted…
+  
+  [Timeline](https://stackoverflow.com/posts/34914876/timeline)
+  
+  Show activity on this post.
+  
+  There seems to have been a bug in tmux, resulting in memory not being freed on a history clear.
+  
+  This bug existed up to including version 1.9a, fixed in version 2.0. I'm posting this as a late answer, as version 1.9a seems to be still in use (with me at least).
+  
+  [https://groups.google.com/forum/#!topic/tmux-users/WiSZy6ft1As](https://groups.google.com/forum/#!topic/tmux-users/WiSZy6ft1As) [https://github.com/tmux/tmux/commit/28f23f18e9d79405a60348c4f7aeded33da9135b](https://github.com/tmux/tmux/commit/28f23f18e9d79405a60348c4f7aeded33da9135b)
+  
+  [Share](https://stackoverflow.com/a/34914876)
+  
+  Share a link to this answer
+  
+  Copy link [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "The current license for this post: CC BY-SA 3.0")
+  
+  Short permalink to this answer
+  
+  [Improve this answer](https://stackoverflow.com/posts/34914876/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this answer to receive notifications
+  
+  answered Jan 21, 2016 at 3:25
+  
+  [![sstn's user avatar](https://www.gravatar.com/avatar/5281c775c4d67b84fd45ae1d85b36b49?s=64&d=identicon&r=PG)](https://stackoverflow.com/users/599614/sstn)
+  
+  [sstn](https://stackoverflow.com/users/599614/sstn)
+  
+  3,0582222 silver badges3232 bronze badges
+  
+  Sign up to request clarification or add additional context in comments.
+  
+  
+  ## 2 Comments
+  
+  Add a comment
+  
+  [![](https://i.sstatic.net/5Powi.jpg?s=64)](https://stackoverflow.com/users/895245/ciro-santilli-ourbigbook-com)
+  
+  Ciro Santilli OurBigBook.com
+  
+  [Ciro Santilli OurBigBook.com](https://stackoverflow.com/users/895245/ciro-santilli-ourbigbook-com) [Over a year ago](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment66810354_34914876)
+  
+  My tmux 2.1 is still memory hungry :-(
+  
+  2016-09-28T20:36:58.06Z+00:00
+  
+  1
+  
+  Reply
+  
+  - Copy link
+  
+  [![](https://i.sstatic.net/5Powi.jpg?s=64)](https://stackoverflow.com/users/895245/ciro-santilli-ourbigbook-com)
+  
+  Ciro Santilli OurBigBook.com
+  
+  [Ciro Santilli OurBigBook.com](https://stackoverflow.com/users/895245/ciro-santilli-ourbigbook-com) [Over a year ago](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment66823241_34914876)
+  
+  Ah, forget it, it was because of `set -g @resurrect-capture-pane-contents 'on'`, that option is unusable.
+  
+  2016-09-29T07:37:02.907Z+00:00
+  
+  1
+  
+  Reply
+  
+  - Copy link
+  
+  This answer is useful
+  
+  6
+  
+  This answer is not useful
+  
+  Save this answer.
+  
+  Loading when this answer was accepted…
+  
+  [Timeline](https://stackoverflow.com/posts/25778582/timeline)
+  
+  Show activity on this post.
+  
+  Since no one has answered this, I'll offer my speculation on what's happening.
+  
+  `tmux` allocates space in memory for its history, and that memory grows as you use up more of your history. Clearing history makes it invisible, but doesn't free up the actual memory. This means that `tmux` can use memory up the total number of lines for each open pane, regardless of whether those panes currently contain anything in them.
+  
+  This is arguably a bug, or a bad feature at best.
+  
+  I don't have a solution.
+  
+  [Share](https://stackoverflow.com/a/25778582)
+  
+  Share a link to this answer
+  
+  Copy link [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "The current license for this post: CC BY-SA 3.0")
+  
+  Short permalink to this answer
+  
+  [Improve this answer](https://stackoverflow.com/posts/25778582/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this answer to receive notifications
+  
+  answered Sep 11, 2014 at 3:30
+  
+  [![quant's user avatar](https://i.sstatic.net/lAhj3.png?s=64)](https://stackoverflow.com/users/1613983/quant)
+  
+  [quant](https://stackoverflow.com/users/1613983/quant)
+  
+  23.7k3939 gold badges134134 silver badges234234 bronze badges
+  
+  ## 1 Comment
+  
+  Add a comment
+  
+  [![](https://i.sstatic.net/6XXt5.jpg?s=64)](https://stackoverflow.com/users/2402577/alper)
+  
+  alper
+  
+  [alper](https://stackoverflow.com/users/2402577/alper) [Over a year ago](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment129418626_25778582)
+  
+  restarting `tmux` seems like the only option
+  
+  2022-08-08T17:01:57.41Z+00:00
+  
+  0
+  
+  Reply
+  
+  - Copy link
+  
+  This answer is useful
+  
+  5
+  
+  This answer is not useful
+  
+  Save this answer.
+  
+  Loading when this answer was accepted…
+  
+  [Timeline](https://stackoverflow.com/posts/53086754/timeline)
+  
+  Show activity on this post.
+  
+  Necropost, but this problem has persisted for me until very recently. The memory use of tmux 2.6 from the repos on x86 xubuntu 18.04 always crept up to a gigabyte within a day or two. I removed it and built tmux 2.8 from source. Its memory usage has been minimal for several days. Problem solved, finally.
+  
+  [Share](https://stackoverflow.com/a/53086754)
+  
+  Share a link to this answer
+  
+  Copy link [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "The current license for this post: CC BY-SA 4.0")
+  
+  Short permalink to this answer
+  
+  [Improve this answer](https://stackoverflow.com/posts/53086754/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this answer to receive notifications
+  
+  answered Oct 31, 2018 at 15:18
+  
+  [![alazyworkaholic's user avatar](https://www.gravatar.com/avatar/cee21ebe77fb529b35e0b303d91fa74b?s=64&d=identicon&r=PG&f=y&so-version=2)](https://stackoverflow.com/users/4697349/alazyworkaholic)
+  
+  [alazyworkaholic](https://stackoverflow.com/users/4697349/alazyworkaholic)
+  
+  58733 silver badges1111 bronze badges
+  
+  ## Comments
+  
+  Add a comment
+  
+  This answer is useful
+  
+  3
+  
+  This answer is not useful
+  
+  Save this answer.
+  
+  Loading when this answer was accepted…
+  
+  [Timeline](https://stackoverflow.com/posts/27933711/timeline)
+  
+  Show activity on this post.
+  
+  It's not a bug, tmux does free memory immediately when you clear the history. It's up to glibc to return it to the kernel and it is poor at that. You should be able to see the memory is free because if you clear the history at say 10000 lines, the memory usage will not grow again until the history again reaches 10000 lines.
+  
+  [Share](https://stackoverflow.com/a/27933711)
+  
+  Share a link to this answer
+  
+  Copy link [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "The current license for this post: CC BY-SA 3.0")
+  
+  Short permalink to this answer
+  
+  [Improve this answer](https://stackoverflow.com/posts/27933711/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this answer to receive notifications
+  
+  answered Jan 13, 2015 at 23:57
+  
+  [![user4451397's user avatar](https://www.gravatar.com/avatar/0683dd5b411cd61563366dd6958e7ac3?s=64&d=identicon&r=PG)](https://stackoverflow.com/users/4451397/user4451397)
+  
+  [user4451397](https://stackoverflow.com/users/4451397/user4451397)
+  
+  3111 bronze badge
+  
+  ## 1 Comment
+  
+  Add a comment
+  
+  [![](https://www.gravatar.com/avatar/c82dc779a6fcec328c22f180471829c7?s=48&d=identicon&r=PG)](https://stackoverflow.com/users/3572417/pesch%c3%bc)
+  
+  peschü
+  
+  [peschü](https://stackoverflow.com/users/3572417/pesch%c3%bc) [Over a year ago](https://stackoverflow.com/questions/23535630/tmux-using-1g-ram-even-after-clearing-all-scrollback-history#comment44309399_27933711)
+  
+  Would glibc return the memory to the kernel sooner if the machine is heavily swapping pages in and out (because it does not have any free memory left)?
+  
+  2015-01-15T05:59:48.267Z+00:00
+  
+  1
+  
+  Reply
+  
+  - Copy link
+  
+  This answer is useful
+  
+  3
+  
+  This answer is not useful
+  
+  Save this answer.
+  
+  Loading when this answer was accepted…
+  
+  [Timeline](https://stackoverflow.com/posts/50214439/timeline)
+  
+  Show activity on this post.
+  
+  Another memory leak was fixed in tmux 2.5:
+  
+  ```
+  * Handle slow terminals and fast output better: when the amount of data
+    outstanding gets too large, discard output until it is drained and we are
+    able to do a full redraw. Prevents tmux sitting on a huge buffer that the
+    terminal will take forever to consume.
+  
+  * Do not redraw a client unless we realistically think it can accept the data -
+    defer redraws until the client has nothing else waiting to write.
+  ```
+  
+  [https://github.com/tmux/tmux/blob/91b220525b0406763dafb6698d2741bec580bc10/CHANGES#L257-L263](https://github.com/tmux/tmux/blob/91b220525b0406763dafb6698d2741bec580bc10/CHANGES#L257-L263)
+  
+  [Share](https://stackoverflow.com/a/50214439)
+  
+  Share a link to this answer
+  
+  Copy link [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "The current license for this post: CC BY-SA 4.0")
+  
+  Short permalink to this answer
+  
+  [Improve this answer](https://stackoverflow.com/posts/50214439/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this answer to receive notifications
+  
+  answered May 7, 2018 at 12:37
+  
+  [![Ivan's user avatar](https://i.sstatic.net/BJH2m.png?s=64)](https://stackoverflow.com/users/738390/ivan)
+  
+  [Ivan](https://stackoverflow.com/users/738390/ivan)
+  
+  87588 silver badges1212 bronze badges
+  
+  ## Comments
+  
+  Add a comment
+  
+  This answer is useful
+  
+  0
+  
+  This answer is not useful
+  
+  Save this answer.
+  
+  Loading when this answer was accepted…
+  
+  [Timeline](https://stackoverflow.com/posts/79884097/timeline)
+  
+  Show activity on this post.
+  
+  In my PC, TMUX server has already freed memory, but it was still stashed by `ptmalloc` (glibc.so).
+  
+  My solution is:
+  
+  1. `sudo gdb -p <pid of tmux>`
+  
+  2. Inside GDB: `call malloc_trim(0)`
+  
+  
+  [Share](https://stackoverflow.com/a/79884097)
+  
+  Share a link to this answer
+  
+  Copy link [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "The current license for this post: CC BY-SA 4.0")
+  
+  Short permalink to this answer
+  
+  [Improve this answer](https://stackoverflow.com/posts/79884097/edit "")
+  
+  Follow
+  
+  
+  
+  Follow this answer to receive notifications
+  
+  [edited Feb 6 at 8:03](https://stackoverflow.com/posts/79884097/revisions "show all edits to this post")
+  
+  [![Mo_'s user avatar](https://i.sstatic.net/8MOtvndT.jpg?s=64)](https://stackoverflow.com/users/21826195/mo)
+  
+  [Mo\_](https://stackoverflow.com/users/21826195/mo)
+  
+  2,39322 gold badges1313 silver badges3636 bronze badges
+  
+  answered Feb 6 at 7:37
+  
+  [![jieyang zhang's user avatar](https://lh3.googleusercontent.com/a/AItbvmk6CPTXq8gZYlviho0y57zCTvteEZaNuwWgS7bF=k-s64)](https://stackoverflow.com/users/21394636/jieyang-zhang)
+  
+  [jieyang zhang](https://stackoverflow.com/users/21394636/jieyang-zhang)
+  
+  2744 bronze badges
+  
+  ## Comments
+  
+  Add a comment
+  
+  ## Your Answer
+  
+  Draft saved
+  
+  Draft discarded
+  
+  ### Sign up or [log in](https://stackoverflow.com/users/login?ssrc=question_page&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f23535630%2ftmux-using-1g-ram-even-after-clearing-all-scrollback-history%23new-answer)
+  
+  Sign up using Google
+  
+  
+  Sign up using Email and Password
+  
+  
+  Submit
+  
+  ### Post as a guest
+  
+  Name
+  
+  Email
+  
+  Required, but never shown
+  
+  Post Your Answer
+  
+  Discard
+  
+  
+  By clicking “Post Your Answer”, you agree to our [terms of service](https://stackoverflow.com/legal/terms-of-service/public) and acknowledge you have read our [privacy policy](https://stackoverflow.com/legal/privacy-policy).
+  
+  
+  Start asking to get answers
+  
+  Find the answer to your question by asking.
+  
+  [Ask question](https://stackoverflow.com/questions/ask)
+  
+  Explore related questions
+  
+  - [memory](https://stackoverflow.com/questions/tagged/memory "show questions tagged 'memory'")
+  - [tmux](https://stackoverflow.com/questions/tagged/tmux "show questions tagged 'tmux'")
+  - [ubuntu-14.04](https://stackoverflow.com/questions/tagged/ubuntu-14.04 "show questions tagged 'ubuntu-14.04'")
+  - [byobu](https://stackoverflow.com/questions/tagged/byobu "show questions tagged 'byobu'")
+  
+  See similar questions with these tags.
+  --- End Content ---

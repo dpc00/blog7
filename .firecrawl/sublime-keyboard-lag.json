@@ -1,0 +1,1044 @@
+Problems after updating to macOS Sequoia · Issue #6537 - GitHub
+  URL: https://github.com/sublimehq/sublime_text/issues/6537
+  After updating laptop to MacOS Sequoia 15.1.1 (24B91) Sublime is now supper laggy with response to keyboard input, to the point of being unusable.
+  Category: github
+
+  --- Content ---
+  [Skip to content](https://github.com/sublimehq/sublime_text/issues/6537#start-of-content)
+  
+  You signed in with another tab or window. [Reload](https://github.com/sublimehq/sublime_text/issues/6537) to refresh your session.You signed out in another tab or window. [Reload](https://github.com/sublimehq/sublime_text/issues/6537) to refresh your session.You switched accounts on another tab or window. [Reload](https://github.com/sublimehq/sublime_text/issues/6537) to refresh your session.Dismiss alert
+  
+  {{ message }}
+  
+  [sublimehq](https://github.com/sublimehq)/ **[sublime\_text](https://github.com/sublimehq/sublime_text)** Public
+  
+  - [Notifications](https://github.com/login?return_to=%2Fsublimehq%2Fsublime_text) You must be signed in to change notification settings
+  - [Fork\\
+  44](https://github.com/login?return_to=%2Fsublimehq%2Fsublime_text)
+  - [Star\\
+  863](https://github.com/login?return_to=%2Fsublimehq%2Fsublime_text)
+  
+  
+  # Problems after updating to macOS Sequoia\#6537
+  
+  [New issue](https://github.com/login?return_to=https://github.com/sublimehq/sublime_text/issues/6537)
+  
+  Copy link
+  
+  [New issue](https://github.com/login?return_to=https://github.com/sublimehq/sublime_text/issues/6537)
+  
+  Copy link
+  
+  Open
+  
+  Open
+  
+  [Problems after updating to macOS Sequoia](https://github.com/sublimehq/sublime_text/issues/6537#top)#6537
+  
+  Copy link
+  
+  [![@kevinpfox](https://avatars.githubusercontent.com/u/57231794?u=53c486281e8082a3a00917dc452af3b1c2722a40&v=4&size=80)](https://github.com/kevinpfox)
+  
+  ## Description
+  
+  [![@kevinpfox](https://avatars.githubusercontent.com/u/57231794?u=53c486281e8082a3a00917dc452af3b1c2722a40&v=4&size=48)](https://github.com/kevinpfox)
+  
+  [kevinpfox](https://github.com/kevinpfox)
+  
+  opened [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issue-2683853874) · edited by [kevinpfox](https://github.com/kevinpfox)
+  
+  Edits
+  
+  Issue body actions
+  
+  ### Description of the bug
+  
+  After updating laptop to MacOS Sequoia 15.1.1 (24B91) Sublime is now supper laggy with response to keyboard input, to the point of being unusable. When I type the characters show up in the document 2-3 seconds after they are typed. No characters show up on the screen and then 10 of them are dumped into the document all at once.
+  
+  Other text editors are not having a problem, e.g. TextEdit, Visual Studio Code, so this is not a keyboard problem. This is a Sublime Text + macOS update problem.
+  
+  Any advice on how to fix this is appreciated. Maybe some OS setting can be disabled? This smells like a macOS bug that is impacting Sublime Text, not the other way around. Could the Sublime maintainers please reach out to Apple to see what has changed that broke the input signal flow for Sublime Text?
+  
+  Side note: Laptop is a Apple M2 Pro
+  
+  ### Steps to reproduce
+  
+  1. Attempt to type in Sublime Text
+  
+  ### Expected behavior
+  
+  When typing character, the characters appear in the document instantly.
+  
+  ### Actual behavior
+  
+  When typing character, they don't show up, then show up all at once in a bundle.
+  
+  ### Sublime Text build number
+  
+  4180
+  
+  ### Operating system & version
+  
+  macOS Sequoia 15.1.1 (24B91)
+  
+  ### (Linux) Desktop environment and/or window manager
+  
+  _No response_
+  
+  ### Additional information
+  
+  _No response_
+  
+  ### OpenGL context information
+  
+  _No response_
+  
+  😕React with 😕1WesleyBlancoYuan
+  
+  ## Activity
+  
+  [![rchl](https://avatars.githubusercontent.com/u/153197?u=f35e208f5a81d203261720205e6eabffa3091df9&v=4&size=80)](https://github.com/rchl)
+  
+  ### rchl commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@rchl](https://avatars.githubusercontent.com/u/153197?u=f35e208f5a81d203261720205e6eabffa3091df9&v=4&size=48)](https://github.com/rchl)
+  
+  [rchl](https://github.com/rchl)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2494695893) · edited by [rchl](https://github.com/rchl)
+  
+  Edits
+  
+  More actions
+  
+  Sounds familiar. I've said this before:
+  
+  ![Screenshot 2024-11-22 at 20 52 22](https://private-user-images.githubusercontent.com/153197/389081186-dc8fd84e-6967-44a6-aa9e-24cc7f69ae87.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzcyMjgxODIsIm5iZiI6MTc3NzIyNzg4MiwicGF0aCI6Ii8xNTMxOTcvMzg5MDgxMTg2LWRjOGZkODRlLTY5NjctNDRhNi1hYTllLTI0Y2M3ZjY5YWU4Ny5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwNDI2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDQyNlQxODI0NDJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0wYzkzMzBjNGEwZjMyOWIxOWZhZjE4YjZhNTRmZGYzMjA4YjE4ZjFmN2IxM2E5YmY2ZjFkMWEyYWUxYjhjYzE5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9aW1hZ2UlMkZwbmcifQ.avOUr6F3PF13u0UYbH08SLEFC6OpK1ELSKyT6aMAPQo)
+  
+  command in a text version:
+  
+  ```
+      {
+          "keys": ["super+alt+left"],
+          "command": "prev_os_tab",
+      },
+  ```
+  
+  I've disabled/changed the key-binding which improved the situation to the point that I don't notice it anymore but I'm not sure if it fully eliminated it or just made it better.
+  
+  I can still reproduce this on that laptop after enabling that command and restarting ST and holding left arrow to move the cursor.
+  
+  macOS 15.1.1 here
+  
+  EDIT: And I guess it doesn't reproduce in safe mode because it appears that a restart of ST is required to reproduce which is not possible in safe mode.
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2494760517) · edited by [fox94610](https://github.com/fox94610)
+  
+  Edits
+  
+  More actions
+  
+  I'm glad I'm not the only who has noticed this. Thank you for replying!
+  
+  For clarity, for other folk, I'm experiencing this for all key presses, not just the arrow keys. But I can imagine the issue is more pronounced if one held down an arrow key and the rapid fire stream of input is converted into delayed, chunked out, sputtered, blasts of what was originally captured.
+  
+  The above comment got me thinking about experimenting with various macOS settings. I tried with all keyboard shortcuts I could find turned off. I tried Function Keys toggled to both using and not using F1, F2 etc. I toggle off all focus related items I could find. I toggled off any extemporaneous keyboard or Finder navigation option I could find (there are a ridiculous number of them at this point) but nothing has remedied the issue.
+  
+  [![rchl](https://avatars.githubusercontent.com/u/153197?u=f35e208f5a81d203261720205e6eabffa3091df9&v=4&size=80)](https://github.com/rchl)
+  
+  ### rchl commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@rchl](https://avatars.githubusercontent.com/u/153197?u=f35e208f5a81d203261720205e6eabffa3091df9&v=4&size=48)](https://github.com/rchl)
+  
+  [rchl](https://github.com/rchl)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2494793433) · edited by [rchl](https://github.com/rchl)
+  
+  Edits
+  
+  More actions
+  
+  Can you reproduce the issue in safe mode (hold option while opening ST from the dock)?
+  
+  [![kevinpfox](https://avatars.githubusercontent.com/u/57231794?u=53c486281e8082a3a00917dc452af3b1c2722a40&v=4&size=80)](https://github.com/kevinpfox)
+  
+  ### kevinpfox commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@kevinpfox](https://avatars.githubusercontent.com/u/57231794?u=53c486281e8082a3a00917dc452af3b1c2722a40&v=4&size=48)](https://github.com/kevinpfox)
+  
+  [kevinpfox](https://github.com/kevinpfox)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2494825421)
+  
+  Author
+  
+  More actions
+  
+  Great suggestion. The issue goes away completely while in safe mode. What does that imply?
+  
+  [![rchl](https://avatars.githubusercontent.com/u/153197?u=f35e208f5a81d203261720205e6eabffa3091df9&v=4&size=80)](https://github.com/rchl)
+  
+  ### rchl commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@rchl](https://avatars.githubusercontent.com/u/153197?u=f35e208f5a81d203261720205e6eabffa3091df9&v=4&size=48)](https://github.com/rchl)
+  
+  [rchl](https://github.com/rchl)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2494835656)
+  
+  More actions
+  
+  Well, in my case the issue seems to be related to custom keybinding so could be the same for you (either your own or coming from some installed packages).
+  
+  [![kevinpfox](https://avatars.githubusercontent.com/u/57231794?u=53c486281e8082a3a00917dc452af3b1c2722a40&v=4&size=80)](https://github.com/kevinpfox)
+  
+  ### kevinpfox commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@kevinpfox](https://avatars.githubusercontent.com/u/57231794?u=53c486281e8082a3a00917dc452af3b1c2722a40&v=4&size=48)](https://github.com/kevinpfox)
+  
+  [kevinpfox](https://github.com/kevinpfox)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2494863158) · edited by [kevinpfox](https://github.com/kevinpfox)
+  
+  Edits
+  
+  Author
+  
+  More actions
+  
+  I'll try tearing everything down and re-installing the few packages I have.
+  
+  // /Library/Application\ Support/Sublime\ Text/Packages/User/Package\ Control.sublime-settings
+  
+  ```
+  {
+  	"bootstrapped": true,
+  	"in_process_packages":
+  	[\
+  	],
+  	"installed_packages":
+  	[\
+  		"HTML-CSS-JS Prettify",\
+  		"Package Control",\
+  		"StringUtilities",\
+  	],
+  }
+  ```
+  
+  // /Library/Application\ Support/Sublime\ Text/Packages/User/Preferences.sublime-settings
+  
+  ```
+  {
+  	"theme": "Default Dark.sublime-theme",
+  	"color_scheme": "Monokai.sublime-color-scheme",
+  	"tab_size": 2,
+  	"font_size": 14,
+  	"translate_tabs_to_spaces": true,
+  	"folder_exclude_patterns":
+  	[\
+  		".svn",\
+  		".git",\
+  		".hg",\
+  		"CVS",\
+  		"node_modules",\
+  		"build",\
+  		".next",\
+  		".idea",\
+  		"package-lock.json"\
+  	],
+  	"ignored_packages":
+    	[\
+                  "Vintage",\
+  	],
+  	"index_files": true,
+  }
+  ```
+  
+  Nothing in key mapping....
+  
+  ![keymap](https://private-user-images.githubusercontent.com/57231794/389109228-8e844bc4-ab86-4f4f-bbc3-5a1cc25cdfb1.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzcyMjgxODIsIm5iZiI6MTc3NzIyNzg4MiwicGF0aCI6Ii81NzIzMTc5NC8zODkxMDkyMjgtOGU4NDRiYzQtYWI4Ni00ZjRmLWJiYzMtNWExY2MyNWNkZmIxLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA0MjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNDI2VDE4MjQ0MlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWZiODJmODA4Y2M0ZTU4ZWIyYjUzNTU2OTk3ZmE1N2VlOWVmOTdiYzQ0YWQwMjBmNzQ4MGY3MDJlMTQ1YzI1YzImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.aXu39jv-rsy0tiPAnMd20x5pKLj7FxuXSZl3TuqK0mk)
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Nov 22, 2024on Nov 22, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Nov 22, 2024on Nov 22, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2495134123) · edited by [fox94610](https://github.com/fox94610)
+  
+  Edits
+  
+  More actions
+  
+  I'm wrong.
+  
+  I just nuked Sublime Text and all supporting files. Reinstalled it from scratch. Then I ran it unmodified "out of the box" and it still feels janky and has intermittent slow response times to key presses. I might roll back to macOS Sonoma.
+  
+  [![deathaxe](https://avatars.githubusercontent.com/u/16542113?u=b8666a3836eafd13ea71114f8af75ffba744cf60&v=4&size=80)](https://github.com/deathaxe)
+  
+  ### deathaxe commented on Nov 23, 2024on Nov 23, 2024
+  
+  [![@deathaxe](https://avatars.githubusercontent.com/u/16542113?u=b8666a3836eafd13ea71114f8af75ffba744cf60&v=4&size=48)](https://github.com/deathaxe)
+  
+  [deathaxe](https://github.com/deathaxe)
+  
+  [on Nov 23, 2024on Nov 23, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2495413269)
+  
+  Collaborator
+  
+  More actions
+  
+  At least in past such slow updates were often caused by broken OpenGL drivers. Does disabling hardware\_accelleration improve situation?
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Nov 24, 2024on Nov 24, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Nov 24, 2024on Nov 24, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2496448494)
+  
+  More actions
+  
+  I restarted my computer and now it's working normally. I'm not sure what fixed it. I assume the two packages I had installed previously or the previous settings from Preferences.sublime-settings.
+  
+  Thank you for suggesting trying Sublime Text out in safe mode.
+  
+  Reinstalling Sublime Text, then re-adding customizations, then restarting computer fixed it somehow.
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Nov 25, 2024on Nov 25, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Nov 25, 2024on Nov 25, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2498525906) · edited by [fox94610](https://github.com/fox94610)
+  
+  Edits
+  
+  More actions
+  
+  Side note, since using Sublime Text reinstalled, my muscle memory fingers are attempting to switch Sublime windows with command \` (tick) and it no longer works. I could have sworn this worked before because my fingers REALLY want to switch windows this way.
+  
+  Now I'm not sure if that was something custom I had setup previously or if that is something Sublime had natively before. Either way, it doesn't work anymore.
+  
+  Makes me wonder if that was somehow related to the bug I was having.
+  
+  I asked AI about it and it gave me this (which could be wrong, granted)....
+  
+  ```
+  As of now, there isn't a direct keyboard shortcut to switch between multiple Sublime Text windows on macOS.
+  Customize Keyboard Shortcuts:
+  Go to Sublime Text > Preferences > Key Bindings - User.
+  Add a custom key binding to trigger the window:next_window command:
+  JSON
+  [\
+      { "keys": ["ctrl+`"], "command": "window:next_window" }\
+  ]
+  Use code [with caution.](https://github.com/faq#coding)
+  Replace ctrl+ with your desired key combination.
+  While these methods might not be as efficient as a dedicated shortcut, they can help you manage multiple Sublime Text windows effectively.
+  ```
+  
+  Is this correct, is there no way to switch Sublime windows via a keyboard shortcut? Did I setup something custom?
+  
+  [![deathaxe](https://avatars.githubusercontent.com/u/16542113?u=b8666a3836eafd13ea71114f8af75ffba744cf60&v=4&size=80)](https://github.com/deathaxe)
+  
+  ### deathaxe commented on Nov 25, 2024on Nov 25, 2024
+  
+  [![@deathaxe](https://avatars.githubusercontent.com/u/16542113?u=b8666a3836eafd13ea71114f8af75ffba744cf60&v=4&size=48)](https://github.com/deathaxe)
+  
+  [deathaxe](https://github.com/deathaxe)
+  
+  [on Nov 25, 2024on Nov 25, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2498551310)
+  
+  Collaborator
+  
+  More actions
+  
+  What you are looking for is probably "Switch Window" package.
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Nov 25, 2024on Nov 25, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Nov 25, 2024on Nov 25, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2498897491) · edited by [fox94610](https://github.com/fox94610)
+  
+  Edits
+  
+  More actions
+  
+  New information regarding this issue.
+  
+  As soon as I entered my Sublime license, the keyboard lag issue came back.
+  
+  [![frou](https://avatars.githubusercontent.com/u/172663?u=dcb4d13e4658ca1516f0148920998c2f5aafb292&v=4&size=80)](https://github.com/frou)
+  
+  ### frou commented on Nov 26, 2024on Nov 26, 2024
+  
+  [![@frou](https://avatars.githubusercontent.com/u/172663?u=dcb4d13e4658ca1516f0148920998c2f5aafb292&v=4&size=48)](https://github.com/frou)
+  
+  [frou](https://github.com/frou)
+  
+  [on Nov 26, 2024on Nov 26, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2501681476)
+  
+  More actions
+  
+  > Side note, since using Sublime Text reinstalled, my muscle memory fingers are attempting to switch Sublime windows with command \` (tick) and it no longer works. I could have sworn this worked before because my fingers REALLY want to switch windows this way.
+  >
+  > \[...\]
+  >
+  > Is this correct, is there no way to switch Sublime windows via a keyboard shortcut? Did I setup something custom?
+  
+  ⌘\` is a macOS system-level keyboard shortcut. Have a look in System Settings to ensure that it's enabled (should be called "Move focus to next window" or similar)
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Dec 2, 2024on Dec 2, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Dec 2, 2024on Dec 2, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2512481927)
+  
+  More actions
+  
+  I checked that setting it was indeed off, that works again now, as per normal. Thank you for the suggestion.
+  
+  Turns out that was not related to the core issue.
+  
+  The core issue still exists - supper laggy response to keyboard input.
+  
+  [![fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=80)](https://github.com/fox94610)
+  
+  ### fox94610 commented on Dec 2, 2024on Dec 2, 2024
+  
+  [![@fox94610](https://avatars.githubusercontent.com/u/243347?u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4&size=48)](https://github.com/fox94610)
+  
+  [fox94610](https://github.com/fox94610)
+  
+  [on Dec 2, 2024on Dec 2, 2024](https://github.com/sublimehq/sublime_text/issues/6537#issuecomment-2513354322)
+  
+  More actions
+  
+  I removed all packages including Package Controller and I unregister Sublime Text and the issue still persists.
+  
+  ### 15 remaining items
+  
+  Load more
+  
+  Loading
+  
+  [Sign up for free](https://github.com/signup?return_to=https://github.com/sublimehq/sublime_text/issues/6537)**to join this conversation on GitHub.** Already have an account? [Sign in to comment](https://github.com/login?return_to=https://github.com/sublimehq/sublime_text/issues/6537)
+  
+  ## Metadata
+  
+  ## Metadata
+  
+  ### Assignees
+  
+  No one assigned
+  
+  ### Labels
+  
+  No labels
+  
+  No labels
+  
+  ### Type
+  
+  No type
+  
+  ### Projects
+  
+  No projects
+  
+  ### Milestone
+  
+  No milestone
+  
+  ### Relationships
+  
+  None yet
+  
+  ### Development
+  
+  No branches or pull requests
+  
+  ### Participants
+  
+  [![@rchl](https://avatars.githubusercontent.com/u/153197?s=64&u=f35e208f5a81d203261720205e6eabffa3091df9&v=4)](https://github.com/rchl)[![@frou](https://avatars.githubusercontent.com/u/172663?s=64&u=dcb4d13e4658ca1516f0148920998c2f5aafb292&v=4)](https://github.com/frou)[![@fox94610](https://avatars.githubusercontent.com/u/243347?s=64&u=e0568515e14ae8e2b18b80722f4455ece3153914&v=4)](https://github.com/fox94610)[![@LMnet](https://avatars.githubusercontent.com/u/2826500?s=64&v=4)](https://github.com/LMnet)[![@khwaaj](https://avatars.githubusercontent.com/u/6587242?s=64&u=63023598228eb9e19040c12e12d75d55fc0e8036&v=4)](https://github.com/khwaaj)
+  
+  +6
+  
+  ## Issue actions
+  
+  You can’t perform that action at this time.
+  --- End Content ---
+
+Sublime Text 4 is very laggy and slow while typing after installing ...
+  URL: https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083
+  Such behavior normally indicates a plugin running expensive code or such with high latencies in UI thread.
+
+  --- Content ---
+  # [Sublime Text 4 is very laggy and slow while typing after installing some plugins which worked perfectly in Sublime text 3](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  [Technical Support](https://forum.sublimetext.com/c/technical-support)
+  
+  You have selected **0** posts.
+  
+  [select all](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  [cancel selecting](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  Apr 2024
+  
+  2 / 10
+  
+  Apr 2024
+  
+  Feb 2025
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [1](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083# "post last edited on Apr 27, 2024 2:46 am")
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083)
+  
+  I have only one package in sublime text for autocompletion because I think I want a clean editor with minimum modifications, so I installed Tabnine.
+  
+  But to my disappointment it made sublime text horribly slow each keystroke appeared after a delay of about 4-5 seconds.
+  
+  I thought the package/plugin had some issues so I tried to switch to some other AI autocompletion tool but that didn’t work well,
+  
+  I tried Codeium but it was giving suggestions which were messed up, there were two print statements in one, it kept on giving messy solutions again and again and on top of that whenever I opened up sublime 4, a terminal window would open which was a language server .download file which never downloaded properly.
+  
+  I was fed up …
+  
+  I tried Sublime Text 3 for no reason but to my surprise Tabnine and Codeium and all other plugins worked perfectly, smooth as butter …
+  
+  I have pretty decent specs on my laptop so I don’t think it’s some specs problem.
+  
+  Maybe the new interface or UI of Sublime Text 4 might be interfering with the plugins processing…
+  
+  I need to use Sublime Text 4 for latest features and I love it’s UI…
+  
+  Anyone has any solutions to this though I have tried many times myself, I am open to suggestions…
+  
+  - #### created
+  
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/20.png)Apr 2024
+  
+  - [**last reply**](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/10)
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/p/a698b9/20.png)Feb 2025
+  
+  - 9
+  
+  #### replies
+  
+  - 4.6k
+  
+  #### views
+  
+  - 3
+  
+  #### users
+  
+  - 1
+  
+  #### like
+  
+  - 2
+  
+  #### links
+  
+  - ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/32.png)6
+  
+  ![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/32/52468_2.png)3
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/p/a698b9/32.png)
+  
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/45/52468_2.png)](https://forum.sublimetext.com/u/deathaxe)
+  
+  [deathaxe](https://forum.sublimetext.com/u/deathaxe)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/2)
+  
+  Such behavior normally indicates a plugin running expensive code or such with high latencies in UI thread.
+  
+  Different behavior between ST3 and 4 may be caused by shipping different versions of a plugin. Several packages dropped support for ST3 and therefore ship older versions. A regression may have been introduced in a more recent release available on ST4, only.
+  
+  That’s most likely something the plugin author needs to investigate and fix.
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/3)
+  
+  I checked the versions of the plugins they were the same for both ST3 and ST4…
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/4)
+  
+  Is there any chance I could do something else in ST4 like changing some settings or something …
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/45/52468_2.png)](https://forum.sublimetext.com/u/deathaxe)
+  
+  [deathaxe](https://forum.sublimetext.com/u/deathaxe)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/5)
+  
+  Without knowledga about the reason, it’s hard to advice anything.
+  
+  A first step therefore probably was to investigate, which event handler consumes so much time by running _Main > Tools > Developer > Profile Plugins_.
+  
+  The result page lists all events and plugins which reacted handled them. Look for a plugin causing high “mean” times to find the culprit.
+  
+  Probably `on_query_completions` is involved.
+  
+  Writing performance may be tanked by plugins, which add huge amounts of completion items. The way legacy completion data structures are converted to new `sublime.CompletionItem` classes in ST4 may cause a performance drop in that case. Latest dev builds ship a fix which should improve situation, but finally plugins need to directly create completion items using new data classes to avoid additional conversion steps.
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/6)
+  
+  This list shows how much time each plugin has taken to respond to each event:
+  
+  on\_activated:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_deactivated:
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_hover:
+  
+  Default.symbol: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_modified:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_post\_text\_command:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Default.paste\_from\_history: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_query\_completions:
+  
+  CSS.css\_completions: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  HTML.html\_completions: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 11.616s total, mean: 0.375s, max: 1.846s
+  
+  on\_query\_context:
+  
+  Default.block: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_selection\_modified:
+  
+  Default.history\_list: 0.016s total, mean: 0.000s, max: 0.016s
+  
+  Vintage.vintage: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_text\_command:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  Tabnine.completions.completions\_v3: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  on\_window\_command:
+  
+  Default.history\_list: 0.000s total, mean: 0.000s, max: 0.000s
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [1](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083# "post last edited on Apr 28, 2024 9:46 am")
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/7)
+  
+  This is what I got… I can see Tabnine’s autocompletion took around 1.846s which is I guess too much for a fast editor like Sublime…
+  
+  I checked the same in ST3, the max, mean, total time there was less than this…
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/deathaxe/45/52468_2.png)](https://forum.sublimetext.com/u/deathaxe)
+  
+  [deathaxe](https://forum.sublimetext.com/u/deathaxe)
+  
+  [1](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083# "post last edited on Apr 28, 2024 11:08 am")
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/8)
+  
+  Seems to be a known issue, according to
+  
+  - [https://github.com/codota/tabnine-sublime/issues/113 82](https://github.com/codota/tabnine-sublime/issues/113)
+  - [https://github.com/codota/tabnine-sublime/issues/123 58](https://github.com/codota/tabnine-sublime/issues/123)
+  
+  ST4 provides API endpoints for plugins to provide completions asynchronously, which would help reducing/avoiding UI to block while waiting for network responses, but Tabnine doesn’t seem to make use of them.
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/58956e/45.png)](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Tungsten](https://forum.sublimetext.com/u/Tungsten)
+  
+  [Apr 2024](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/9)
+  
+  That means there’s nothing that I can do …
+  
+  10 months later
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/p/a698b9/45.png)](https://forum.sublimetext.com/u/Peter_Rabbit)
+  
+  [Peter\_Rabbit](https://forum.sublimetext.com/u/Peter_Rabbit)
+  
+  [Feb 2025](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083/10)
+  
+  Thank you for this. Had an issue with a recently updated plugin and this helped me narrow it down. HUGE HELP!
+  
+  Reply
+  
+  ### \[en.share.topic\]
+  
+  [Share this link on Twitter](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "Share this link on Twitter")
+  
+  [Share this link on Facebook](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "Share this link on Facebook")
+  
+  [Send this link in an email](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "Send this link in an email")
+  
+  [close](https://forum.sublimetext.com/t/sublime-text-4-is-very-laggy-and-slow-while-typing-after-installing-some-plugins-which-worked-perfectly-in-sublime-text-3/72083 "close")
+  
+  Invalid date
+  
+  Invalid date
+  --- End Content ---
+
+Slow Key Repeat - Technical Support - Sublime Forum
+  URL: https://forum.sublimetext.com/t/slow-key-repeat/6664
+  Try going into your System Preferences > Keyboard and moving the slider under “Key Repeat” all the way to the right “Fast”, that should fix up ...
+
+  --- Content ---
+  # [Slow Key Repeat](https://forum.sublimetext.com/t/slow-key-repeat/6664)
+  
+  [Technical Support](https://forum.sublimetext.com/c/technical-support)
+  
+  You have selected **0** posts.
+  
+  [select all](https://forum.sublimetext.com/t/slow-key-repeat/6664)
+  
+  [cancel selecting](https://forum.sublimetext.com/t/slow-key-repeat/6664)
+  
+  Jul 2012
+  
+  2 / 15
+  
+  Jul 2012
+  
+  Mar 2020
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/njamesp/45/67799_2.png)](https://forum.sublimetext.com/u/njamesp)
+  
+  [njamesp](https://forum.sublimetext.com/u/njamesp)
+  
+  [Jul 2012](https://forum.sublimetext.com/t/slow-key-repeat/6664)
+  
+  The key repeat rate in Sublime Text is much slower than in other Apps. I am on OS X. Is this configurable? I don’t see any options related to this in the general preference file.
+  
+  - #### created
+  
+  
+  ![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/njamesp/20/67799_2.png)Jul 2012
+  
+  - [**last reply**](https://forum.sublimetext.com/t/slow-key-repeat/6664/15)
+  ![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/bschaaf/20/70376_2.png)Mar 2020
+  
+  - 14
+  
+  #### replies
+  
+  - 8.0k
+  
+  #### views
+  
+  - 14
+  
+  #### users
+  
+  - 2
+  
+  #### links
+  
+  - ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/b/7c8e57/32.png)
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/839c29/32.png)
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/a/ecae2f/32.png)
+  
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/g/59ef9b/45.png)](https://forum.sublimetext.com/u/Giganic)
+  
+  [Giganic](https://forum.sublimetext.com/u/Giganic)
+  
+  [Jul 2012](https://forum.sublimetext.com/t/slow-key-repeat/6664/2)
+  
+  Hi Mate,
+  
+  Try going into your System Preferences > Keyboard and moving the slider under “Key Repeat” all the way to the right “Fast”, that should fix up your problem.
+  
+  Hope this helps!
+  
+  Giganic.
+  
+  1 month later
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/shanebdavis/45/62348_2.png)](https://forum.sublimetext.com/u/shanebdavis)
+  
+  [shanebdavis](https://forum.sublimetext.com/u/shanebdavis)
+  
+  [Sep 2012](https://forum.sublimetext.com/t/slow-key-repeat/6664/3)
+  
+  I’m having the same problem on a MBP-retina. I have my System -> Preferences key repeat set to max and I still have this problem.
+  
+  OS X 10.8.1 (12B19)
+  
+  SublimeText 2.0.1 build 2217
+  
+  Another user with the same problem:
+  
+  [sublimetext.userecho.com/topic/8 … -osx-lion/ 15](http://sublimetext.userecho.com/topic/89285-key-autorepeat-slower-under-osx-lion/)
+  
+  11 days later
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/aziz/45/41565_2.png)](https://forum.sublimetext.com/u/aziz)
+  
+  [aziz](https://forum.sublimetext.com/u/aziz)
+  
+  [Sep 2012](https://forum.sublimetext.com/t/slow-key-repeat/6664/4)
+  
+  Same problem here. mac book pro (normal display but mainly using the Apple Cinema Display) with OSX 10.8.1
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/a/ecae2f/45.png)](https://forum.sublimetext.com/u/arek1)
+  
+  [arek1](https://forum.sublimetext.com/u/arek1)
+  
+  [Sep 2012](https://forum.sublimetext.com/t/slow-key-repeat/6664/5)
+  
+  Same problem on my machine. Have set Preferences - Keyboard to max and in other apps is OK but in ST2 it is so slow.
+  
+  If using ST2 with TextExpander snippet using function to set cursor in concrete position after expanding abbreviation it is totally unusable becouse coursor mouvement is so slow.
+  
+  Retina MBP ML 10.8.1
+  
+  6 months later
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/b/bb73d2/45.png)](https://forum.sublimetext.com/u/ben_d)
+  
+  [ben\_d](https://forum.sublimetext.com/u/ben_d)
+  
+  [Mar 2013](https://forum.sublimetext.com/t/slow-key-repeat/6664/6)
+  
+  I’m still/also seeing this problem. The key repeat rate is DEFINITELY slower inside SublimeText 2 than it is throughout the rest of my system.
+  
+  My system specs:
+  
+  –Mac OS 10.8.2
+  
+  –Sublime Text 2.0.1 build 2217
+  
+  It also seems to be directly connected to the size of the window. When I have my window maxed out on my 27" display, the key repeat rate is obviously slower than it is when I make my window very small (c. 1/4 of the screen).
+  
+  19 days later
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/verticalforest/45/66667_2.png)](https://forum.sublimetext.com/u/verticalforest)
+  
+  [verticalforest](https://forum.sublimetext.com/u/verticalforest)
+  
+  [Mar 2013](https://forum.sublimetext.com/t/slow-key-repeat/6664/7)
+  
+  I’ve been having this problem for a while, and its been extremely annoying, but I think I’ve found a solution, at least for my machine.
+  
+  I noticed that when I had terminal closed, the sublime cursor moved much more quickly. After further investigation, I determined that I by turning off the “blur” affect on the background of terminal, sublime would stay just as fast even with terminal running. This issue also only seems to appear when my mac is running on integrated graphics, so I’m guessing that it is a hardware limitation of the integrated graphics card that slows down the compositing process. Terminal also runs much faster with blur disabled, so I think I’m going to keep it off permanently now.
+  
+  A few other interesting tidbits:
+  
+  - Sublime’s performance only degrades when I set the terminal blur to above 62%
+  
+  - If the terminal window is completely covered by sublime, no performance hit occurs
+  
+  - Its less noticeable, a maximized, blurred terminal will also affect the scrolling performance of Safari and other applications
+  
+  
+  6 months later
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/t/839c29/45.png)](https://forum.sublimetext.com/u/tpneumat)
+  
+  [tpneumat](https://forum.sublimetext.com/u/tpneumat)
+  
+  [Oct 2013](https://forum.sublimetext.com/t/slow-key-repeat/6664/8)
+  
+  Same deal here. Terminal doesn’t seem to have an effect. I actually had this same issue with BBEdit and it drove me so nutz that was the main reason I switched to sublime. Whats going on here? If nothing else, a text editor needs to be a fast way to manipulate text.
+  
+  4 months later
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/hedefalk/45/65419_2.png)](https://forum.sublimetext.com/u/hedefalk)
+  
+  [hedefalk](https://forum.sublimetext.com/u/hedefalk)
+  
+  [Jan 2014](https://forum.sublimetext.com/t/slow-key-repeat/6664/9)
+  
+  +1
+  
+  Same problem in latest Sublimetext 3. Any official comment?
+  
+  Thanks,
+  
+  Viktor
+  
+  2 months later
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/b/7c8e57/45.png)](https://forum.sublimetext.com/u/BUGMENOT)
+  
+  [BUGMENOT](https://forum.sublimetext.com/u/BUGMENOT)
+  
+  [Apr 2014](https://forum.sublimetext.com/t/slow-key-repeat/6664/10)
+  
+  Still seeing this on latest Sublime Text 2 and is definitely related to window size. Running on OS X 10.9.2, 1920x1080. Is there any solution for this?
+  
+  Related articles:
+  
+  [sublimetext.com/forum/viewt … f=3&t=3555](https://forum.sublimetext.com/t/typing-very-slow-delayed-even-on-small-files/2996/1)
+  
+  [sublimetext.com/forum/viewt … =3&t=13824](https://forum.sublimetext.com/t/bug-rendering-speed/11137/1)
+  
+  [sublimetext.com/forum/viewt … =3&t=15424](https://forum.sublimetext.com/t/sublime-lag-on-linux/12631/1)
+  
+  [sublimetext.userecho.com/topic/8 … -osx-lion/ 3](http://sublimetext.userecho.com/topic/89285-key-autorepeat-slower-under-osx-lion/)
+  
+  [sublimetext.userecho.com/topic/4 … dow-sizes/ 3](http://sublimetext.userecho.com/topic/41151-rendering-update-is-slow-for-very-large-window-sizes/)
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/b/7c8e57/45.png)](https://forum.sublimetext.com/u/BUGMENOT)
+  
+  [BUGMENOT](https://forum.sublimetext.com/u/BUGMENOT)
+  
+  [Apr 2014](https://forum.sublimetext.com/t/slow-key-repeat/6664/11)
+  
+  If anyone still looks for solution, I’ve managed to solve it via “gpu\_window\_buffer” setting with “true” as value. This is for OS X only, as it says in description for this property.
+  
+  9 months later
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/tomv/45/64718_2.png)](https://forum.sublimetext.com/u/tomv)
+  
+  [tomv](https://forum.sublimetext.com/u/tomv)
+  
+  [Dec 2014](https://forum.sublimetext.com/t/slow-key-repeat/6664/12)
+  
+  I was having the same problem and it was driving me a little nuts. Fortunately, I do a lot of scrolling using the trackpad, but sometimes I really want to just hold down control-n to scroll through a bunch of code.
+  
+  I just discovered if I close the sidebar (that’s what I call it) everything is fine.
+  
+  So that got me thinking because I installed the Soda theme on my MacBook Pro.
+  
+  I disabled it, and my key repeat rate is now the same as the system-wide setting.
+  
+  So I suggest not using any themes and see if that clears it up for you.
+  
+  19 days later
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/mugukamil/45/62860_2.png)](https://forum.sublimetext.com/u/mugukamil)
+  
+  [mugukamil](https://forum.sublimetext.com/u/mugukamil)
+  
+  [Jan 2015](https://forum.sublimetext.com/t/slow-key-repeat/6664/13)
+  
+  \[quote=“tomv”\]I was having the same problem and it was driving me a little nuts. Fortunately, I do a lot of scrolling using the trackpad, but sometimes I really want to just hold down control-n to scroll through a bunch of code.
+  
+  I just discovered if I close the sidebar (that’s what I call it) everything is fine.
+  
+  So that got me thinking because I installed the Soda theme on my MacBook Pro.
+  
+  I disabled it, and my key repeat rate is now the same as the system-wide setting.
+  
+  So I suggest not using any themes and see if that clears it up for you.\[/quote\]
+  
+  It’s work for me too
+  
+  5 years later
+  
+  [![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/j/c4cdca/45.png)](https://forum.sublimetext.com/u/jlinton)
+  
+  [jlinton](https://forum.sublimetext.com/u/jlinton)
+  
+  ![](https://forum.sublimetext.com/letter_avatar_proxy/v3/letter/b/7c8e57/25.png)BUGMENOT
+  
+  [Mar 2020](https://forum.sublimetext.com/t/slow-key-repeat/6664/14)
+  
+  I’m on windows, sublime 3.2.2 and I see the same thing when the sublime window is maximized on a 5K monitor (system scaling disabled, but sublime text scaled). Reducing the window size makes it fast again. Sort of annoying.
+  
+  [![](https://forum.sublimetext.com/user_avatar/forum.sublimetext.com/bschaaf/45/70376_2.png)](https://forum.sublimetext.com/u/bschaaf)
+  
+  [bschaaf](https://forum.sublimetext.com/u/bschaaf)
+  
+  [Mar 2020](https://forum.sublimetext.com/t/slow-key-repeat/6664/15)
+  
+  Note that we already have a fix for Sublime Text 4 that’s ok the current Sublime Merge dev build: hardware accelerated rendering. Using `"hardware_acceleration": "opengl"` should fix this on for windows high-dpi displays (this is the default for macOS already).
+  
+  Reply
+  
+  ### \[en.share.topic\]
+  
+  [Share this link on Twitter](https://forum.sublimetext.com/t/slow-key-repeat/6664 "Share this link on Twitter")
+  
+  [Share this link on Facebook](https://forum.sublimetext.com/t/slow-key-repeat/6664 "Share this link on Facebook")
+  
+  [Send this link in an email](https://forum.sublimetext.com/t/slow-key-repeat/6664 "Send this link in an email")
+  
+  [close](https://forum.sublimetext.com/t/slow-key-repeat/6664 "close")
+  
+  Invalid date
+  
+  Invalid date
+  --- End Content ---
+
+SublimeText UI generally slow and laggy - Reddit
+  URL: https://www.reddit.com/r/SublimeText/comments/1huz0mi/sublimetext_ui_generally_slow_and_laggy/
+  The UI has been generally laggy. It takes a long time to switch between tabs, there is a delay between me typing and the characters showing up on screen, etc.

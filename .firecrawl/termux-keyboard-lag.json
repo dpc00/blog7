@@ -1,0 +1,1419 @@
+[Bug]: cinnamon doesn't start on Turnip devices without ... - GitHub
+  URL: https://github.com/termux/termux-packages/issues/26772
+  Problem description When I launch cinnamon all I get is a black screen. Here is a screenshot: This is the log: ~ $ termux-x11 :1 -xstartup ...
+  Category: github
+
+  --- Content ---
+  [Skip to content](https://github.com/termux/termux-packages/issues/26772#start-of-content)
+  
+  You signed in with another tab or window. [Reload](https://github.com/termux/termux-packages/issues/26772) to refresh your session.You signed out in another tab or window. [Reload](https://github.com/termux/termux-packages/issues/26772) to refresh your session.You switched accounts on another tab or window. [Reload](https://github.com/termux/termux-packages/issues/26772) to refresh your session.Dismiss alert
+  
+  {{ message }}
+  
+  [termux](https://github.com/termux)/ **[termux-packages](https://github.com/termux/termux-packages)** Public
+  
+  - Sponsor
+  
+  
+  
+  
+  
+  
+  
+  # Sponsor termux/termux-packages
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ##### External links
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  [https://termux.dev/donate](https://termux.dev/donate)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  [Learn more about funding links in repositories](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository).
+  
+  
+  
+  
+  [Report abuse](https://github.com/contact/report-abuse?report=termux%2Ftermux-packages+%28Repository+Funding+Links%29)
+  
+  - [Notifications](https://github.com/login?return_to=%2Ftermux%2Ftermux-packages) You must be signed in to change notification settings
+  - [Fork\\
+  4.1k](https://github.com/login?return_to=%2Ftermux%2Ftermux-packages)
+  - [Star\\
+  16.1k](https://github.com/login?return_to=%2Ftermux%2Ftermux-packages)
+  
+  
+  # \[Bug\]: cinnamon doesn't start on Turnip devices without `LIBGL_ALWAYS_SOFTWARE=1`\#26772
+  
+  [New issue](https://github.com/login?return_to=https://github.com/termux/termux-packages/issues/26772)
+  
+  Copy link
+  
+  [New issue](https://github.com/login?return_to=https://github.com/termux/termux-packages/issues/26772)
+  
+  Copy link
+  
+  Open
+  
+  [Bug](https://github.com/termux/termux-packages/issues?q=type:%22Bug%22)
+  
+  Open
+  
+  [\[Bug\]: cinnamon doesn't start on Turnip devices without `LIBGL_ALWAYS_SOFTWARE=1`](https://github.com/termux/termux-packages/issues/26772#top)#26772
+  
+  Bug
+  
+  Copy link
+  
+  Labels
+  
+  [bug reportSomething is not working properly](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22bug%20report%22) Something is not working properly [inactiveNo activity in a certain period of time](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22inactive%22) No activity in a certain period of time [videoIssue related to video device support, not X11 necessarily](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22video%22) Issue related to video device support, not X11 necessarily [x11Issue is related to stuff requiring X11 environment or x11-packages](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22x11%22) Issue is related to stuff requiring X11 environment or x11-packages
+  
+  [![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=80)](https://github.com/DuilioPerez)
+  
+  ## Description
+  
+  [![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=48)](https://github.com/DuilioPerez)
+  
+  [DuilioPerez](https://github.com/DuilioPerez)
+  
+  opened [on Oct 4, 2025on Oct 5, 2025](https://github.com/termux/termux-packages/issues/26772#issue-3484259335)
+  
+  Issue body actions
+  
+  ### Problem description
+  
+  When I launch cinnamon all I get is a black screen. Here is a screenshot:
+  
+  ![Image](https://private-user-images.githubusercontent.com/135564120/497503921-6a2bab56-c99c-4d16-b239-de76f3430561.jpg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzcyMjgxNzQsIm5iZiI6MTc3NzIyNzg3NCwicGF0aCI6Ii8xMzU1NjQxMjAvNDk3NTAzOTIxLTZhMmJhYjU2LWM5OWMtNGQxNi1iMjM5LWRlNzZmMzQzMDU2MS5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwNDI2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDQyNlQxODI0MzRaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lOGM0YTk2MDg1MzY1OTE3MWFjNTkzODJiYzk3NGRhNjgyMmJjNDRkOTU4ZTI5NGJkNTZhMDIyMDVjY2YxYzgzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9aW1hZ2UlMkZqcGVnIn0.rItzKRzq5SSqEUVmFlvR6fXfoO2GattD0J67nUyJWAw)
+  
+  This is the log:
+  
+  ```
+  ~ $ termux-x11 :1 -xstartup "dbus-launch --exit-with-session cinnamon-session" | termux-clipboard-set   "The XKEYBOARD keymap compiler (xkbcomp) reports:"
+  "> "Warning:          Could not resolve keysym XF86OK
+  "> "Warning:          Could not resolve keysym XF86GoTo                                                 "> "Warning:          Could not resolve keysym XF86VendorLogo
+  "> "Warning:          Could not resolve keysym XF86MediaSelectProgramGuide
+  "> "Warning:          Could not resolve keysym XF86MediaSelectProgramGuide
+  "> "Warning:          Could not resolve keysym XF86MediaSelectHome
+  "> "Warning:          Could not resolve keysym XF86MediaLanguageMenu
+  "> "Warning:          Could not resolve keysym XF86MediaTitleMenu
+  "> "Warning:          Could not resolve keysym XF86AudioChannelMode
+  "> "Warning:          Could not resolve keysym XF86MediaSelectPC
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTV
+  "> "Warning:          Could not resolve keysym XF86MediaSelectCable
+  "> "Warning:          Could not resolve keysym XF86MediaSelectVCR
+  "> "Warning:          Could not resolve keysym XF86MediaSelectVCRPlus
+  "> "Warning:          Could not resolve keysym XF86MediaSelectSatellite
+  "> "Warning:          Could not resolve keysym XF86MediaSelectCD
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTape
+  "> "Warning:          Could not resolve keysym XF86MediaSelectRadio
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTuner
+  "> "Warning:          Could not resolve keysym XF86MediaPlayer
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTeletext
+  "> "Warning:          Could not resolve keysym XF86MediaSelectAuxiliary
+  "> "Warning:          Could not resolve keysym XF86MediaPlaySlow
+  "> "Warning:          Could not resolve keysym XF86NumberEntryMode
+  "Errors from xkbcomp are not fatal to the X server"
+  cinnamon-session-binary: GLib-GObject-CRITICAL: t+0.00095s: g_object_class_override_property: Can't find property to override for 'CsmConsolekit::active'
+  cinnamon-session-binary: WARNING: t+0.00313s: IceListenForConnections returned 2 non-local listeners: inet6/localhost:32779,inet/localhost:42153
+  gnome-keyring-daemon: no process capabilities, insecure memory might get used
+  gnome-keyring-daemon: no process capabilities, insecure memory might get used
+  
+  (csd-color:15044): csd-color-WARNING **: 18:39:01.552: failed to connect to colord: Could not connect: Connection refused
+  
+  (csd-media-keys:15055): csd-media-keys-WARNING **: 18:39:01.568: Failed to connect to system bus: Could not connect: Connection refused
+  
+  (csd-media-keys:15055): csd-media-keys-WARNING **: 18:39:01.738: Failed to get proxy for upower: Could not connect: Connection refused
+  
+  ** (csd-automount:15059): WARNING **: 18:39:01.755: cannot connect to ConsoleKit: Could not connect: Connection refused
+  /data/data/com.termux/files/usr/bin/cinnamon-launcher:56: DeprecationWarning: This process (pid=15171) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.cinnamon_pid = os.fork()
+  Xlib:  extension "DPMS" missing on display ":1".
+  
+  (cinnamon:15176): mutter-WARNING **: 18:39:02.263: Impossible to set scaling on crtc 63 to 1.000000, error id 2
+  Window manager warning: Scalig CRTC 63 at 1.000000 failed
+  Xlib:  extension "DPMS" missing on display ":1".
+  
+  (cinnamon:15176): GLib-GObject-CRITICAL **: 18:39:02.272: g_type_add_instance_private: assertion 'private_size > 0' failed
+  
+  (cinnamon:15176): mutter-WARNING **: 18:39:02.273: Failed to query property: no udev support
+  Cjs-Message: 18:39:02.353: Profiler is disabled. Not setting up signals.
+  Cjs-Message: 18:39:02.586: JS LOG: About to start Cinnamon (X11 backend)
+  Cjs-Message: 18:39:02.628: JS LOG: [LookingGlass/info] Cinnamon.AppSystem.get_default() started in 0 ms
+  Cjs-Message: 18:39:02.633: JS LOG: [LookingGlass/info] loading user theme: /data/data/com.termux/files/usr/share/themes/Mint-Y-Dark-Aqua/cinnamon/cinnamon.css
+  Cjs-Message: 18:39:02.657: JS LOG: [LookingGlass/info] added icon directory: /data/data/com.termux/files/usr/share/themes/Mint-Y-Dark-Aqua/cinnamon
+  Cjs-Message: 18:39:02.812: JS LOG: [LookingGlass/info] NetworkManager agent: disabled
+  Cjs-Message: 18:39:02.812: JS LOG: [LookingGlass/info] Polkit agent: disabled (not compiled in)
+  Cjs-Message: 18:39:02.814: JS LOG: [LookingGlass/info] SSH agent: enabled
+  Cjs-Message: 18:39:02.828: JS LOG: [LookingGlass/info] loaded at Sat Oct 04 2025 18:39:02 GMT-0600 (Central Standard Time)
+  Cjs-Message: 18:39:02.829: JS LOG: Cinnamon started at Sat Oct 04 2025 18:39:02 GMT-0600 (Central Standard Time)
+  Cjs-Message: 18:39:02.841: JS LOG: [LookingGlass/info] ExtensionSystem started in 2 ms
+  Cjs-Message: 18:39:02.841: JS LOG: [LookingGlass/info] DeskletManager started in 1 ms
+  Cjs-Message: 18:39:02.841: JS LOG: [LookingGlass/info] SearchProviderManager started in 1 ms
+  Xlib:  extension "DPMS" missing on display ":1".
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.918: invalid (NULL) pointer instance
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.923: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15068): GLib-GIO-CRITICAL **: 18:39:02.924: g_dbus_proxy_call_internal: assertion 'G_IS_DBUS_PROXY (proxy)' failed
+  
+  (csd-power:15068): GLib-GIO-CRITICAL **: 18:39:02.924: g_dbus_proxy_call_internal: assertion 'G_IS_DBUS_PROXY (proxy)' failed
+  
+  (csd-power:15068): libupower-glib-WARNING **: 18:39:02.924: Couldn't connect to proxy: Could not connect: Connection refused
+  
+  (csd-power:15068): libupower-glib-CRITICAL **: 18:39:02.924: up_client_get_lid_is_closed: assertion 'UP_IS_CLIENT (client)' failed
+  
+  (csd-power:15068): libupower-glib-CRITICAL **: 18:39:02.924: up_client_get_on_battery: assertion 'UP_IS_CLIENT (client)' failed
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: invalid (NULL) pointer instance
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: invalid (NULL) pointer instance
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: invalid (NULL) pointer instance
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: invalid (NULL) pointer instance
+  
+  (csd-power:15068): GLib-GObject-CRITICAL **: 18:39:02.924: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-color:15044): csd-color-WARNING **: 18:39:02.925: failed to connect to colord: Could not connect: Connection refused
+  
+  (csd-power:15068): libupower-glib-CRITICAL **: 18:39:02.926: up_client_get_devices_full: assertion 'UP_IS_CLIENT (client)' failed
+  Cjs-Message: 18:39:02.980: JS LOG: [LookingGlass/info] Loaded applet removable-drives@cinnamon.org in 55 ms
+  Cjs-Message: 18:39:02.988: JS LOG: [LookingGlass/info] Role locked: tray
+  Cjs-Message: 18:39:03.002: JS LOG: [LookingGlass/info] Loaded applet systray@cinnamon.org in 21 ms
+  Xlib:  extension "DPMS" missing on display ":1".
+  cinnamon-session-binary: WARNING: t+1.92458s: Application 'cinnamon-settings-daemon-power.desktop' killed by signal 11
+  Cjs-Message: 18:39:03.107: JS LOG: [LookingGlass/info] Loaded applet keyboard@cinnamon.org in 105 ms
+  MESA: warning: zink: PERF WARNING! > 100 copy boxes detected for 0xb4000076ceea2a80
+  Cjs-Message: 18:39:03.138: JS LOG: [LookingGlass/info] Role locked: notifications
+  Cjs-Message: 18:39:03.185: JS LOG: [LookingGlass/info] Loaded applet notifications@cinnamon.org in 78 ms
+  
+  (nemo-desktop:15242): GLib-CRITICAL **: 18:39:03.233: g_strstr_len: assertion 'haystack != NULL' failed
+  Nemo-Message: 18:39:03.233: nemo-desktop: session is not cinnamon (checked XDG_SESSION_DESKTOP,DESKTOP_SESSION environment variables.) Applying default behavior
+  Cjs-Message: 18:39:03.345: JS LOG: [LookingGlass/info] Loaded applet calendar@cinnamon.org in 159 ms
+  Cjs-Message: 18:39:03.356: JS LOG: [LookingGlass/info] Loaded applet xapp-status@cinnamon.org in 10 ms
+  Cjs-Message: 18:39:03.389: JS LOG: [LookingGlass/info] Role locked: panellauncher
+  Cjs-Message: 18:39:03.390: JS LOG: [LookingGlass/info] Role locked: windowattentionhandler
+  Cjs-Message: 18:39:03.395: JS LOG: [LookingGlass/info] Monitor Watch List updated: [0]
+  Cjs-Message: 18:39:03.395: JS LOG: [LookingGlass/info] Loaded applet grouped-window-list@cinnamon.org in 39 ms
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.434: invalid (NULL) pointer instance
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.434: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15262): GLib-GIO-CRITICAL **: 18:39:03.435: g_dbus_proxy_call_internal: assertion 'G_IS_DBUS_PROXY (proxy)' failed
+  
+  (csd-power:15262): GLib-GIO-CRITICAL **: 18:39:03.436: g_dbus_proxy_call_internal: assertion 'G_IS_DBUS_PROXY (proxy)' failed
+  
+  (csd-power:15262): libupower-glib-WARNING **: 18:39:03.436: Couldn't connect to proxy: Could not connect: Connection refused
+  
+  (csd-power:15262): libupower-glib-CRITICAL **: 18:39:03.436: up_client_get_lid_is_closed: assertion 'UP_IS_CLIENT (client)' failed
+  
+  (csd-power:15262): libupower-glib-CRITICAL **: 18:39:03.436: up_client_get_on_battery: assertion 'UP_IS_CLIENT (client)' failed
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: invalid (NULL) pointer instance
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: invalid (NULL) pointer instance
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: invalid (NULL) pointer instance
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: invalid (NULL) pointer instance
+  
+  (csd-power:15262): GLib-GObject-CRITICAL **: 18:39:03.436: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+  
+  (csd-power:15262): libupower-glib-CRITICAL **: 18:39:03.438: up_client_get_devices_full: assertion 'UP_IS_CLIENT (client)' failed
+  Cjs-Message: 18:39:03.515: JS LOG: [LookingGlass/info] Loaded applet sound@cinnamon.org in 120 ms
+  cinnamon-session-binary: WARNING: t+2.42106s: Application 'cinnamon-settings-daemon-power.desktop' killed by signal 11
+  cinnamon-session-binary: WARNING: t+2.42158s: App 'cinnamon-settings-daemon-power.desktop' respawning too quickly
+  cinnamon-session-binary: WARNING: t+2.42176s: Error on restarting session managed app: Component 'cinnamon-settings-daemon-power.desktop' crashing too quickly
+  
+  (nemo-desktop:15242): Nemo-WARNING **: 18:39:03.610: Action 'mount-archive.nemo_action' is missing dependency: gnome-disk-image-mounter
+  Cjs-Message: 18:39:03.726: JS LOG: [LookingGlass/info] Loaded applet menu@cinnamon.org in 211 ms
+  Cjs-Message: 18:39:03.727: JS LOG: [LookingGlass/info] AppletManager started in 897 ms
+  Cjs-Message: 18:39:03.733: JS LOG: [LookingGlass/info] Cinnamon took 1147 ms to start
+  CinnamonDesktop-Message: 18:39:03.814: Ignoring thumbnailer with missing binary: '/usr/bin/gdk-pixbuf-thumbnailer'
+  CinnamonDesktop-Message: 18:39:03.814: Ignoring thumbnailer with missing binary: '/data/data/com.termux/files/usr/bin/gdk-pixbuf-thumbnailer'
+  /data/data/com.termux/files/usr/bin/cinnamon-launcher:82: DeprecationWarning: This process (pid=15171) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.fb_pid = os.fork()
+  Exception in thread Thread-2 (wait_for_process):
+  Traceback (most recent call last):
+    File "/data/data/com.termux/files/usr/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+      self.run()
+    File "/data/data/com.termux/files/usr/lib/python3.12/threading.py", line 1012, in run
+      self._target(*self._args, **self._kwargs)
+    File "/data/data/com.termux/files/usr/bin/cinnamon-launcher", line 91, in wait_for_process
+      os.execvp(FALLBACK_COMMAND, (FALLBACK_COMMAND,) + FALLBACK_ARGS)
+    File "<frozen os>", line 609, in execvp
+    File "<frozen os>", line 651, in _execvpe
+    File "<frozen os>", line 642, in _execvpe
+  FileNotFoundError: [Errno 2] No such file or directory
+  None: no process found
+  nm-applet: no process found
+  /data/data/com.termux/files/usr/bin/cinnamon-launcher:56: DeprecationWarning: This process (pid=15171) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.cinnamon_pid = os.fork()
+  Xlib:  extension "DPMS" missing on display ":1".
+  Xlib:  extension "DPMS" missing on display ":1".
+  
+  (cinnamon:15598): GLib-GObject-CRITICAL **: 18:39:18.416: g_type_add_instance_private: assertion 'private_size > 0' failed
+  
+  (cinnamon:15598): mutter-WARNING **: 18:39:18.427: Failed to query property: no udev support
+  Cjs-Message: 18:39:18.493: Profiler is disabled. Not setting up signals.
+  Cjs-Message: 18:39:18.838: JS LOG: About to start Cinnamon (X11 backend)
+  Cjs-Message: 18:39:18.935: JS LOG: [LookingGlass/info] Cinnamon.AppSystem.get_default() started in 0 ms
+  Cjs-Message: 18:39:18.943: JS LOG: [LookingGlass/info] loading user theme: /data/data/com.termux/files/usr/share/themes/Mint-Y-Dark-Aqua/cinnamon/cinnamon.css
+  Cjs-Message: 18:39:18.970: JS LOG: [LookingGlass/info] added icon directory: /data/data/com.termux/files/usr/share/themes/Mint-Y-Dark-Aqua/cinnamon
+  Cjs-Message: 18:39:19.150: JS LOG: [LookingGlass/info] NetworkManager agent: disabled
+  Cjs-Message: 18:39:19.150: JS LOG: [LookingGlass/info] Polkit agent: disabled (not compiled in)
+  Cjs-Message: 18:39:19.152: JS LOG: [LookingGlass/info] SSH agent: enabled
+  Cjs-Message: 18:39:19.170: JS LOG: [LookingGlass/info] loaded at Sat Oct 04 2025 18:39:19 GMT-0600 (Central Standard Time)
+  Cjs-Message: 18:39:19.170: JS LOG: Cinnamon started at Sat Oct 04 2025 18:39:19 GMT-0600 (Central Standard Time)
+  Cjs-Message: 18:39:19.184: JS LOG: [LookingGlass/info] ExtensionSystem started in 1 ms
+  Cjs-Message: 18:39:19.184: JS LOG: [LookingGlass/info] DeskletManager started in 2 ms
+  Cjs-Message: 18:39:19.184: JS LOG: [LookingGlass/info] SearchProviderManager started in 1 ms
+  Cjs-Message: 18:39:19.277: JS LOG: [LookingGlass/info] Loaded applet removable-drives@cinnamon.org in 26 ms
+  Cjs-Message: 18:39:19.283: JS LOG: [LookingGlass/info] Role locked: tray
+  Cjs-Message: 18:39:19.287: JS LOG: [LookingGlass/info] Loaded applet systray@cinnamon.org in 10 ms
+  MESA: warning: zink: PERF WARNING! > 100 copy boxes detected for 0xb40000735cf01b80
+  Cjs-Message: 18:39:19.391: JS LOG: [LookingGlass/info] Loaded applet calendar@cinnamon.org in 104 ms
+  Cjs-Message: 18:39:19.420: JS LOG: [LookingGlass/info] Loaded applet keyboard@cinnamon.org in 28 ms
+  Cjs-Message: 18:39:19.428: JS LOG: [LookingGlass/info] Role locked: notifications
+  Cjs-Message: 18:39:19.475: JS LOG: [LookingGlass/info] Loaded applet notifications@cinnamon.org in 55 ms
+  Cjs-Message: 18:39:19.486: JS LOG: [LookingGlass/info] Loaded applet xapp-status@cinnamon.org in 11 ms
+  Cjs-Message: 18:39:19.527: JS LOG: [LookingGlass/info] Role locked: panellauncher
+  Cjs-Message: 18:39:19.527: JS LOG: [LookingGlass/info] Role locked: windowattentionhandler
+  Cjs-Message: 18:39:19.531: JS LOG: [LookingGlass/info] Monitor Watch List updated: [0]
+  Cjs-Message: 18:39:19.532: JS LOG: [LookingGlass/info] Loaded applet grouped-window-list@cinnamon.org in 45 ms
+  Cjs-Message: 18:39:19.601: JS LOG: [LookingGlass/info] Loaded applet sound@cinnamon.org in 69 ms
+  Cjs-Message: 18:39:19.761: JS LOG: [LookingGlass/info] Loaded applet menu@cinnamon.org in 160 ms
+  Cjs-Message: 18:39:19.762: JS LOG: [LookingGlass/info] AppletManager started in 590 ms
+  Cjs-Message: 18:39:19.769: JS LOG: [LookingGlass/info] Cinnamon took 930 ms to start
+  /data/data/com.termux/files/usr/bin/cinnamon-launcher:82: DeprecationWarning: This process (pid=15171) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.fb_pid = os.fork()
+  Exception in thread Thread-2 (wait_for_process):
+  Traceback (most recent call last):
+    File "/data/data/com.termux/files/usr/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+      self.run()
+    File "/data/data/com.termux/files/usr/lib/python3.12/threading.py", line 1012, in run
+      self._target(*self._args, **self._kwargs)
+    File "/data/data/com.termux/files/usr/bin/cinnamon-launcher", line 91, in wait_for_process
+      os.execvp(FALLBACK_COMMAND, (FALLBACK_COMMAND,) + FALLBACK_ARGS)
+    File "<frozen os>", line 609, in execvp
+    File "<frozen os>", line 651, in _execvpe
+    File "<frozen os>", line 642, in _execvpe
+  FileNotFoundError: [Errno 2] No such file or directory
+  ^Ccinnamon-session-binary: GLib-CRITICAL: t+29.58335s: g_variant_unref: assertion 'value != NULL' failed
+  cinnamon-session-binary: CRITICAL: t+29.58361s: Unable to close Cinnamon's end session dialog: The connection is closed
+  cinnamon-session-binary: CRITICAL: t+29.59703s: Unable to start session: Lost name on bus: org.gnome.SessionManager
+  cinnamon-session-binary: GLib-CRITICAL: t+29.59740s: g_variant_unref: assertion 'value != NULL' failed
+  cinnamon-session-binary: CRITICAL: t+29.59751s: Unable to close Cinnamon's end session dialog: The connection is closed
+  ```
+  
+  ### What steps will reproduce the bug?
+  
+  In my case, just installing it in a clean environment was enough
+  
+  ### What is the expected behavior?
+  
+  _No response_
+  
+  ### System information
+  
+  ```
+  Termux Variables:
+  TERMUX_API_VERSION=0.53.0
+  TERMUX_APK_RELEASE=GITHUB
+  TERMUX_APP_PACKAGE_MANAGER=apt
+  TERMUX_APP_PID=10443
+  TERMUX_APP__DATA_DIR=/data/user/0/com.termux
+  TERMUX_APP__LEGACY_DATA_DIR=/data/data/com.termux
+  TERMUX_APP__SE_FILE_CONTEXT=u:object_r:app_data_file:s0:c68,c257,c512,c768
+  TERMUX_APP__SE_INFO=default:targetSdkVersion=28:complete
+  TERMUX_IS_DEBUGGABLE_BUILD=1
+  TERMUX_MAIN_PACKAGE_FORMAT=debian
+  TERMUX_VERSION=0.118.3
+  TERMUX__HOME=/data/data/com.termux/files/home
+  TERMUX__PREFIX=/data/data/com.termux/files/usr
+  TERMUX__ROOTFS_DIR=/data/data/com.termux/files
+  TERMUX__SE_PROCESS_CONTEXT=u:r:untrusted_app_27:s0:c68,c257,c512,c768
+  TERMUX__USER_ID=0
+  Packages CPU architecture:
+  aarch64
+  Subscribed repositories:
+  # sources.list
+  deb https://packages-cf.termux.dev/apt/termux-main/ stable main
+  # x11-repo (sources.list.d/x11.list)
+  deb https://packages-cf.termux.dev/apt/termux-x11/ x11 main
+  # tur-repo (sources.list.d/tur.list)
+  deb https://tur.kcubeterm.com tur-packages tur tur-on-device tur-continuous
+  Updatable packages:
+  All packages up to date
+  termux-tools version:
+  1.45.0
+  Android version:
+  16
+  Kernel build information:
+  Linux localhost 6.6.77-android15-8-31998796-abogkiA366EXXU4BYI7-4k #1 SMP PREEMPT Mon Sep  8 10:16:28 UTC 2025 aarch64 Android
+  Device manufacturer:
+  samsung
+  Device model:
+  SM-A366E
+  Supported ABIs:
+  SUPPORTED_ABIS: arm64-v8a
+  SUPPORTED_32_BIT_ABIS:
+  SUPPORTED_64_BIT_ABIS: arm64-v8a
+  LD Variables:
+  LD_LIBRARY_PATH=
+  LD_PRELOAD=/data/data/com.termux/files/usr/lib/libtermux-exec-ld-preload.so
+  Installed termux plugins:
+  com.termux.api versionCode:1002
+  com.termux.x11 versionCode:15
+  ```
+  
+  ## Activity
+  
+  [Next](https://github.com/termux/termux-packages/issues/26772?timeline_page=1)
+  
+  [![](https://avatars.githubusercontent.com/u/135564120?s=64&v=4)DuilioPerez](https://github.com/DuilioPerez)
+  
+  added
+  
+  [bug reportSomething is not working properly](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22bug%20report%22) Something is not working properly
+  
+  [untriaged](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22untriaged%22)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#event-20098950721)
+  
+  [![](https://avatars.githubusercontent.com/u/135564120?s=64&v=4)DuilioPerez](https://github.com/DuilioPerez)
+  
+  added the
+  
+  [Bug](https://github.com/termux/termux-packages/issues?q=type:%22Bug%22)
+  
+  issue type [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#event-20098950746)
+  
+  [![robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=80)](https://github.com/robertkirkman)
+  
+  ### robertkirkman commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=48)](https://github.com/robertkirkman)
+  
+  [robertkirkman](https://github.com/robertkirkman)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368643325)
+  
+  Member
+  
+  More actions
+  
+  [@DuilioPerez](https://github.com/DuilioPerez) Unfortunately I'm not able to reproduce this using the command `LIBGL_ALWAYS_SOFTWARE=1 termux-x11 -xstartup cinnamon-launcher`, which is what works for me. I can reproduce this using the command `cinnamon-session`, but I thought that `cinnamon-session` isn't supposed to be used and `cinnamon-launcher` was supposed to be used instead since that's what works for me.
+  
+  ![Image](https://private-user-images.githubusercontent.com/31490854/497504315-72414cb7-5a59-4504-80c2-d30f262063cb.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzcyMjgxNzUsIm5iZiI6MTc3NzIyNzg3NSwicGF0aCI6Ii8zMTQ5MDg1NC80OTc1MDQzMTUtNzI0MTRjYjctNWE1OS00NTA0LTgwYzItZDMwZjI2MjA2M2NiLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA0MjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNDI2VDE4MjQzNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTBjNzkzZTU1MTY3NTlkNGFmM2I4OTRhZGFiZmI4YTQ2ZDI2MmM1NzkwMDY2NWI1YTlhZDQ0YWQ1YWEyYjYzZDImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9._mG-PtKVU3aFH-SCk4G1NbLA0Dua34UFkeXkE3uGDm8)
+  
+  [@sabamdarif](https://github.com/sabamdarif) If I am wrong and `cinnamon-session` is supposed to work, do you happen to know what might be problem with it? or should only `cinnamon-launcher` be used?
+  
+  [![robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=80)](https://github.com/robertkirkman)
+  
+  ### robertkirkman commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=48)](https://github.com/robertkirkman)
+  
+  [robertkirkman](https://github.com/robertkirkman)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368644322)
+  
+  Member
+  
+  More actions
+  
+  Oh, I see from this message that `cinnamon-session` is supposed to be used, not `cinnamon-launcher`.
+  
+  [#25823 (comment)](https://github.com/termux/termux-packages/pull/25823#issuecomment-3243795309)
+  
+  so there seems to now be a problem with `cinnamon-session`.
+  
+  [![robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=80)](https://github.com/robertkirkman)
+  
+  ### robertkirkman commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=48)](https://github.com/robertkirkman)
+  
+  [robertkirkman](https://github.com/robertkirkman)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368646701)
+  
+  Member
+  
+  More actions
+  
+  for me it's different from what you see, for me `cinnamon-session` immediately closes without anything displaying in Termux:X11.
+  
+  ```
+  ~ $ LIBGL_ALWAYS_SOFTWARE=1 termux-x11 -xstartup cinnamon-session &
+  [1] 25758
+  ~ $ "The XKEYBOARD keymap compiler (xkbcomp) reports:"
+  "> "Warning:          Could not resolve keysym XF86OK
+  "> "Warning:          Could not resolve keysym XF86GoTo
+  "> "Warning:          Could not resolve keysym XF86VendorLogo
+  "> "Warning:          Could not resolve keysym XF86MediaSelectProgramGuide
+  "> "Warning:          Could not resolve keysym XF86MediaSelectProgramGuide
+  "> "Warning:          Could not resolve keysym XF86MediaSelectHome
+  "> "Warning:          Could not resolve keysym XF86MediaLanguageMenu
+  "> "Warning:          Could not resolve keysym XF86MediaTitleMenu
+  "> "Warning:          Could not resolve keysym XF86AudioChannelMode
+  "> "Warning:          Could not resolve keysym XF86MediaSelectPC
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTV
+  "> "Warning:          Could not resolve keysym XF86MediaSelectCable
+  "> "Warning:          Could not resolve keysym XF86MediaSelectVCR
+  "> "Warning:          Could not resolve keysym XF86MediaSelectVCRPlus
+  "> "Warning:          Could not resolve keysym XF86MediaSelectSatellite
+  "> "Warning:          Could not resolve keysym XF86MediaSelectCD
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTape
+  "> "Warning:          Could not resolve keysym XF86MediaSelectRadio
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTuner
+  "> "Warning:          Could not resolve keysym XF86MediaPlayer
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTeletext
+  "> "Warning:          Could not resolve keysym XF86MediaSelectAuxiliary
+  "> "Warning:          Could not resolve keysym XF86MediaPlaySlow
+  "> "Warning:          Could not resolve keysym XF86NumberEntryMode
+  "Errors from xkbcomp are not fatal to the X server"
+  25779 exited, status=0
+  
+  [1]+  Done                       LIBGL_ALWAYS_SOFTWARE=1 termux-x11 -xstartup cinnamon-session
+  ~ $
+  ```
+  
+  [![DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=80)](https://github.com/DuilioPerez)
+  
+  ### DuilioPerez commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=48)](https://github.com/DuilioPerez)
+  
+  [DuilioPerez](https://github.com/DuilioPerez)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368656986)
+  
+  Author
+  
+  More actions
+  
+  My guess is that all trubles are with cinnamon-launcher located at `/data/data/com.termux/files/usr/bin/cinnamon-launcher`:
+  
+  ```
+  #!/data/data/com.termux/files/usr/bin/python3
+  #
+  """ Launches or restarts cinnamon
+  """
+  
+  import os
+  import sys
+  import time
+  import gettext
+  from setproctitle import setproctitle
+  import psutil
+  import threading
+  import gi
+  import shutil
+  gi.require_version('Gtk', '3.0')  # noqa
+  from gi.repository import Gtk, GLib, Gio, GLib
+  
+  FALLBACK_COMMAND = "metacity"
+  FALLBACK_ARGS = ("--replace",)
+  
+  gettext.install("cinnamon", "/data/data/com.termux/files/usr/share/locale")
+  
+  panel_process_name = None
+  panel_cmd = None
+  if shutil.which("mate-panel"):
+      panel_process_name = "mate-panel"
+      panel_cmd = "mate-panel --replace &"
+  elif shutil.which("gnome-panel"):
+      panel_process_name = "gnome-panel"
+      panel_cmd = "gnome-panel --replace &"
+  elif shutil.which("tint2"):
+      panel_process_name = "tint2"
+      panel_cmd = "killall tint2; tint2 &"
+  
+  # Used as a decorator to run things in the background
+  def async_function(func):
+      def wrapper(*args, **kwargs):
+          thread = threading.Thread(target=func, args=args, kwargs=kwargs)
+          thread.daemon = True
+          thread.start()
+          return thread
+      return wrapper
+  
+  # Used as a decorator to run things in the main loop, from another thread
+  def idle_function(func):
+      def wrapper(*args):
+          GLib.idle_add(func, *args)
+      return wrapper
+  
+  class Launcher:
+  
+      def __init__(self):
+          self.fb_pid = 0
+          self.kill_lock = threading.Lock()
+  
+          self.cinnamon_pid = os.fork()
+          if self.cinnamon_pid == 0:
+              os.execvp("cinnamon", ("cinnamon", "--replace", ) + tuple(sys.argv[1:]))
+          else:
+              self.settings = Gio.Settings(schema="org.cinnamon.launcher")
+              self.settings.connect("changed::memory-limit-enabled", self.on_settings_changed)
+              self.killed = False
+              if self.settings.get_boolean("memory-limit-enabled"):
+                  print("Cinnamon memory limit enabled: %d MB" % self.settings.get_int("memory-limit"))
+                  self.monitor_memory()
+              self.wait_for_process()
+              Gtk.main()
+  
+      def on_settings_changed(self, settings, key):
+          print("Memory profiler status changed, restarting Cinnamon.")
+          self.restart_cinnamon()
+  
+      @async_function
+      def wait_for_process(self):
+          exit_status = os.waitpid(self.cinnamon_pid, 0)[1]
+          if not os.WIFEXITED(exit_status):
+              with self.kill_lock:
+                  if self.killed:
+                      # Restart Cinnamon
+                      self.restart_cinnamon()
+                  else:
+                      self.fb_pid = os.fork()
+                      if self.fb_pid == 0:
+                          # Start NM applet
+                          if shutil.which("nm-applet"):
+                              os.system("nm-applet &")
+                          # Start the fallback panel
+                          if panel_cmd is not None:
+                              os.system(panel_cmd)
+                          # Start the fallback window manager
+                          os.execvp(FALLBACK_COMMAND, (FALLBACK_COMMAND,) + FALLBACK_ARGS)
+                      else:
+                          self.confirm_restart()
+          else:
+              Gtk.main_quit()
+  
+      @async_function
+      def monitor_memory(self):
+          if psutil.pid_exists(self.cinnamon_pid):
+              process = psutil.Process(self.cinnamon_pid)
+              while True:
+                  delay = self.settings.get_int("check-frequency")
+                  limit = self.settings.get_int("memory-limit")
+                  time.sleep(delay)
+                  if not process.is_running():
+                      break
+                  memory = ((process.memory_full_info().rss - process.memory_full_info().shared) / 1024 ** 2)
+                  if memory > limit:
+                      print ("Memory threshold reached: %d" % memory)
+                      self.log_kill(memory, limit, delay)
+                      with self.kill_lock:
+                          self.killed = True
+                          process.kill()
+                      break
+  
+      def restart_cinnamon(self):
+          os.execvp(sys.argv[0], sys.argv)
+  
+      def log_kill(self, memory, limit, delay):
+          try:
+              directory = os.path.join(GLib.get_user_state_dir(), 'cinnamon')
+          except AttributeError:
+              directory = os.path.expanduser("~/.cinnamon")
+  
+          string = "%s - Usage: %d MB - Limit: %d MB - Freq: %s sec" % (time.strftime("%Y.%m.%d %H:%M:%S"), memory, limit, delay)
+          if not os.path.exists(directory):
+              os.mkdir(directory)
+          with open(os.path.join(directory, "restarts.log"), "a") as log_file:
+              print(string, file=log_file)
+  
+      @idle_function
+      def confirm_restart(self):
+          d = Gtk.MessageDialog(title=None, parent=None, flags=0, message_type=Gtk.MessageType.WARNING)
+          d.add_buttons(_("No"),  Gtk.ResponseType.NO,
+                        _("Yes"), Gtk.ResponseType.YES)
+          d.set_keep_above(True)
+          d.set_position(Gtk.WindowPosition.CENTER)
+          d.set_title(_("Cinnamon just crashed"))
+          box = d.get_content_area()
+          checkbutton = Gtk.CheckButton(label=_("Disable downloaded applets, desklets and extensions"))
+          d.set_markup("<span size='large'><b>%s</b></span>\n\n%s\n\n%s\n\n" %
+                  (
+                      _("You are currently running in fallback mode."),
+                      _("If you suspect the source of the crash is a local extension, applet or desklet, you can disable downloaded add-ons using the checkbox below."),
+                      _("Do you want to restart Cinnamon?"),
+                  ))
+          box.set_border_width(20)
+          box.add(checkbutton)
+          checkbutton.show_all()
+          resp = d.run()
+          d.destroy()
+          if resp == Gtk.ResponseType.YES:
+              if checkbutton.get_active():
+                  os.environ["CINNAMON_TROUBLESHOOT"] = "1"
+              os.system("killall %s" % panel_process_name)
+              os.system("killall nm-applet")
+              os.system("kill %d" % self.fb_pid)
+              os.waitpid(self.fb_pid, 0)
+              self.restart_cinnamon()
+          else:
+              Gtk.main_quit()
+  
+  if __name__ == "__main__":
+      setproctitle("cinnamon-launcher")
+      Launcher()
+  ```
+  
+  First, it doesn't detect their panel manager, two can be installed from termux, `mate-panel` and `tint2`. But if I'm right, what cinnamon usually use is gnome-panel. And second in some place an exception happens. I can confirm is before creating data directory, not `~/.cinnamon` or `~/.local/state/cinnamon` directory is created
+  
+  [![robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=80)](https://github.com/robertkirkman)
+  
+  ### robertkirkman commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=48)](https://github.com/robertkirkman)
+  
+  [robertkirkman](https://github.com/robertkirkman)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368659697)
+  
+  Member
+  
+  More actions
+  
+  I have been able to reproduce your original problem by using the command `pkg install nemo` and trying again, indicating that the cinnamon file manager, `nemo`, is not marked as a dependency of the package `cinnamon` for some reason. Arch Linux marks `nemo` as a dependency of `cinnamon`.
+  
+  I don't have `tint2`, `mate-panel` or `gnome-panel` installed.
+  
+  Next, I can try to troubleshoot the "you are currently running in fallback mode" error now that I can reproduce it.
+  
+  [![robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=80)](https://github.com/robertkirkman)
+  
+  ### robertkirkman commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=48)](https://github.com/robertkirkman)
+  
+  [robertkirkman](https://github.com/robertkirkman)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368665307)
+  
+  Member
+  
+  More actions
+  
+  [@DuilioPerez](https://github.com/DuilioPerez) I've been able to get a backtrace of the problem using the command `gdb cinnamon`, debugging the `cinnamon` binary itself.
+  
+  As is unfortunately often the case, the issue is that Zink/Turnip is crashing when Cinnamon sets the graphics driver into a certain state.
+  
+  ```
+  Thread 1 "cinnamon" received signal SIGSEGV, Segmentation fault.
+  0x0000007c7c5f6d9c in ?? () from /data/data/com.termux/files/usr/lib/libvulkan_freedreno.so
+  (gdb) bt
+  #0  0x0000007c7c5f6d9c in ?? () from /data/data/com.termux/files/usr/lib/libvulkan_freedreno.so
+  #1  0x0000007c86e9cef0 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #2  0x0000007c86e9b094 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #3  0x0000007c86ddf998 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #4  0x0000007c86dda340 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #5  0x0000007c86cc95b4 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #6  0x0000007c86cc3b2c in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #7  0x0000007c86cc7bbc in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #8  0x0000007c86a4276c in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #9  0x0000007c86a074f0 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #10 0x0000007c869b5680 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #11 0x0000007c86a09c4c in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #12 0x0000007c869b6b80 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #13 0x0000007c869b6458 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #14 0x0000007c869b6500 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  #15 0x0000007f9f275960 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #16 0x0000007f9f26cf74 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #17 0x0000007f9f292898 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #18 0x0000007f9f291a60 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #19 0x0000007f9f29701c in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #20 0x0000007f9f291df0 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #21 0x0000007f9f296fa0 in cogl_meta_texture_foreach_in_region () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  #22 0x0000007f9f291814 in cogl_texture_get_data () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  ```
+  
+  You can see from this that, unfortunately, while you are using Mesa 25.1.5, I am using Mesa 25.2.3 so I can confirm that future Mesa versions will not resolve this problem. I could try to debug the graphics driver as well, but that falls into a different category from Cinnamon itself.
+  
+  [@DuilioPerez](https://github.com/DuilioPerez) For me, after installing `nemo` manually, my usual command:
+  
+  **`LIBGL_ALWAYS_SOFTWARE=1 termux-x11 -xstartup cinnamon-session &`**
+  
+  is now working for me to launch Cinnamon properly, does that work for you?
+  
+  [![sabamdarif](https://avatars.githubusercontent.com/u/111168803?u=27bd399189b7a57bdc354b973658f4abaa3ce3bc&v=4&size=80)](https://github.com/sabamdarif)
+  
+  ### sabamdarif commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@sabamdarif](https://avatars.githubusercontent.com/u/111168803?u=27bd399189b7a57bdc354b973658f4abaa3ce3bc&v=4&size=48)](https://github.com/sabamdarif)
+  
+  [sabamdarif](https://github.com/sabamdarif)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368665361)
+  
+  Contributor
+  
+  More actions
+  
+  > I have been able to reproduce your original problem by using the command `pkg install nemo` and trying again, indicating that the cinnamon file manager, `nemo`, is not marked as a dependency of the package `cinnamon` for some reason. Arch Linux marks `nemo` as a dependency of `cinnamon`.
+  >
+  > I don't have `tint2`, `mate-panel` or `gnome-panel` installed.
+  >
+  > Next, I can try to troubleshoot the "you are currently running in fallback mode" error now that I can reproduce it.
+  
+  Yes I was thinking of mentioning that you neeed nmo to launch cinnamon so we should add it to cinnamon's dependency
+  
+  👍React with 👍1robertkirkman
+  
+  [![DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=80)](https://github.com/DuilioPerez)
+  
+  ### DuilioPerez commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=48)](https://github.com/DuilioPerez)
+  
+  [DuilioPerez](https://github.com/DuilioPerez)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368665899)
+  
+  Author
+  
+  More actions
+  
+  Ok, with help of AI I was able to understand the exact issue happening here (I've never worked with python). So these are the things I now know:
+  
+  1. There is no panel. Installing `mate-panel` or `tint2` works for it
+  2. There is no package for `metacity`, the windows manager used by cinnamon
+  3. What is failing is the command `cinnamon`, that's what produce the error dialog.
+  
+  
+  This is the error log of command `cinnamon`:
+  
+  ```
+  ~ $ termux-x11 :1 -xstartup "dbus-launch --exit-with-session cinnamon"
+  "The XKEYBOARD keymap compiler (xkbcomp) reports:"
+  "> "Warning:          Could not resolve keysym XF86OK
+  "> "Warning:          Could not resolve keysym XF86GoTo
+  "> "Warning:          Could not resolve keysym XF86VendorLogo
+  "> "Warning:          Could not resolve keysym XF86MediaSelectProgramGuide
+  "> "Warning:          Could not resolve keysym XF86MediaSelectProgramGuide
+  "> "Warning:          Could not resolve keysym XF86MediaSelectHome
+  "> "Warning:          Could not resolve keysym XF86MediaLanguageMenu
+  "> "Warning:          Could not resolve keysym XF86MediaTitleMenu
+  "> "Warning:          Could not resolve keysym XF86AudioChannelMode
+  "> "Warning:          Could not resolve keysym XF86MediaSelectPC
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTV
+  "> "Warning:          Could not resolve keysym XF86MediaSelectCable
+  "> "Warning:          Could not resolve keysym XF86MediaSelectVCR
+  "> "Warning:          Could not resolve keysym XF86MediaSelectVCRPlus
+  "> "Warning:          Could not resolve keysym XF86MediaSelectSatellite
+  "> "Warning:          Could not resolve keysym XF86MediaSelectCD
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTape
+  "> "Warning:          Could not resolve keysym XF86MediaSelectRadio
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTuner
+  "> "Warning:          Could not resolve keysym XF86MediaPlayer
+  "> "Warning:          Could not resolve keysym XF86MediaSelectTeletext
+  "> "Warning:          Could not resolve keysym XF86MediaSelectAuxiliary
+  "> "Warning:          Could not resolve keysym XF86MediaPlaySlow
+  "> "Warning:          Could not resolve keysym XF86NumberEntryMode
+  "Errors from xkbcomp are not fatal to the X server"
+  Xlib:  extension "DPMS" missing on display ":1".
+  
+  (cinnamon:6695): mutter-WARNING **: 19:41:52.255: Impossible to set scaling on crtc 63 to 1.000000, error id 2
+  Window manager warning: Scalig CRTC 63 at 1.000000 failed
+  Xlib:  extension "DPMS" missing on display ":1".
+  
+  (cinnamon:6695): GLib-GObject-CRITICAL **: 19:41:52.260: g_type_add_instance_private: assertion 'private_size > 0' failed
+  
+  (cinnamon:6695): mutter-WARNING **: 19:41:52.261: Failed to query property: no udev support
+  Cjs-Message: 19:41:52.331: Profiler is disabled. Not setting up signals.
+  Cjs-Message: 19:41:52.618: JS LOG: About to start Cinnamon (X11 backend)
+  Cjs-Message: 19:41:52.671: JS LOG: [LookingGlass/info] Cinnamon.AppSystem.get_default() started in 0 ms
+  Cjs-Message: 19:41:52.677: JS LOG: [LookingGlass/info] loading user theme: /data/data/com.termux/files/usr/share/themes/Mint-Y-Dark-Aqua/cinnamon/cinnamon.css
+  Cjs-Message: 19:41:52.703: JS LOG: [LookingGlass/info] added icon directory: /data/data/com.termux/files/usr/share/themes/Mint-Y-Dark-Aqua/cinnamon
+  Cjs-Message: 19:41:52.947: JS LOG: [LookingGlass/info] NetworkManager agent: disabled
+  Cjs-Message: 19:41:52.948: JS LOG: [LookingGlass/info] Polkit agent: disabled (not compiled in)
+  Cjs-Message: 19:41:52.955: JS LOG: [LookingGlass/info] SSH agent: enabled
+  Cjs-Message: 19:41:52.977: JS LOG: [LookingGlass/info] loaded at Sat Oct 04 2025 19:41:52 GMT-0600 (Central Standard Time)
+  Cjs-Message: 19:41:52.977: JS LOG: Cinnamon started at Sat Oct 04 2025 19:41:52 GMT-0600 (Central Standard Time)
+  Cjs-Message: 19:41:52.995: JS LOG: [LookingGlass/info] ExtensionSystem started in 2 ms
+  Cjs-Message: 19:41:52.995: JS LOG: [LookingGlass/info] DeskletManager started in 2 ms
+  Cjs-Message: 19:41:52.995: JS LOG: [LookingGlass/info] SearchProviderManager started in 1 ms
+  Xlib:  extension "DPMS" missing on display ":1".
+  MESA: warning: zink: PERF WARNING! > 100 copy boxes detected for 0xb4000072a0b18f40
+  Cjs-Message: 19:41:53.087: JS LOG: [LookingGlass/info] Role locked: notifications
+  Cjs-Message: 19:41:53.167: JS LOG: [LookingGlass/info] Loaded applet notifications@cinnamon.org in 116 ms
+  Cjs-Message: 19:41:53.176: JS LOG: [LookingGlass/info] Role locked: tray
+  Cjs-Message: 19:41:53.181: JS LOG: [LookingGlass/info] Loaded applet systray@cinnamon.org in 12 ms
+  Cjs-Message: 19:41:53.193: JS LOG: [LookingGlass/info] Loaded applet xapp-status@cinnamon.org in 12 ms
+  Cjs-Message: 19:41:53.203: JS LOG: [LookingGlass/info] Loaded applet removable-drives@cinnamon.org in 10 ms
+  Cjs-Message: 19:41:53.232: JS LOG: [LookingGlass/info] Role locked: panellauncher
+  Cjs-Message: 19:41:53.232: JS LOG: [LookingGlass/info] Role locked: windowattentionhandler
+  Cjs-Message: 19:41:53.236: JS LOG: [LookingGlass/info] Monitor Watch List updated: [0]
+  Cjs-Message: 19:41:53.237: JS LOG: [LookingGlass/info] Loaded applet grouped-window-list@cinnamon.org in 34 ms
+  Cjs-Message: 19:41:53.296: JS LOG: [LookingGlass/info] Loaded applet keyboard@cinnamon.org in 59 ms
+  
+  ** (process:6763): WARNING **: 19:41:53.318: XDG_CURRENT_DESKTOP not set, unable to check against enabled desktop list. Starting anyway...
+  Cjs-Message: 19:41:53.402: JS LOG: [LookingGlass/info] Loaded applet calendar@cinnamon.org in 106 ms
+  Cjs-Message: 19:41:53.732: JS LOG: [LookingGlass/info] Loaded applet sound@cinnamon.org in 330 ms
+  6695 killed by signal 11
+  ```
+  
+  The command halts because of `SIGSEGV` (Segmentation Violation) signal. So this triggers the dialog box
+  
+  [![DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=80)](https://github.com/DuilioPerez)
+  
+  ### DuilioPerez commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=48)](https://github.com/DuilioPerez)
+  
+  [DuilioPerez](https://github.com/DuilioPerez)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368666209)
+  
+  Author
+  
+  More actions
+  
+  > > I have been able to reproduce your original problem by using the command `pkg install nemo` and trying again, indicating that the cinnamon file manager, `nemo`, is not marked as a dependency of the package `cinnamon` for some reason. Arch Linux marks `nemo` as a dependency of `cinnamon`.
+  > >
+  > > I don't have `tint2`, `mate-panel` or `gnome-panel` installed.
+  > >
+  > > Next, I can try to troubleshoot the "you are currently running in fallback mode" error now that I can reproduce it.
+  >
+  > Yes I was thinking of mentioning that you neeed nmo to launch cinnamon so we should add it to cinnamon's dependency
+  
+  I have nemo installed
+  
+  [![DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=80)](https://github.com/DuilioPerez)
+  
+  ### DuilioPerez commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?v=4&size=48)](https://github.com/DuilioPerez)
+  
+  [DuilioPerez](https://github.com/DuilioPerez)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368667980)
+  
+  Author
+  
+  More actions
+  
+  > [@DuilioPerez](https://github.com/DuilioPerez) I've been able to get a backtrace of the problem using the command `gdb cinnamon`, debugging the `cinnamon` binary itself.
+  >
+  > As is unfortunately often the case, the issue is that Zink/Turnip is crashing when Cinnamon sets the graphics driver into a certain state.
+  >
+  > ```
+  > Thread 1 "cinnamon" received signal SIGSEGV, Segmentation fault.
+  > 0x0000007c7c5f6d9c in ?? () from /data/data/com.termux/files/usr/lib/libvulkan_freedreno.so
+  > (gdb) bt
+  > #0  0x0000007c7c5f6d9c in ?? () from /data/data/com.termux/files/usr/lib/libvulkan_freedreno.so
+  > #1  0x0000007c86e9cef0 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #2  0x0000007c86e9b094 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #3  0x0000007c86ddf998 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #4  0x0000007c86dda340 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #5  0x0000007c86cc95b4 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #6  0x0000007c86cc3b2c in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #7  0x0000007c86cc7bbc in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #8  0x0000007c86a4276c in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #9  0x0000007c86a074f0 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #10 0x0000007c869b5680 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #11 0x0000007c86a09c4c in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #12 0x0000007c869b6b80 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #13 0x0000007c869b6458 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #14 0x0000007c869b6500 in ?? () from /data/data/com.termux/files/usr/lib/libgallium-25.2.3.so
+  > #15 0x0000007f9f275960 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #16 0x0000007f9f26cf74 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #17 0x0000007f9f292898 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #18 0x0000007f9f291a60 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #19 0x0000007f9f29701c in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #20 0x0000007f9f291df0 in ?? () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #21 0x0000007f9f296fa0 in cogl_meta_texture_foreach_in_region () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > #22 0x0000007f9f291814 in cogl_texture_get_data () from /data/data/com.termux/files/usr/lib/muffin/libmuffin-cogl-0.so.0.0.0
+  > ```
+  >
+  > You can see from this that, unfortunately, while you are using Mesa 25.1.5, I am using Mesa 25.2.3 so I can confirm that future Mesa versions will not resolve this problem. I could try to debug the graphics driver as well, but that falls into a different category from Cinnamon itself.
+  >
+  > [@DuilioPerez](https://github.com/DuilioPerez) For me, after installing `nemo` manually, my usual command:
+  >
+  > **`LIBGL_ALWAYS_SOFTWARE=1 termux-x11 -xstartup cinnamon-session &`**
+  >
+  > is now working for me to launch Cinnamon properly, does that work for you?
+  
+  You're right. Zink/Turnip is the problem. I'll make an alias in my environment to make sure always tp use software renderer in this DE
+  
+  [![robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=80)](https://github.com/robertkirkman)
+  
+  ### robertkirkman commented on Oct 4, 2025on Oct 4, 2025
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?v=4&size=48)](https://github.com/robertkirkman)
+  
+  [robertkirkman](https://github.com/robertkirkman)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#issuecomment-3368668441)
+  
+  Member
+  
+  More actions
+  
+  [@sabamdarif](https://github.com/sabamdarif) yes, I can make the PR for that if you want or if you want, you can,
+  
+  [@DuilioPerez](https://github.com/DuilioPerez) did you try the command I sent above which has `LIBGL_ALWAYS_SOFTWARE=1`? also, since generally desktop environments themselves do not work in Zink+Turnip (pretty much at all) on my devices in my experience (and I believe this varies heavily by device), and only normal app windows which are not desktop environments work with Zink+Turnip, I am not confident that it would be possible to resolve the crash when hardware GPU acceleration is permitted to activate for Cinnamon itself, and even if it were, I doubt it would work even after that (XFCE exposed to Zink+Turnip is just a black screen for me, for example, though it doesn't crash)
+  
+  Because of that, I should explain also that it is still possible to use Zink+Turnip with individual app windows while using Cinnamon, and those other windows do not crash, it is just the Desktop Environment itself that needs `LIBGL_ALWAYS_SOFTWARE=1` to be set, so after that, you can use Zink+Turnip again by opening a terminal and typing `unset LIBGL_ALWAYS_SOFTWARE`, and then running the program you want to have GPU acceleration in that window. Example:
+  
+  ![Image](https://private-user-images.githubusercontent.com/31490854/497506399-9a5013c3-66a1-42c3-bbb0-b479e3a64b05.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzcyMjgxNzUsIm5iZiI6MTc3NzIyNzg3NSwicGF0aCI6Ii8zMTQ5MDg1NC80OTc1MDYzOTktOWE1MDEzYzMtNjZhMS00MmMzLWJiYjAtYjQ3OWUzYTY0YjA1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjA0MjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwNDI2VDE4MjQzNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTBhNDc1MjQ2OThlYzQ5Y2YxNThiYTNiNmIwMGNkNzRlOGIxOGQ4Yzg1ODY4ZGUyMGYyMTJjZjIwNzNlZDYxODUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.vCIN6Q--MRW77_ws9yIqbMEB735zn96rad8MjuniXxQ)
+  
+  [![](https://avatars.githubusercontent.com/u/31490854?s=64&v=4)robertkirkman](https://github.com/robertkirkman)
+  
+  removed
+  
+  [untriaged](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22untriaged%22)
+  
+  [on Oct 4, 2025on Oct 4, 2025](https://github.com/termux/termux-packages/issues/26772#event-20099130724)
+  
+  ### 45 remaining items
+  
+  Load more
+  
+  Loading
+  
+  [Sign up for free](https://github.com/signup?return_to=https://github.com/termux/termux-packages/issues/26772)**to join this conversation on GitHub.** Already have an account? [Sign in to comment](https://github.com/login?return_to=https://github.com/termux/termux-packages/issues/26772)
+  
+  ## Metadata
+  
+  ## Metadata
+  
+  ### Assignees
+  
+  No one assigned
+  
+  ### Labels
+  
+  [bug reportSomething is not working properly](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22bug%20report%22) Something is not working properly [inactiveNo activity in a certain period of time](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22inactive%22) No activity in a certain period of time [videoIssue related to video device support, not X11 necessarily](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22video%22) Issue related to video device support, not X11 necessarily [x11Issue is related to stuff requiring X11 environment or x11-packages](https://github.com/termux/termux-packages/issues?q=state%3Aopen%20label%3A%22x11%22) Issue is related to stuff requiring X11 environment or x11-packages
+  
+  ### Type
+  
+  [Bug](https://github.com/termux/termux-packages/issues?q=type:%22Bug%22)
+  
+  ### Projects
+  
+  No projects
+  
+  ### Milestone
+  
+  No milestone
+  
+  ### Relationships
+  
+  None yet
+  
+  ### Development
+  
+  No branches or pull requests
+  
+  ### Participants
+  
+  [![@robertkirkman](https://avatars.githubusercontent.com/u/31490854?s=64&v=4)](https://github.com/robertkirkman)[![@sabamdarif](https://avatars.githubusercontent.com/u/111168803?s=64&u=27bd399189b7a57bdc354b973658f4abaa3ce3bc&v=4)](https://github.com/sabamdarif)[![@DuilioPerez](https://avatars.githubusercontent.com/u/135564120?s=64&v=4)](https://github.com/DuilioPerez)
+  
+  ## Issue actions
+  
+  You can’t perform that action at this time.
+  --- End Content ---
+
+Any help fixing remote terminal issues on machine "a"? - Facebook
+  URL: https://www.facebook.com/groups/linux.fans.group/posts/5158981800810227/
+  Hi guys.. i need a help, when i log into the machine (name it "A") from a remote one, i end up on a terminal like shown in first image and with ...
+
+long live wayland : r/linuxmemes - Reddit
+  URL: https://www.reddit.com/r/linuxmemes/comments/1cmzgqx/long_live_wayland/
+  The input lag gamescope introduces is just annoying as hell. CNR_07 ... the kde wayland session works perfectly with hdpi screens and fractional ...
+
+For english language, swipe typing coupled with autocorrect works ...
+  URL: https://news.ycombinator.com/item?id=26659740
+  For english language, swipe typing coupled with autocorrect works astonishingly well. So much so that I use it regularly because of lazyness.
+
+  --- Content ---
+  |     |     |     |
+  | --- | --- | --- |
+  | |     |     |     |
+  | --- | --- | --- |
+  | [![](https://news.ycombinator.com/y18.svg)](https://news.ycombinator.com/) | **[Hacker News](https://news.ycombinator.com/news)** [new](https://news.ycombinator.com/newest) \| [past](https://news.ycombinator.com/front) \| [comments](https://news.ycombinator.com/newcomments) \| [ask](https://news.ycombinator.com/ask) \| [show](https://news.ycombinator.com/show) \| [jobs](https://news.ycombinator.com/jobs) \| [submit](https://news.ycombinator.com/submit) | [login](https://news.ycombinator.com/login?goto=item%3Fid%3D26659740) | |
+  
+  | |     |     |     |
+  | --- | --- | --- |
+  |  |  | [tifadg1](https://news.ycombinator.com/user?id=tifadg1) [on April 1, 2021](https://news.ycombinator.com/item?id=26659740) \| [parent](https://news.ycombinator.com/item?id=26659150) \| [context](https://news.ycombinator.com/item?id=26659150#26659740) \| [favorite](https://news.ycombinator.com/fave?id=26659740&auth=d00147cbc1de4ea218eb3120f3610417870395a7) \| on: [Pro1 X: A Linux smartphone with slideout keyboard](https://news.ycombinator.com/item?id=26659150 "Pro1 X: A Linux smartphone with slideout keyboard")<br>For english language, swipe typing coupled with autocorrect works astonishingly well. So much so that I use it regularly because of lazyness.<br>What segment does the physical keyboard appeal to? Youngins were born and raised touching the screen, so it's archaic to them. Old timers are jaded at this point to either wait for their dream phone or buy any cheap crap.<br>So who's the target for this 900 usd device? |
+  |  |  |
+  
+  |     |     |     |
+  | --- | --- | --- |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [blandflakes](https://news.ycombinator.com/user?id=blandflakes) [on April 1, 2021](https://news.ycombinator.com/item?id=26659862) \| [next](https://news.ycombinator.com/item?id=26659740#26660067)\[–\]<br>Honestly, I find that it works astonishingly poorly. Autocorrect is often wrong, sometimes showing the right thing milliseconds before second-guessing itself into a totally wrong word, so now I'm having to backspace because for some reason typing the actual letters I want is bad user interface.<br>Agreed regarding target audience, though. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [flatline](https://news.ycombinator.com/user?id=flatline) [on April 1, 2021](https://news.ycombinator.com/item?id=26660817) \| [parent](https://news.ycombinator.com/item?id=26659740#26659862) \| [next](https://news.ycombinator.com/item?id=26659740#26660531)\[–\]<br>I turned off autocorrect years ago and never looked back. Sometimes I misspell a word but it’s better than typing a word slightly wrong and having a completely different word pop out. I’ll still use autocomplete sometimes to save some typing. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [anotheryou](https://news.ycombinator.com/user?id=anotheryou) [on April 1, 2021](https://news.ycombinator.com/item?id=26660531) \| [parent](https://news.ycombinator.com/item?id=26659740#26659862) \| [prev](https://news.ycombinator.com/item?id=26659740#26660817) \| [next](https://news.ycombinator.com/item?id=26659740#26660447)\[–\]<br>Apple? My swiftkey on android is sooo much better. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [SamBam](https://news.ycombinator.com/user?id=SamBam) [on April 1, 2021](https://news.ycombinator.com/item?id=26660614) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26660531) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>I used Swype for a long time and loved it.<br>Then it was killed, and Android shipped its default keyboard ("gboard") with one that included swiping. I've used it ever since, not thinking about it, but it has _never_ been as good as Swype, and about 20% of my words are errors. I don't think about it much because their autocorrect suggestions are pretty good when you tap on a word, but it really is annoying. Honestly, it's insane that I keep swiping because it would be faster just to type than to swipe and correct every fifth word.<br>I have now downloaded Swiftkey. We'll see if it's any better. My first gripe is that the backspace key doesn't delete a whole word, which, when you're swiping, seems natural to me (either the whole word is right or it's not), but I'm sure there are settings and improvements I can make as I get used to it.<br>(Edit: The translate as you type feature is a perhaps-niche but killer feature for me. I often have to write to people in my poor Spanish, and always had to go back and forth between the Translate app and the app I was writing it. Doing it as I type is amazing.) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [abawany](https://news.ycombinator.com/user?id=abawany) [on April 1, 2021](https://news.ycombinator.com/item?id=26667518) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26660614) \| [next](https://news.ycombinator.com/item?id=26659740#26661128)\[–\]<br>The one thing that made Swype awesome compared to GBoard is the configurability. On GBoard, it appears to be impossible to turn off auto space insertion after a predicted swipe whereas on Swype, one could turn that off: this allowed swiping away at long urls a word at a time. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [smichel17](https://news.ycombinator.com/user?id=smichel17) [on April 1, 2021](https://news.ycombinator.com/item?id=26661128) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26660614) \| [prev](https://news.ycombinator.com/item?id=26659740#26667518) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>Swype was killed? I still have and use it. It came preinstalled on my Galaxy S6. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [ForHackernews](https://news.ycombinator.com/user?id=ForHackernews) [on April 1, 2021](https://news.ycombinator.com/item?id=26661778) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26661128) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>It was killed from the app store. Maybe it's still available to OEMs to preinstall on their devices.<br>[https://www.theverge.com/2018/2/21/17030216/nuance-discontin...](https://www.theverge.com/2018/2/21/17030216/nuance-discontinues-swype-keyboard) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [LilBytes](https://news.ycombinator.com/user?id=LilBytes) [on April 1, 2021](https://news.ycombinator.com/item?id=26661914) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26661778) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>Swype or at least the functionality behind it still exists with Swiftkey on Android. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [SamBam](https://news.ycombinator.com/user?id=SamBam) [on April 2, 2021](https://news.ycombinator.com/item?id=26668673) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26661914) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>Ayer having tried Swiftkey for a few hours, I've reverted back to gboard. I don't know if my old keyboard knows me more or I know it, but Swiftkey just could not get words right, even when I could clearly see the trail hitting the letters.<br>Maybe its prediction was turned up too high, and yet not correctly? When I finally gave up I had been trying to write The Warmth of Other Suns, and it could _not_ get "Suns," no matter _how_ slowly and accurately I did it, presumably because "subs" or "sins" are much more common words. (Actually gboard has trouble with Suns right now too, but not as bad.)<br>I'm waiting for one of these to come installed with GPT-3. Presumably a GPT-3 model could look at a sentence and work out which sword doesn't fit... | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [LilBytes](https://news.ycombinator.com/user?id=LilBytes) [on April 2, 2021](https://news.ycombinator.com/item?id=26668969) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26668673) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>Yeah, I'm not using swype. Just SwiftKey but I find it gets it wrong most of the time. It occasionally picks up typos and I'm actually writing this comment without manually correcting any errors. To try and gauge how well it does. And I don't type well. It seems. To be decent enough. Almost anyway.<br>Tkl that last sentence.ortoq.<br>(till that last sentence of two...) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Normille](https://news.ycombinator.com/user?id=Normille) [on April 2, 2021](https://news.ycombinator.com/item?id=26675170) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26668969) \| [next](https://news.ycombinator.com/item?id=26659740#26661147)\[–\]<br>I've been getting increasingly annoyed with SwiftKey lately. It's so fucking dumb, is unbelievable. I'll be typing a sentence with a really common phrase in it and it will substitute some absolutely ridiculous word I've never used in my life for the everyday one I wanted to type.<br>Inspired by this thread, I just went looking for an alternative and found Yandex.Keyboard. I've been using their browser on Android for a long time but had no idea they did a keyboard too. First impressions are pretty good. In typing this comment, I've had to correct 2 words so far. With SwiftKey, I'd have had that many corrections to do in each sentence!<br>YMMV --as I said, I've only been using it for under an hour | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [stevehawk](https://news.ycombinator.com/user?id=stevehawk) [on April 1, 2021](https://news.ycombinator.com/item?id=26661147) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26660531) \| [prev](https://news.ycombinator.com/item?id=26659740#26660614) \| [next](https://news.ycombinator.com/item?id=26659740#26660447)\[–\]<br>Apple swipe is f'n horrible. I've disabled every autocorrect I can and it still goes back and will change _previous_ words to the word I've typed when it decides I don't know what the hell I'm typing. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [antibuddy](https://news.ycombinator.com/user?id=antibuddy) [on April 1, 2021](https://news.ycombinator.com/item?id=26660447) \| [parent](https://news.ycombinator.com/item?id=26659740#26659862) \| [prev](https://news.ycombinator.com/item?id=26659740#26660531) \| [next](https://news.ycombinator.com/item?id=26659740#26660067)\[–\]<br>I have a hybrid experience where I really need swipe to get things done fast, but I always disable autocorrect, because when I actually type I don't like to be corrected. This way I can put the anger on me rather than the software. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [silicon2401](https://news.ycombinator.com/user?id=silicon2401) [on April 1, 2021](https://news.ycombinator.com/item?id=26660771) \| [root](https://news.ycombinator.com/item?id=26659740#26659862) \| [parent](https://news.ycombinator.com/item?id=26659740#26660447) \| [next](https://news.ycombinator.com/item?id=26659740#26660067)\[–\]<br>I'm the same way. Nothing makes me want to throw a device through the wall like it autocorrecting me in a way I don't want. this is actually a reason I still use android phones even though I agree iphone probably has better security | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [maxsilver](https://news.ycombinator.com/user?id=maxsilver) [on April 1, 2021](https://news.ycombinator.com/item?id=26660067) \| [prev](https://news.ycombinator.com/item?id=26659740#26659862) \| [next](https://news.ycombinator.com/item?id=26659740#26659886)\[–\]<br>You can have both, with no drawbacks.<br>My favourite phone ever designed was the BlackBerry Priv. It was an Android-based smartphone with a full-sized (5.4in) touchscreen, an completely-hidden slide-out physical keyboard, that also doubled as a touch-sensitive pad.<br>You could "swipe" (touchscreen-style) over the keys, and then press down on those same physical keys simultaneously. But you could also slide it back into the phone, and use it just like any other iPhone or Android ever made.<br>It's the best of both worlds, really. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [b112](https://news.ycombinator.com/user?id=b112) [on April 1, 2021](https://news.ycombinator.com/item?id=26660117) \| [parent](https://news.ycombinator.com/item?id=26659740#26660067) \| [next](https://news.ycombinator.com/item?id=26659740#26660263)\[–\]<br>Yes, plus not losing 1/2 the screen to an on-screen keyboard.<br>Was almost pure android, incredibly secure. Blackberry got it right, then bailed. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [29083011397778](https://news.ycombinator.com/user?id=29083011397778) [on April 1, 2021](https://news.ycombinator.com/item?id=26661696) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660117) \| [next](https://news.ycombinator.com/item?id=26659740#26660376)\[–\]<br>My KeyOne is actually _better_ due to losing half the screen - I remember trying to open a webpage and a notes app and type in some notes from the page. My Oneplus 3, whenever I pulled up the keyboard, would shift everything up, making it impossible to see what I had focused on. My KeyOne never shifted the view though, because the keyboard was already there.<br>Even better is the effect this has on battery life. The screen is the biggest battery drain on nearly every phone, and so having a little less means my phone lasts all weekend on a single charge. Because I don't watch video on my phone (or read the bottom half of the screen) anyways, there's really no drawback for me to "losing" a third of my screen, only benefits | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [b112](https://news.ycombinator.com/user?id=b112) [on April 1, 2021](https://news.ycombinator.com/item?id=26666446) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26661696) \| [next](https://news.ycombinator.com/item?id=26659740#26660376)\[–\]<br>My comment was about how on-screen, software keyboards eat 1/2 the active screen.<br>The Priv had a slide out hardware keyboard, the optimal solution IMO. Full size screen on the device, hardware keyboard too.<br>I know what you mean, but the keyone didn't lose 1/2 its screen, to lose something, you have to have it first. If it lost 1/2 its screen, it would end up with 1/4 of phone's length with usable screen.<br>Agree with all you said about software keyboards. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [29083011397778](https://news.ycombinator.com/user?id=29083011397778) [on April 2, 2021](https://news.ycombinator.com/item?id=26675370) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26666446) \| [next](https://news.ycombinator.com/item?id=26659740#26660376)\[–\]<br>My mistake then, I completely misread what you meant. I thought it was more in the Steve Jobs meaning of losing half the screen; I.E., it's taken up by the keyboard. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [studog](https://news.ycombinator.com/user?id=studog) [on April 1, 2021](https://news.ycombinator.com/item?id=26660376) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660117) \| [prev](https://news.ycombinator.com/item?id=26659740#26661696) \| [next](https://news.ycombinator.com/item?id=26659740#26664719)\[–\]<br>Ex-Blackberry here. BB didn't bail; not enough people were buying the phones for hardware manufacturing to be self-sustainable. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [b112](https://news.ycombinator.com/user?id=b112) [on April 1, 2021](https://news.ycombinator.com/item?id=26660749) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660376) \| [next](https://news.ycombinator.com/item?id=26659740#26664719)\[–\]<br>Yes, but, you cannot build a new brand in a couple of years. If you look at the Wikipedia article, you'll see the Priv, the first all android Blackberry, was released in 2015, and they bailed in late 2016.<br>You cannot re-invent a brand in a bit more than a year. They should have expected years to see significant adoption.<br>Worse, the people who trusted Blackberry, often didn't want a Chinese company making their hardware.<br>Sad really. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [b112](https://news.ycombinator.com/user?id=b112) [on April 1, 2021](https://news.ycombinator.com/item?id=26660819) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660749) \| [next](https://news.ycombinator.com/item?id=26659740#26661352)\[–\]<br>What really got me, was how much people I showed the Priv to, and the slide out keyboard loved it.<br>An example, I was on a plane. Guy next to me, a Canadian, had never heard of or seen the Priv, and had a Samsung.<br>When he saw me scrolling a webpage up and down with the touchpad/hardware keyboard, use it for gestures, then type with swipe completion via the hardware keyboard, _and_ keep a full screen, he immediately wanted one.<br>I had to tell him the last security update was 2 months ago, and it looked like the end of line.<br>How many people didn't even know? I wonder that, to this day.<br>Further to that, phone purchase cycles are often 3 or 4 years. They gave it no chance IMO. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [numpad0](https://news.ycombinator.com/user?id=numpad0) [on April 1, 2021](https://news.ycombinator.com/item?id=26661352) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660749) \| [prev](https://news.ycombinator.com/item?id=26659740#26660819) \| [next](https://news.ycombinator.com/item?id=26659740#26664719)\[–\]<br>\> 2015<br>iPhone happened 2007, Android, 2008. Their “people love our software never hardware” self deception had completely wiped positive brand values by that point, along with trust from the market towards mobile hardware keyboard, because BB engaged anyone getting close to their level of sophistication in the technology, rendering competitors’ implementations inconsistent and lackluster as the result.<br>I still don’t fully understand serial suicides in phone market 2007-2012, it was strange times. Lots of companies were politely asked to finish their free lunch session and most decided to burn their retirement instead of accepting it. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [b112](https://news.ycombinator.com/user?id=b112) [on April 1, 2021](https://news.ycombinator.com/item?id=26666546) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26661352) \| [next](https://news.ycombinator.com/item?id=26659740#26664719)\[–\]<br>I think, in a market like this, if a new type of product appears, and starts gaining massive traction?<br>The CEO, the board, the top execs, marketing, etc, need to force use that product exclusively. So they know. So they get it.<br>Because it seemed like many floundered by not understanding the differences, what was important.<br>RIM could have done so much, but they didn't even get it, or seem to understand why people were bailing.<br>Where was RIM's board? CEO replacement took too long too.<br>Ah well. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [rchaud](https://news.ycombinator.com/user?id=rchaud) [on April 1, 2021](https://news.ycombinator.com/item?id=26664719) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660117) \| [prev](https://news.ycombinator.com/item?id=26659740#26660376) \| [next](https://news.ycombinator.com/item?id=26659740#26660263)\[–\]<br>The phone had a lot of complaints about getting hot while in use. The camera was also quite poor, which in 2015 was a dealbreaker.<br>I did run into someone using it though, and when I asked him how he liked it, he said it was great. The keyboard was more important to him than anything else. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [NathanielK](https://news.ycombinator.com/user?id=NathanielK) [on April 1, 2021](https://news.ycombinator.com/item?id=26660263) \| [parent](https://news.ycombinator.com/item?id=26659740#26660067) \| [prev](https://news.ycombinator.com/item?id=26659740#26660117) \| [next](https://news.ycombinator.com/item?id=26659740#26659886)\[–\]<br>BlackBerry's keyboard software is excellent too. I use BlackBerry Keyboard\[1\] on my compact Xperia. The auto-suggests appear on the keys themselves. This saves valuable real-estate compared to having an extra row of words above the keyboard.<br>Sadly BlackBerry haven't released new hardware for ~3 years and their software is barely on life support. A shame since they have a knack for functional design.<br>\[1\] [https://play.google.com/store/apps/details?id=com.blackberry...](https://play.google.com/store/apps/details?id=com.blackberry.keyboard) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [aembleton](https://news.ycombinator.com/user?id=aembleton) [on April 1, 2021](https://news.ycombinator.com/item?id=26665238) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26660263) \| [next](https://news.ycombinator.com/item?id=26659740#26659886)\[–\]<br>I was going to try that keyboard out but it isn't compatible with my phone (Android 10). Not sure why. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [NathanielK](https://news.ycombinator.com/user?id=NathanielK) [on April 1, 2021](https://news.ycombinator.com/item?id=26667177) \| [root](https://news.ycombinator.com/item?id=26659740#26660067) \| [parent](https://news.ycombinator.com/item?id=26659740#26665238) \| [next](https://news.ycombinator.com/item?id=26659740#26659886)\[–\]<br>BlackBerry only lets BlackBerry hardware install it from the playstore. BlackBerry Manager\[1\] was an MIT licensed program that let you patch and install on unauthorized devices. <br>Sadly, it looks like repository was deleted in the last few months(DMCA?). Silly considering they haven't released any Android 10 devices.<br>Maybe there's still BlackBerry Manager apks around. I'd recommend trying it out, it's still an excellent typing experience. Haven't found anything to replace it yet.<br>\[1\] [https://web.archive.org/web/20201121204253/https://github.co...](https://web.archive.org/web/20201121204253/https://github.com/cobalt232/blackberrymanager) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [PH01](https://news.ycombinator.com/user?id=PH01) [on April 1, 2021](https://news.ycombinator.com/item?id=26659886) \| [prev](https://news.ycombinator.com/item?id=26659740#26660067) \| [next](https://news.ycombinator.com/item?id=26659740#26659907)\[–\]<br>What is your baseline for how good swipe typing is?<br>Pre-smartphone plenty of people touch typed text messages. No need to be staring at the screen. Stealth messages could be sent without taking the phone out of your pocket.<br>Physical keyboards probably appear to a significant section of people who would like to use their phone as a productivity device. Surely if swipe typing is so good it would be an option in Windows 10?<br>I agree on the price but I am still considering purchasing this phone. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [kroltan](https://news.ycombinator.com/user?id=kroltan) [on April 1, 2021](https://news.ycombinator.com/item?id=26662080) \| [parent](https://news.ycombinator.com/item?id=26659740#26659886) \| [next](https://news.ycombinator.com/item?id=26659740#26667781)\[–\]<br>\> Stealth messages could be sent without taking the phone out of your pocket<br>Remember when phones were predictable enough that you could remember where everything was and navigate anywhere through memory alone?<br>Nowadays you need to be very skillful to even open the app you meant to, let alone press the right keys on a keyboard.<br>Heck, sometimes between all of notifications, video overlays, recommendations, ads, frequent redesigns, non-deterministic search results and whatnot, you might congratulate yourself for being able to do the thing you meant to at all!<br>(And no, I don't have any physical, vision or mental impairment, and I have grown up with technology) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [comex](https://news.ycombinator.com/user?id=comex) [on April 2, 2021](https://news.ycombinator.com/item?id=26667781) \| [parent](https://news.ycombinator.com/item?id=26659740#26659886) \| [prev](https://news.ycombinator.com/item?id=26659740#26662080) \| [next](https://news.ycombinator.com/item?id=26659740#26660053)\[–\]<br>Personally, I can get 75-80 WPM with two-handed _non-_ swipe typing on my iPhone, with autocorrect on, albeit making a few uncorrected errors. Now, I have never spent any significant amount of time with physical phone keyboards, so I can’t personally compare the experience. But from some Googling, 75 WPM seems to be at the high end of what people could achieve on old BlackBerries. So or oductivity-wise, it doesn’t seem like I’m missing out on much. YMMV.<br>That said, autocorrect only works for English text. If I’m trying to, say, type a shell command into an SSH session, I do have to slow down quite a bit. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [OGWhales](https://news.ycombinator.com/user?id=OGWhales) [on April 1, 2021](https://news.ycombinator.com/item?id=26660053) \| [parent](https://news.ycombinator.com/item?id=26659740#26659886) \| [prev](https://news.ycombinator.com/item?id=26659740#26667781) \| [next](https://news.ycombinator.com/item?id=26659740#26659907)\[–\]<br>I almost never swipe type unless I am in bed with one hand. Otherwise, tap typing is what I prefer. I have sort of a weird grip but can type at about 80-90wpm on my phone with enough accuracy that autocorrect works the majority of the time. I can also type reasonably well under my desk without looking, but that would be much easier with physical buttons.<br>Does everyone else swipe type now? | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [akalsz](https://news.ycombinator.com/user?id=akalsz) [on April 1, 2021](https://news.ycombinator.com/item?id=26660713) \| [root](https://news.ycombinator.com/item?id=26659740#26659886) \| [parent](https://news.ycombinator.com/item?id=26659740#26660053) \| [next](https://news.ycombinator.com/item?id=26659740#26659907)\[–\]<br>\> I have sort of a weird grip but can type at about 80-90wpm on my phone with<br>enough accuracy that autocorrect works the majority of the time.<br>I'm quite curious about your \`weird grip'; 80-90 wpm on a touchscreen sounds<br>absurdly fast. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [comex](https://news.ycombinator.com/user?id=comex) [on April 2, 2021](https://news.ycombinator.com/item?id=26667881) \| [root](https://news.ycombinator.com/item?id=26659740#26659886) \| [parent](https://news.ycombinator.com/item?id=26659740#26660713) \| [next](https://news.ycombinator.com/item?id=26659740#26677208)\[–\]<br>I can get around 75-80 WPM tap-typing on my iPhone. No weird grip.<br>Though, to measure that I had to make my own typing test, because after trying multiple websites and native apps, I couldn’t find any tests that didn’t disable autocorrect. Accuracy without autocorrect may be interesting to measure, but in real-world typing, I intentionally sacrifice accuracy for speed and let autocorrect pick up the slack. A test of practical typing speed should take that into account.<br>If anyone else wants to try, here is my very barebones test:<br>[https://a.qoid.us/typetest.html](https://a.qoid.us/typetest.html) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [OGWhales](https://news.ycombinator.com/user?id=OGWhales) [on April 3, 2021](https://news.ycombinator.com/item?id=26677213) \| [root](https://news.ycombinator.com/item?id=26659740#26659886) \| [parent](https://news.ycombinator.com/item?id=26659740#26667881) \| [next](https://news.ycombinator.com/item?id=26659740#26677208)\[–\]<br>Ah excellent, I agree most type sites are terrible for mobile. This is much appreciated | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [OGWhales](https://news.ycombinator.com/user?id=OGWhales) [on April 3, 2021](https://news.ycombinator.com/item?id=26677208) \| [root](https://news.ycombinator.com/item?id=26659740#26659886) \| [parent](https://news.ycombinator.com/item?id=26659740#26660713) \| [prev](https://news.ycombinator.com/item?id=26659740#26667881) \| [next](https://news.ycombinator.com/item?id=26659740#26659907)\[–\]<br>So I type with my left pointer finger and right thumb.<br>My left hand has the middle finger on the side edge, thumb on the bottom edge. The rest of the fingers hang.<br>My right hand supports the back of the phone with 3 fingers, pointer on the side edge and the thumb types.<br>Hope they helps describe it. My family and friends make fun of how fast and loud I type and my weird grip, but I do take pride in my speed :) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Swenrekcah](https://news.ycombinator.com/user?id=Swenrekcah) [on April 1, 2021](https://news.ycombinator.com/item?id=26659907) \| [prev](https://news.ycombinator.com/item?id=26659740#26659886) \| [next](https://news.ycombinator.com/item?id=26659740#26659857)\[–\]<br>First of all, there are other languages than English.<br>Some of them are programming languages.<br>Also a touchscreen can not be operated with sweaty fingers or slightly unusual conditions.<br>No they really can not be reliably used, recent years’ improvements notwithstanding.<br>If I ever need to use my phone in an emergency outside in the cold with wet, sweaty perhaps bloody hands, I’d appreciate a 100% physical keyboard controllable one.<br>Touchscreens are handy though as an auxiliary control in the ideal circumstances. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Loughla](https://news.ycombinator.com/user?id=Loughla) [on April 1, 2021](https://news.ycombinator.com/item?id=26660398) \| [parent](https://news.ycombinator.com/item?id=26659740#26659907) \| [next](https://news.ycombinator.com/item?id=26659740#26659982)\[–\]<br>>Some of them are programming languages.<br>Are you doing programming on your smartphone?<br>I agree with the rest - sweaty fingers or wet fingers in general, or god forbid you want to wear gloves where it's cold.<br>But programming on a smartphone? | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Mediterraneo10](https://news.ycombinator.com/user?id=Mediterraneo10) [on April 1, 2021](https://news.ycombinator.com/item?id=26662934) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660398) \| [next](https://news.ycombinator.com/item?id=26659740#26660473)\[–\]<br>When I had a Nokia N900, I programmed on the device all the time. Nothing especially big, of course, but the traditional-Linux environment and physical keyboard on that phone allowed you to quickly knock out a small shell or Python script if you had some task you wanted to automate. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [wffurr](https://news.ycombinator.com/user?id=wffurr) [on April 1, 2021](https://news.ycombinator.com/item?id=26660473) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660398) \| [prev](https://news.ycombinator.com/item?id=26659740#26662934) \| [next](https://news.ycombinator.com/item?id=26659740#26661045)\[–\]<br>I don't know about programming but I have definitely used a remote shell session from my phone while on the subway.<br>Can't now because my device doesn't have sufficient access, but I used to have VPN on it. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [danans](https://news.ycombinator.com/user?id=danans) [on April 1, 2021](https://news.ycombinator.com/item?id=26662513) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660473) \| [next](https://news.ycombinator.com/item?id=26659740#26661045)\[–\]<br>\> I have definitely used a remote shell session from my phone while on the subway.<br>Out of necessity or just for fun/curiosity? | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Mediterraneo10](https://news.ycombinator.com/user?id=Mediterraneo10) [on April 1, 2021](https://news.ycombinator.com/item?id=26663079) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26662513) \| [next](https://news.ycombinator.com/item?id=26659740#26663194)\[–\]<br>I have SSHed into a remote server from my phone out of necessity many, many times. When you get that e-mail on debian-security-announce that some package on one of your servers has just received a security update to fix some serious vulnerability, then ideally you install that update and reload the service right away, instead of putting it off for later. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [danans](https://news.ycombinator.com/user?id=danans) [on April 1, 2021](https://news.ycombinator.com/item?id=26664250) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26663079) \| [next](https://news.ycombinator.com/item?id=26659740#26663194)\[–\]<br>Is this for a personal server or for a server that is being used by a paying client? If the latter, doesn't it make sense to have an oncall rotation with someone else on your team? | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Mediterraneo10](https://news.ycombinator.com/user?id=Mediterraneo10) [on April 1, 2021](https://news.ycombinator.com/item?id=26664269) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26664250) \| [next](https://news.ycombinator.com/item?id=26659740#26663194)\[–\]<br>Personal servers. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [wffurr](https://news.ycombinator.com/user?id=wffurr) [on April 1, 2021](https://news.ycombinator.com/item?id=26663194) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26662513) \| [prev](https://news.ycombinator.com/item?id=26659740#26663079) \| [next](https://news.ycombinator.com/item?id=26659740#26661045)\[–\]<br>It was for work but mostly to see if I could. I got a code review approval email while commuting and logged in to submit. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [swebs](https://news.ycombinator.com/user?id=swebs) [on April 1, 2021](https://news.ycombinator.com/item?id=26661045) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660398) \| [prev](https://news.ycombinator.com/item?id=26659740#26660473) \| [next](https://news.ycombinator.com/item?id=26659740#26659982)\[–\]<br>>Are you doing programming on your smartphone?<br>No, mostly because it lacks a physical keyboard. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [TedDoesntTalk](https://news.ycombinator.com/user?id=TedDoesntTalk) [on April 1, 2021](https://news.ycombinator.com/item?id=26659982) \| [parent](https://news.ycombinator.com/item?id=26659740#26659907) \| [prev](https://news.ycombinator.com/item?id=26659740#26660398) \| [next](https://news.ycombinator.com/item?id=26659740#26659857)\[–\]<br>\> If I ever need to use my phone in an emergency outside in the cold with wet, sweaty perhaps bloody hands<br>Man, we have very different lifestyles. Are you a serial killer? :)<br>\> Some of them are programming languages<br>You’re the first person I’ve known who programs on phone hardware rather than using a larger computer with emulators. It must be quite painful for you! | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [dsr\_](https://news.ycombinator.com/user?id=dsr_) [on April 1, 2021](https://news.ycombinator.com/item?id=26660092) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26659982) \| [next](https://news.ycombinator.com/item?id=26659740#26660876)\[–\]<br>Most people carry around several liters of blood inside them. It's surprisingly easy to get some out, even by accident.<br>While it is undeniably more comfortable to program with a nice keyboard and big monitor, emergencies can demand that you work with what you have. Typing<br>cat /tmp/accumulatedfiles \| while read line ; do sed -i '/inner\\;/outer\\;/' < $line ; done<br>can be rather frustrating without a real keyboard. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [spurgu](https://news.ycombinator.com/user?id=spurgu) [on April 1, 2021](https://news.ycombinator.com/item?id=26660377) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660092) \| [next](https://news.ycombinator.com/item?id=26659740#26660123)\[–\]<br>Yup, I've had to troubleshoot servers over SSH on Android more times than I care to count and it's _time consuming_. Due to this I often bring my backpack with laptop _just in case_. With a daily driver like this with a physical keyboard I wouldn't have to bother.<br>The size of this (as well as the Astro Slide\[0\]) deters me from buying though. Well COVID as well since I'm not on the move as much as I used to. But size-wise it's just too big, a phone this size doesn't comfortably fit in my pocket. Wish someone made something N900-sized (but lighter and thinner). The large size is great when used in computer mode, but most of the time you're using it in phone mode so I'd prefer to have it smaller.<br>\[0\] [https://www.indiegogo.com/projects/astro-slide-5g-transforme...](https://www.indiegogo.com/projects/astro-slide-5g-transformer#/) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [arghwhat](https://news.ycombinator.com/user?id=arghwhat) [on April 1, 2021](https://news.ycombinator.com/item?id=26660123) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660092) \| [prev](https://news.ycombinator.com/item?id=26659740#26660377) \| [next](https://news.ycombinator.com/item?id=26659740#26660876)\[–\]<br>\> Most people carry around several liters of blood inside them.<br>Emphasis on “most”. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [InitialLastName](https://news.ycombinator.com/user?id=InitialLastName) [on April 1, 2021](https://news.ycombinator.com/item?id=26663583) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660123) \| [next](https://news.ycombinator.com/item?id=26659740#26660876)\[–\]<br>I really worry about the exceptions to that. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [shard](https://news.ycombinator.com/user?id=shard) [on April 1, 2021](https://news.ycombinator.com/item?id=26665168) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26663583) \| [next](https://news.ycombinator.com/item?id=26659740#26660876)\[–\]<br>Only on HN would I be incentivized to Google "amount of blood in a baby". It turns out babies have about 75mL of blood per kg, so an 8 pound baby would have about 270 mL of blood. Infants/toddlers up to ~29lbs (between 2~4 years old) will have less than a liter of blood. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [macksd](https://news.ycombinator.com/user?id=macksd) [on April 1, 2021](https://news.ycombinator.com/item?id=26660876) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26659982) \| [prev](https://news.ycombinator.com/item?id=26659740#26660092) \| [next](https://news.ycombinator.com/item?id=26659740#26660521)\[–\]<br>\> Man, we have very different lifestyles. Are you a serial killer? :)<br>It wasn't an emergency, but I've certainly wanted to use my phone recently while outside shoveling after a blizzard, with hands that are simultaneously cold, wet and sweaty. Heck, I can hardly use my phone when I'm done at the gym. And one doesn't have to be a serial killer to get blood on their hands in say, a fall while hiking, a crash while biking, or when dialing 911 while rendering aid to someone else whose blood is now on your hands.<br>There are 2 types of people in this world: people who would like a phone to work at such times, and people who feel like they have to do things like panic-buy toilet paper during a pandemic. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [ungamedplayer](https://news.ycombinator.com/user?id=ungamedplayer) [on April 5, 2021](https://news.ycombinator.com/item?id=26698013) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660876) \| [next](https://news.ycombinator.com/item?id=26659740#26660521)\[–\]<br>This is the difference between country and city life. Help, or trip to a hospital is quite often longer than you'd survive if you were bleeding out.<br>Those who have never lived a more rugged life do not understand. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [macksd](https://news.ycombinator.com/user?id=macksd) [on April 6, 2021](https://news.ycombinator.com/item?id=26715011) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26698013) \| [next](https://news.ycombinator.com/item?id=26659740#26660521)\[–\]<br>Heck - I had to call 911 for an active domestic violence situation in the middle of New York, with a guy high on drugs yelling imminent death threats. The response time was well over an hour and all that was left to do was tell the police that we had gotten rid of the guy ourselves.<br>Of course, this is now far removed from the topic of how easily your fingers can dial 911 - but yes. In general I don't understand how people, even in cities, can think emergencies just don't happen in this day and age and if they do you'll always have help. It's like we haven't lived in the same world for the last year. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [alpaca128](https://news.ycombinator.com/user?id=alpaca128) [on April 1, 2021](https://news.ycombinator.com/item?id=26660521) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26659982) \| [prev](https://news.ycombinator.com/item?id=26659740#26660876) \| [next](https://news.ycombinator.com/item?id=26659740#26660079)\[–\]<br>Preparing for those situations isn't stupid, similarly using seatbelts and creating backups is usually a good idea. Sure, you can go without and you'll be fine...until you're not. And then you'll be glad for every little measure you took beforehand.<br>You don't need to write code on your phone? Me neither. But if some server suddenly starts acting weird while I'm on a roadtrip and everything I have is a smartphone, I sure as hell would not enjoy the typical SSH session using swype and autocorrect. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [danans](https://news.ycombinator.com/user?id=danans) [on April 1, 2021](https://news.ycombinator.com/item?id=26662634) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660521) \| [next](https://news.ycombinator.com/item?id=26659740#26660079)\[–\]<br>\> But if some server suddenly starts acting weird while I'm on a roadtrip.<br>This sort of example always strikes me as odd because it seems far better to have a an oncall rotation for this sort of thing.<br>Granted that nobody has this for their personal servers, but that by definition is not an emergency.<br>However, if it's for a service you are providing to a paying client, I'd hope they aren't relying on a server being reset by a single individual who might be on a road trip. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [IgorPartola](https://news.ycombinator.com/user?id=IgorPartola) [on April 1, 2021](https://news.ycombinator.com/item?id=26660079) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26659982) \| [prev](https://news.ycombinator.com/item?id=26659740#26660521) \| [next](https://news.ycombinator.com/item?id=26659740#26659857)\[–\]<br>I guess someone has never been in a car crash. Or had to fix a problem on the train home after leaving work. Must be nice. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [reasonabl\_human](https://news.ycombinator.com/user?id=reasonabl_human) [on April 1, 2021](https://news.ycombinator.com/item?id=26660203) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660079) \| [next](https://news.ycombinator.com/item?id=26659740#26659857)\[–\]<br>Emergency mode on an iPhone is activated with physical buttons. If I’m on the train leaving work, I have my laptop in my bag...<br>This device is really interesting, but I agree that the product market fit is slim. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [IgorPartola](https://news.ycombinator.com/user?id=IgorPartola) [on April 1, 2021](https://news.ycombinator.com/item?id=26661738) \| [root](https://news.ycombinator.com/item?id=26659740#26659907) \| [parent](https://news.ycombinator.com/item?id=26659740#26660203) \| [next](https://news.ycombinator.com/item?id=26659740#26659857)\[–\]<br>I can tell you from several unfortunate emergency experiences that you don’t just call 911. In fact if you are the one in the accident, it’s often the case that someone else calls 911 before you find your phone. What you do is call or text your family/coworkers/significant other/etc. I mean I won’t buy a phone just for this use case, but someone who routinely works in harsh environments might.<br>As far as programming on the phone, I used to leave my computer at work and have a computer at home. On the commute I would only have my phone. If I am at the grocery store and the client calls and says their server is acting funny, I might not want to wait to SSH to it from home or run to the office.<br>I think this is all a moot point in that you are right: at this point most people don’t have the need for a physical keyboard. But at the same time, I think some small subset of people will want a physical keyboard. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [dijit](https://news.ycombinator.com/user?id=dijit) [on April 1, 2021](https://news.ycombinator.com/item?id=26659857) \| [prev](https://news.ycombinator.com/item?id=26659740#26659907) \| [next](https://news.ycombinator.com/item?id=26659740#26660349)\[–\]<br>There are a cohort of people who abhor touchscreens for typing but there currently exists nothing that caters to them.<br>Everyone making phones caters to the 80% case, there are economic reasons for this (supply chain runoffs, manufacturing equipment and software) so making something for the remaining 20% cases is increasingly expensive.<br>To answer your question directly, me (a 31 year old white man technologist) and my friend (a 28 year old white man technologist)<br>¯\\\_(ツ)\_/¯ | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [aceazzameen](https://news.ycombinator.com/user?id=aceazzameen) [on April 1, 2021](https://news.ycombinator.com/item?id=26660349) \| [prev](https://news.ycombinator.com/item?id=26659740#26659857) \| [next](https://news.ycombinator.com/item?id=26659740#26659892)\[–\]<br>This targets me exactly! Well, sort of. The original Moto Droid was my first Android device, and I loved the slide out physical keyboard (paired with SwiftKey prediction and autocorrect!). It was the best of both worlds. I miss that typing experience.<br>This phone looks perfect! Up until I saw the processor. A snapdragon 662 sounds like it would be a step back in time.<br>So I guess I'm on the jaded list. My dream phone would have a landscape physical keyboard and a Samsung/Wacom pressure sensitive stylus. All with a flagship quality CPU/GPU. I could care less about multiple camera lenses. Anyways, never gonna happen. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [rjzzleep](https://news.ycombinator.com/user?id=rjzzleep) [on April 1, 2021](https://news.ycombinator.com/item?id=26660422) \| [parent](https://news.ycombinator.com/item?id=26659740#26660349) \| [next](https://news.ycombinator.com/item?id=26659740#26660524)\[–\]<br>Yeah, no idea how that happened. 662 is an early 2020 11nm midrange SoC. For comparison the 1.5 year older Apple A12 is twice as fast. Considering the price point I'd rather pay an extra 200 dollars and buy a 7" One Mix laptop. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [RHSeeger](https://news.ycombinator.com/user?id=RHSeeger) [on April 1, 2021](https://news.ycombinator.com/item?id=26660524) \| [parent](https://news.ycombinator.com/item?id=26659740#26660349) \| [prev](https://news.ycombinator.com/item?id=26659740#26660422) \| [next](https://news.ycombinator.com/item?id=26659740#26659892)\[–\]<br>I miss my Droid keyboard. It was so much more convenient than the current screen keyboards, even with swipe. Swipe + auto-correct gets every 3rd word wrong for me. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [nochowder](https://news.ycombinator.com/user?id=nochowder) [on April 1, 2021](https://news.ycombinator.com/item?id=26659892) \| [prev](https://news.ycombinator.com/item?id=26659740#26660349) \| [next](https://news.ycombinator.com/item?id=26659740#26660901)\[–\]<br>>What segment does the physical keyboard appeal to?<br>Sysadmins, hackers, etc. Ever tried ”swipe typing coupled with autocorrect” in an SSH session? | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [tifadg1](https://news.ycombinator.com/user?id=tifadg1) [on April 1, 2021](https://news.ycombinator.com/item?id=26660450) \| [parent](https://news.ycombinator.com/item?id=26659740#26659892) \| [next](https://news.ycombinator.com/item?id=26659740#26660014)\[–\]<br>I just wonder how practical it really is to do any kind of meaningful sysadmin work on a phone. Yeah you can ssh and type long commands better, but if you're in an enterprise setting you have to vpn in, then connect to a jump server so you have ssh aliases and pki certs. Or have them ready on your phone, but how do you keep it up to date? What about auxiliary programs that are needed to make better decisions once ssh is established (monitoring)?..<br>I'm saying maybe it's legit, maybe I'm just oldfashioned. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [dvdkon](https://news.ycombinator.com/user?id=dvdkon) [on April 5, 2021](https://news.ycombinator.com/item?id=26703954) \| [root](https://news.ycombinator.com/item?id=26659740#26659892) \| [parent](https://news.ycombinator.com/item?id=26659740#26660450) \| [next](https://news.ycombinator.com/item?id=26659740#26660014)\[–\]<br>Definitely not "true enterprise", but I have fixed server issues with my phone on a half-hour train ride. Back then I just used SSH password auth to connect to a server, so no security measures stopped me. Nowadays I'd probably wake up my home desktop and SSH into that and go from there. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [oblio](https://news.ycombinator.com/user?id=oblio) [on April 1, 2021](https://news.ycombinator.com/item?id=26660014) \| [parent](https://news.ycombinator.com/item?id=26659740#26659892) \| [prev](https://news.ycombinator.com/item?id=26659740#26660450) \| [next](https://news.ycombinator.com/item?id=26659740#26660901)\[–\]<br>Yeah, but then I hope their OS is super optimized and runs like a demon on the Snapdragon 662. Most likely, if it's Android, at some point it will lag even while typing using that physical keyboard. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [vimacs2](https://news.ycombinator.com/user?id=vimacs2) [on April 1, 2021](https://news.ycombinator.com/item?id=26660461) \| [root](https://news.ycombinator.com/item?id=26659740#26659892) \| [parent](https://news.ycombinator.com/item?id=26659740#26660014) \| [next](https://news.ycombinator.com/item?id=26659740#26660901)\[–\]<br>It's running Lineage OS which is pretty close to stock Android sans a lot of the invasive Google telemetry so it will probably run smoother than you would expect given the specs. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [imhoguy](https://news.ycombinator.com/user?id=imhoguy) [on April 1, 2021](https://news.ycombinator.com/item?id=26660901) \| [prev](https://news.ycombinator.com/item?id=26659740#26659892) \| [next](https://news.ycombinator.com/item?id=26659740#26659896)\[–\]<br>Think thin-client. I do on-call duty often, having entire smartphone screen available for terminal/remote desktop plus hw keyboard is priceless. No need to carry a laptop everywhere I go, esp. outdoor and during trips.<br>My current emergency set: stock Android phone (with OTG), Termux, VPN client, RDP client, cheap lap phone stand with USB keyboard which I keep in my car. I also keep my own jumpbox servers with software required by employer/customer, which is not easily installable on phone without quirks.<br>My todo: check some Dex dongle with HDMI to use hotel TV as external screen; figure out if I can cast phone screen onto car's screen with Mirrorlink. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [BossingAround](https://news.ycombinator.com/user?id=BossingAround) [on April 1, 2021](https://news.ycombinator.com/item?id=26659896) \| [prev](https://news.ycombinator.com/item?id=26659740#26660901) \| [next](https://news.ycombinator.com/item?id=26659740#26660659)\[–\]<br>\> What segment does the physical keyboard appeal to?<br>I definitely welcome this. Swipe typing has been completely unusable for me, personally (I must be doing it wrong, Galaxy S10) and the display registers so many typos when I type that I often break out the whole laptop to type a simple whatsapp message.<br>The price is steep; if the phone is good though, it definitely interests me. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [reasonabl\_human](https://news.ycombinator.com/user?id=reasonabl_human) [on April 1, 2021](https://news.ycombinator.com/item?id=26660283) \| [parent](https://news.ycombinator.com/item?id=26659740#26659896) \| [next](https://news.ycombinator.com/item?id=26659740#26660659)\[–\]<br>Whoa... maybe it’s the jenky touchwiz software Samsung bundles on galaxies (if that’s still the case?). Try installing the default google keyboard and setting it as default. Back when I used android, the Google keyboard swipe capability was solid, this was on an LG G6 with some debloated vanilla android rom.<br>Although I have to say, moving back to iOS has been pretty amazing. Swiping on the normal iOS keyboard allowed me to type this entire message from bed with one hand... barely any autocorrect kicked in... | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [shard](https://news.ycombinator.com/user?id=shard) [on April 1, 2021](https://news.ycombinator.com/item?id=26665284) \| [root](https://news.ycombinator.com/item?id=26659740#26659896) \| [parent](https://news.ycombinator.com/item?id=26659740#26660283) \| [next](https://news.ycombinator.com/item?id=26659740#26660659)\[–\]<br>Different software keyboards definitely have different swiping requirements. I've found that Samsung swiping keyboards need sharper angles at direction changes to help with recognition. Other swiping keyboards are more okay with smooth continuous curves. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [alpaca128](https://news.ycombinator.com/user?id=alpaca128) [on April 1, 2021](https://news.ycombinator.com/item?id=26660659) \| [prev](https://news.ycombinator.com/item?id=26659740#26659896) \| [next](https://news.ycombinator.com/item?id=26659740#26660946)\[–\]<br>\> For english language, swipe typing coupled with autocorrect works astonishingly well.<br>That's great. Meanwhile text input on phones is astonishingly frustrating in many other languages; for one because we also use english words and expressions in our native language, and this alone will already completely derail >90% of text correction and completion systems. Now add another "smart prediction" layer on top with swipe input and the result switches between "decent" and "totally unusable" from one sentence to the next.<br>And without swype I find touchscreen-based text input just as frustrating. It's a constant cycle of fixing typos using the worst UI possible. We need a "UI dark pattern from hell" award just so we can give one to the genius who came up with Android's pixel-perfect cursor placement mechanism to select text(which Google, for whatever reason, just refuses to fix in any way). | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [spazx](https://news.ycombinator.com/user?id=spazx) [on April 1, 2021](https://news.ycombinator.com/item?id=26660946) \| [prev](https://news.ycombinator.com/item?id=26659740#26660659) \| [next](https://news.ycombinator.com/item?id=26659740#26660732)\[–\]<br>I'm 25 - I loved qwerty physical keyboards on those "texting phones" from the late 2000s. The Sidekick, the enV, the Octane, etc. To me, as a kid, it looked like a small laptop, and I wanted to run real applications on it and use the web. I was very fast on that little keyboard, too. When I got my first smartphone, it took me awhile to get used to it. I can't type without the tactile feedback, and I don't like using the terminal on a touch keyboard. Adding that I'm a nerd for pocket computers in general, I guess I'm the target audience. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [solatic](https://news.ycombinator.com/user?id=solatic) [on April 1, 2021](https://news.ycombinator.com/item?id=26660732) \| [prev](https://news.ycombinator.com/item?id=26659740#26660946) \| [next](https://news.ycombinator.com/item?id=26659740#26660620)\[–\]<br>I bought a Pro1, their first-gen model. Termux had packages for both vim, kubectl, and the Teleport client binary (tsh). Unfortunately, it didn't work because Termux refused (refuses?) to run within the Android work profile, but if it did, it would have permitted running kubectl commands - checking status, restarting deployments, scaling deployments, etc., all from the phone in your pocket.<br>Running kubectl edit and then using vim from a physical keyboard is very doable. Trying to do it from a touch keyboard is a nightmare. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [lawtalkinghuman](https://news.ycombinator.com/user?id=lawtalkinghuman) [on April 1, 2021](https://news.ycombinator.com/item?id=26660620) \| [prev](https://news.ycombinator.com/item?id=26659740#26660732) \| [next](https://news.ycombinator.com/item?id=26659740#26660303)\[–\]<br>If you can't type on an actual keyboard, touchscreen typing is barely a downgrade from hunting and pecking.<br>If you can type quickly, touchscreen typing is really fucking awful. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [s\_fischer](https://news.ycombinator.com/user?id=s_fischer) [on April 1, 2021](https://news.ycombinator.com/item?id=26660303) \| [prev](https://news.ycombinator.com/item?id=26659740#26660620) \| [next](https://news.ycombinator.com/item?id=26659740#26660196)\[–\]<br>They probably aren't the designed target market but I wonder if a physical keyboard would be easier to use for the vision impaired. Especially with the ridges on the home keys, they could rely less on the audio feedback experience of glass screen keyboards | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [ilovetux](https://news.ycombinator.com/user?id=ilovetux) [on April 1, 2021](https://news.ycombinator.com/item?id=26660196) \| [prev](https://news.ycombinator.com/item?id=26659740#26660303) \| [next](https://news.ycombinator.com/item?id=26659740#26660743)\[–\]<br>I have been waiting for a phone like this since I had a Samsung Captivate Glide \[0\] in 2011. The fact that it can come with Linux preinstalled is a huge bonus for me.<br>I can't really say why I like typing on a physical keyboard, but not losing half of your screen to a virtual keyboard and also having access to modifier keys like shift, ctrl and alt are the top two reasons I prefer having the physical keyboard. Also it slides out so you only need to use it when it will help.<br>\[0\] [https://en.wikipedia.org/wiki/Samsung\_Captivate\_Glide](https://en.wikipedia.org/wiki/Samsung_Captivate_Glide) | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [legohead](https://news.ycombinator.com/user?id=legohead) [on April 1, 2021](https://news.ycombinator.com/item?id=26660743) \| [prev](https://news.ycombinator.com/item?id=26659740#26660196) \| [next](https://news.ycombinator.com/item?id=26659740#26662894)\[–\]<br>I used swype up to a few years ago, and now I use speech to text all the time. It isn't perfect, and for some reason loves to confuse pronouns (I becomes HE, why Google?). But it's ease of use and speed is unmatched.<br>Typing on a physical keyboard feels like going back a couple steps. I would like actual buttons on the phone though - for gaming. And maybe a little touchpad? That's what I'd put on a pull out pad. Now the problem becomes getting support for those things... | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Mediterraneo10](https://news.ycombinator.com/user?id=Mediterraneo10) [on April 1, 2021](https://news.ycombinator.com/item?id=26662894) \| [prev](https://news.ycombinator.com/item?id=26659740#26660743) \| [next](https://news.ycombinator.com/item?id=26659740#26660487)\[–\]<br>If typing on a screen was really as enjoyable and productive as a keyboard, we wouldn't see the enormous collapse in long-form text blogging over the last decade in favor of just uploading images with a much smaller amount of text.<br>Physical keyboards appeal to, besides those who just like to write a lot of text, also people who often need to SSH into a server and enter extended characters, or who run Emacs on their phone and want to easily use the power of packages like org-mode. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [tyfon](https://news.ycombinator.com/user?id=tyfon) [on April 1, 2021](https://news.ycombinator.com/item?id=26660487) \| [prev](https://news.ycombinator.com/item?id=26659740#26662894) \| [next](https://news.ycombinator.com/item?id=26659740#26660240)\[–\]<br>It targets me since my hands are way too fat and I need to type Norwegian. None of the keyboards from apple (who doesn't even have swipe in Norwegian), google or microsoft supports compound words.<br>Combine that with my fat fingers that generally press 3-4 keys on my iphone at the same time I have to spend a lot of time erasing what I just wrote. A physical slide out keyboard would be great. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [dmos62](https://news.ycombinator.com/user?id=dmos62) [on April 1, 2021](https://news.ycombinator.com/item?id=26660240) \| [prev](https://news.ycombinator.com/item?id=26659740#26660487) \| [next](https://news.ycombinator.com/item?id=26659740#26660440)\[–\]<br>\> For english language, swipe typing coupled with autocorrect works astonishingly well.<br>Yes! I love it. But when I'm typing in a morphologically complex language that has poor autocorrect coverage (dictionary too small), swipe typing is unpleasant. I hate swipe-less touch typing. Keyboard is right up my alley (though I'd love to see improvements in non-English autocorrect more). | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [rorykoehler](https://news.ycombinator.com/user?id=rorykoehler) [on April 1, 2021](https://news.ycombinator.com/item?id=26660440) \| [prev](https://news.ycombinator.com/item?id=26659740#26660240) \| [next](https://news.ycombinator.com/item?id=26659740#26660605)\[–\]<br>Most of what I wrote makes no sense. The previous sentence has only one to be to get the just.<br>I swiped the above and you can see the results. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Yizahi](https://news.ycombinator.com/user?id=Yizahi) [on April 1, 2021](https://news.ycombinator.com/item?id=26660605) \| [prev](https://news.ycombinator.com/item?id=26659740#26660440) \| [next](https://news.ycombinator.com/item?id=26659740#26659792)\[–\]<br>I have yet to see an even half working autocorrect on phone (even in English). I'm using Samsung S10P and when typing autocorrect can't correct even a simple 1 character typos (e.g. "cha4acter" or "5ypo"). Also trying to put a cursor in the desired place happens usually only after several tries. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [throwaway744678](https://news.ycombinator.com/user?id=throwaway744678) [on April 1, 2021](https://news.ycombinator.com/item?id=26660631) \| [parent](https://news.ycombinator.com/item?id=26659740#26660605) \| [next](https://news.ycombinator.com/item?id=26659740#26659792)\[–\]<br>For the cursor part, most keyboard allow precise cursor movements by swiping the space bar. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [goodusername](https://news.ycombinator.com/user?id=goodusername) [on April 1, 2021](https://news.ycombinator.com/item?id=26666346) \| [root](https://news.ycombinator.com/item?id=26659740#26660605) \| [parent](https://news.ycombinator.com/item?id=26659740#26660631) \| [next](https://news.ycombinator.com/item?id=26659740#26659792)\[–\]<br>Wow,i never realized you could do that, such a game changer! Thanks for the tip. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [rchaud](https://news.ycombinator.com/user?id=rchaud) [on April 1, 2021](https://news.ycombinator.com/item?id=26664687) \| [prev](https://news.ycombinator.com/item?id=26659740#26659792) \| [next](https://news.ycombinator.com/item?id=26659740#26660478)\[–\]<br>Probably the people that bought the previous Android iteration of this, the FxTec Pro 1 from 2019. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [crocsarecool](https://news.ycombinator.com/user?id=crocsarecool) [on April 1, 2021](https://news.ycombinator.com/item?id=26660478) \| [prev](https://news.ycombinator.com/item?id=26659740#26664687) \| [next](https://news.ycombinator.com/item?id=26659740#26661743)\[–\]<br>I’ve actually heard people with certain handicaps find they can type better with the physical keyboard. I’m not sure what those handicaps are - I read it a long time ago. I think one thing may have been poor eyesight and being able to feel the keys helped aid them. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Erlich\_Bachman](https://news.ycombinator.com/user?id=Erlich_Bachman) [on April 1, 2021](https://news.ycombinator.com/item?id=26661743) \| [prev](https://news.ycombinator.com/item?id=26659740#26660478) \| [next](https://news.ycombinator.com/item?id=26659740#26667559)\[–\]<br>\> born and raised touching the screen<br>What does this have to do with the market? People don't want physical keyboards because they are "used to" them. They want because the experience of typing is different. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [ansible](https://news.ycombinator.com/user?id=ansible) [on April 1, 2021](https://news.ycombinator.com/item?id=26661879) \| [parent](https://news.ycombinator.com/item?id=26659740#26661743) \| [next](https://news.ycombinator.com/item?id=26659740#26667559)\[–\]<br>I would have bought this style of phone 8 or 9 years ago. I had the original G1 (actually the ADP1) and Samsung Sidekick 4G, and _loved_ the keyboards on those phones. With some practice, I could get close to 30 wpm on the keyboards.<br>Since those phones were current though, I've needed to switch to "normal" smartphones without physical keyboards. At first I really disliked them, but with practice, and especially with better swipe-capable keyboards, I got used to it.<br>Now, I don't know that I'd worry about going back. I'd rather have a phone with long-term software support. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [knolax](https://news.ycombinator.com/user?id=knolax) [on April 1, 2021](https://news.ycombinator.com/item?id=26667559) \| [prev](https://news.ycombinator.com/item?id=26659740#26661743) \| [next](https://news.ycombinator.com/item?id=26659740#26659919)\[–\]<br>IMO autocorrect only works well if all of the following are true:<br>1\. You only speak one language, and never find yourself in a situation where you encounter transliterated foreign words or names.<br>2\. You never use any obscure or technical words. No jargon or slang.<br>3\. You also never find yourself in a situation where you have to come up with new terms and abbreviations.<br>4\. You never use the keyboard for any notation other than prose. No code.<br>5\. You agree 100% with the orthographic choices of whoever made your autocorrect.<br>Personal experience tells me that as a result anyone who has autocorrect on tends to be a boring conversation partner. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [iujjkfjdkkdkf](https://news.ycombinator.com/user?id=iujjkfjdkkdkf) [on April 1, 2021](https://news.ycombinator.com/item?id=26659919) \| [prev](https://news.ycombinator.com/item?id=26659740#26667559) \| [next](https://news.ycombinator.com/item?id=26659740#26659880)\[–\]<br>I often have a shell open on my phone, but far less often than I would if there were good options for typing. I'm very excited by the prospect. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [mulletbum](https://news.ycombinator.com/user?id=mulletbum) [on April 1, 2021](https://news.ycombinator.com/item?id=26659880) \| [prev](https://news.ycombinator.com/item?id=26659740#26659919) \| [next](https://news.ycombinator.com/item?id=26659740#26659988)\[–\]<br>I honestly found keyboards like this cumbersome because I can only use two fingers. I thought that was there reason we got away from them in the first place? Then haptic feedback made it so touching the screen feels better, but the original iPhone showed you didn't need a keyboard. I am so confused on who would buy this device. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [HideousKojima](https://news.ycombinator.com/user?id=HideousKojima) [on April 1, 2021](https://news.ycombinator.com/item?id=26659987) \| [parent](https://news.ycombinator.com/item?id=26659740#26659880) \| [next](https://news.ycombinator.com/item?id=26659740#26660148)\[–\]<br>>I thought that was there reason we got away from them in the first place?<br>Yes, and that reason was "Apple did it and everyone else imitated them." There were other reasons too, having a keyboard on the phone itself like a Blackberry took up valuable screen real estate, and slide-outs made the phone ticker (when all manufacturers were crazy about making them thinner and thinner) and adds a mechanical point of failure. But other than that, it was largely trend-chasing. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [mlatu](https://news.ycombinator.com/user?id=mlatu) [on April 1, 2021](https://news.ycombinator.com/item?id=26660148) \| [parent](https://news.ycombinator.com/item?id=26659740#26659880) \| [prev](https://news.ycombinator.com/item?id=26659740#26659987) \| [next](https://news.ycombinator.com/item?id=26659740#26659988)\[–\]<br>\> Then haptic feedback made it so touching the screen feels better<br>ACTUAL<br>MECHANICAL<br>HAPTICS<br>vs<br>vibrating-slab-of-glass<br>vs<br>non-vibrating-slab-of-glass<br>_cough_ yeah, have fun with your glass bricks | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [GrinningFool](https://news.ycombinator.com/user?id=GrinningFool) [on April 1, 2021](https://news.ycombinator.com/item?id=26661729) \| [root](https://news.ycombinator.com/item?id=26659740#26659880) \| [parent](https://news.ycombinator.com/item?id=26659740#26660148) \| [next](https://news.ycombinator.com/item?id=26659740#26659988)\[–\]<br>Once 'haptic' found its way into phone marketing, 'a slab of glass that vibrates when you touch it' quickly supplanted any more complete definition of the word in this context. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [oblio](https://news.ycombinator.com/user?id=oblio) [on April 1, 2021](https://news.ycombinator.com/item?id=26659988) \| [prev](https://news.ycombinator.com/item?id=26659740#26659880) \| [next](https://news.ycombinator.com/item?id=26659740#26660663)\[–\]<br>\> So who's the target for this 900 usd device?<br>The cynic in me says: No one. Or as close to no one as possible: too few people. And too fickle people (enthusiasts are notorious for being fickle and changing their minds about tech every 5 minutes). We just won't notice anything as this product dies a silent death, a few months from now. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [andagainagain](https://news.ycombinator.com/user?id=andagainagain) [on April 1, 2021](https://news.ycombinator.com/item?id=26660663) \| [prev](https://news.ycombinator.com/item?id=26659740#26659988) \| [next](https://news.ycombinator.com/item?id=26659740#26660019)\[–\]<br>swipe typing is great until you fudge it just a little bit. Then it gets hilarious horrible really fast. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [rainingmonkey](https://news.ycombinator.com/user?id=rainingmonkey) [on April 1, 2021](https://news.ycombinator.com/item?id=26660019) \| [prev](https://news.ycombinator.com/item?id=26659740#26660663) \| [next](https://news.ycombinator.com/item?id=26659740#26660424)\[–\]<br>Everyone who remembers how much better phones with slide-out keyboards were.<br>Commenters here seem to be focusing on the available OSes, but most flagship phones from a few years ago without a locked bootloader will run Lineage or Uubuntu Touch. FXtec's offering here is just that the bootloader won't be uncooperative.<br>The real killer feature is the keyboard. Those questioning the utility of a slide-out keyboard on a phone have obviously never used one. The speed and precision possible is miles ahead of an on-screen keyboard, plus there's all the extra screen real estate. While you can't touch type in the classic 4-fingers-on-home-row way, you certainly can learn to 'touch type' with your thumbs. Those who want proper touch typing can sit down in front of a Gemini, a slide-out keyboard excels at blasting out messages while standing on the metro.<br>There are plenty of us still holding onto our Motorola Photons and Droids (now so old the hardware is beginning to fail), blackberries (permanently locked bootloader) and Geminis (not a real phone, clamshell keyboard). For us, this is as close to the dream phone we've been waiting for as we'll likely ever see.<br>\> swipe typing coupled with autocorrect works astonishingly well<br>Last I checked, AnySoftKeyboard had the only FOSS implementation of swipe typing, and it wasn't very good. All the providers of decent swiping keyboards have a profit incentive to mine your data, and a keyboard that leaks information makes any other protections redundant. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [uranium](https://news.ycombinator.com/user?id=uranium) [on April 1, 2021](https://news.ycombinator.com/item?id=26661150) \| [parent](https://news.ycombinator.com/item?id=26659740#26660019) \| [next](https://news.ycombinator.com/item?id=26659740#26662741)\[–\]<br>This. I haven't seen a good phone with a 5-row keyboard since my first android phone, a G-1. Having that fifth row means that all the punctuation goes where you expect it to be, and you don't have to learn another key layout. I've been making do with swiping text since about 4 phones ago, but it makes typing on a phone painful and about 10x slower. So far I've had to correct about 3 words per sentence. I can't wait to be able to order this phone! | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [Snitch-Thursday](https://news.ycombinator.com/user?id=Snitch-Thursday) [on April 1, 2021](https://news.ycombinator.com/item?id=26661609) \| [root](https://news.ycombinator.com/item?id=26659740#26660019) \| [parent](https://news.ycombinator.com/item?id=26659740#26661150) \| [next](https://news.ycombinator.com/item?id=26659740#26662741)\[–\]<br>G1, G2, Droid, Droid 2, Droid 4, Photon Q, Dell Venue Pro (windows phone), Priv, Pro1.<br>The road for keyboard phones is long and winding.<br>The portrait sliders like Dell Venue Pro and BB Priv are the best IMHO. With glossy silver metal sides to protect the screen, mmmm. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [abcanthur](https://news.ycombinator.com/user?id=abcanthur) [on April 1, 2021](https://news.ycombinator.com/item?id=26662741) \| [parent](https://news.ycombinator.com/item?id=26659740#26660019) \| [prev](https://news.ycombinator.com/item?id=26659740#26661150) \| [next](https://news.ycombinator.com/item?id=26659740#26660424)\[–\]<br>I have long yearned for the sliding keyboards of yore; better touch typing, adds some articulation and yes, size, to phones that are too small and smooth for many hands, all while preserving screen real estate from onscreen keyboards AND visual obstruction from our moving fingers. To this last point, I have given up on physical keyboards returning to phones, but why can't we have a physical scroll wheel on the side? Handles so many use screentime use cases (infinite scroll...), unobstrusive, precise, piggybacks on accessibility UIs, etc. Early ipods were all scroll wheel, and there is great versatility in the clicking and smooth-vs-stepped modes of modern mouse scroll wheels. If we haven't gotten a decent keyboard in any device for years, at least give us a wheel!! Touch screens are like wearing cheap cellophane gloves, this is why nobody looks cool while using their smartphone, because there is no possibility of virtuosity in the dead, time lagged UI. | |
+  | |     |     |     |
+  | --- | --- | --- |
+  | ![](https://news.ycombinator.com/s.gif) |  | [tubularhells](https://news.ycombinator.com/user?id=tubularhells) [on April 1, 2021](https://news.ycombinator.com/item?id=26660424) \| [prev](https://news.ycombinator.com/item?id=26659740#26660019)\[–\]<br>Imagine a world where some people speak more than one language on a daily basis.<br>Wild, I know. | | |
+  | ![](https://news.ycombinator.com/s.gif)
+  
+  |     |
+  | --- |
+  |  |
+  
+  [Consider applying for YC's Summer 2026 batch! Applications are open till May 4](https://www.ycombinator.com/apply/)
+  
+  [Guidelines](https://news.ycombinator.com/newsguidelines.html) \| [FAQ](https://news.ycombinator.com/newsfaq.html) \| [Lists](https://news.ycombinator.com/lists) \| [API](https://github.com/HackerNews/API) \| [Security](https://news.ycombinator.com/security.html) \| [Legal](https://www.ycombinator.com/legal/) \| [Apply to YC](https://www.ycombinator.com/apply/) \| [Contact](mailto:hn@ycombinator.com)
+  
+  Search: |
+  --- End Content ---
