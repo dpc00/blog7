@@ -34,17 +34,13 @@ def _css_version():
 
 # ── Platform detection & data root ───────────────────────────────────────────
 
-_ANDROID_ROOT = Path("/sdcard/data/finance")
-_ANDROID_SECRETS_ROOT = Path("/sdcard/secrets/finance")
-ANDROID = _ANDROID_ROOT.exists()
-DATA_ROOT = _ANDROID_ROOT if ANDROID else Path.home() / "data" / "finance"
-SECRETS_ROOT = (
-    _ANDROID_SECRETS_ROOT if ANDROID else (Path.home() / "secrets" / "finance")
-)
+import dpc_paths
+DATA_ROOT    = dpc_paths.DATA
+SECRETS_ROOT = dpc_paths.SECRETS
 
-DB_PATH = DATA_ROOT / "db" / "blog7.db"
-TOKEN_FILE = SECRETS_ROOT / "ns_token.txt"
-CREDS_FILE = SECRETS_ROOT / "ns_creds.txt"
+DB_PATH     = dpc_paths.BLOG7_DB
+TOKEN_FILE  = dpc_paths.NS_TOKEN
+CREDS_FILE  = dpc_paths.NS_CREDS
 RCLONE_CONF = SECRETS_ROOT / "rclone.conf"
 
 # ── NS API constants ──────────────────────────────────────────────────────────
