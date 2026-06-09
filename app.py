@@ -630,7 +630,7 @@ def balances():
     asset_id = request.args.get("asset", type=int, default=_NS_ASSET_ID)
     recent = db.fetchall(
         "SELECT id, day, amt, balance, flow FROM transactions"
-        " WHERE asset_id=? ORDER BY day DESC, rowid DESC LIMIT 15",
+        " WHERE asset_id=? ORDER BY day DESC, rowid ASC LIMIT 15",
         [asset_id],
     )
     ft_rows = db.fetchall("SELECT flow, code FROM flow_types")
@@ -851,9 +851,10 @@ def transactions():
     ft_rows = db.fetchall("SELECT flow, name FROM flow_types")
     flow_name_map = {r.flow: r.name for r in ft_rows}
 
+    tie = "ASC" if not asc else "DESC"
     rows = db.fetchall(
         f"SELECT id, day, COALESCE(comp, desc) AS label, asset_id, flow, amt, balance"
-        f" FROM transactions ORDER BY {sort_col} {direction}, rowid DESC"
+        f" FROM transactions ORDER BY {sort_col} {direction}, rowid {tie}"
     )
 
     return render_template(
