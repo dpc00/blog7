@@ -872,51 +872,23 @@ _SUMMARY_LIMITS = {"daily": 40, "weekly": 40, "monthly": 40, "yearly": 40}
 
 
 def _summary_route(tbl, period_col, title, tab):
-    assets = db.load_assets()
-    asset_name_map = {a["id"]: a["name"] for a in assets}
     limit = _SUMMARY_LIMITS.get(tbl, 60)
-    # Get most recent N distinct periods, then fetch all rows for those periods
-    periods_q = db.fetchall(
-        f"SELECT DISTINCT {period_col} FROM {tbl} ORDER BY {period_col} DESC LIMIT ?",
+    rows = db.fetchall(
+        f"SELECT {period_col},"
+        f" SUM(COALESCE(expense,0)) + SUM(COALESCE(refund_return,0)) AS spend,"
+        f" SUM(COALESCE(income,0)) AS income"
+        f" FROM {tbl}"
+        f" GROUP BY {period_col}"
+        f" ORDER BY {period_col} DESC"
+        f" LIMIT ?",
         [limit],
     )
-    if not periods_q:
-        rows = []
-    else:
-        placeholders = ",".join("?" * len(periods_q))
-        period_vals = [r[period_col] for r in periods_q]
-        rows = db.fetchall(
-            f"SELECT {period_col}, asset_id, income, expense, transfer_in, transfer_out, refund_return"
-            f" FROM {tbl} WHERE {period_col} IN ({placeholders}) ORDER BY {period_col} DESC",
-            period_vals,
-        )
-
-    # Collect ordered periods; always show all assets as columns
-    asset_ids = [a["id"] for a in assets]
-    periods = []
-    pivot = {}
-    for r in rows:
-        p = r[period_col]
-        if p not in pivot:
-            pivot[p] = {}
-            periods.append(p)
-        pivot[p][r.asset_id] = (
-            r.income,
-            r.expense,
-            r.transfer_in,
-            r.transfer_out,
-            r.refund_return,
-        )
 
     return render_template(
         "summary.html",
         tab=tab,
-        title=title,
         period_col=period_col,
-        periods=periods,
-        asset_ids=asset_ids,
-        pivot=pivot,
-        asset_name_map=asset_name_map,
+        rows=rows,
     )
 
 
