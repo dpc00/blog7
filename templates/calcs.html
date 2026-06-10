@@ -14,7 +14,15 @@
 {% if dl_items %}
 <hr>
 {% for item in dl_items %}
-<div class="dl-item">{{ item }}</div>
+<div class="dl-item" style="display:flex;align-items:center;gap:8px;">
+  <span>{{ item.label }}</span>
+  <form method="post" action="/update_source_day" style="display:flex;align-items:center;gap:4px;">
+    <input type="hidden" name="source_id" value="{{ item.source_id }}">
+    <input type="text" name="day" value="{{ item.day }}" inputmode="numeric"
+           style="width:36px;padding:2px 4px;font-size:13px;border:1px solid #bbb;border-radius:3px;text-align:center;">
+    <button type="submit" style="font-size:12px;padding:2px 6px;border:1px solid #bbb;border-radius:3px;background:#f5f5f5;cursor:pointer;">✓</button>
+  </form>
+</div>
 {% endfor %}
 {% endif %}
 

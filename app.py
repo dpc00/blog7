@@ -816,9 +816,11 @@ def calcs():
     for s in sources:
         if s["day"] and int(s["day"]) > 0:
             days = dl(int(s["day"]))
-            dl_items.append(
-                f"{int(round(days))} days left until {s['name']} {s['type']}"
-            )
+            dl_items.append({
+                "label": f"{int(round(days))} days left until {s['name']} {s['type']}",
+                "source_id": s["id"],
+                "day": s["day"],
+            })
 
     calcs_data = [
         ("DAllow", "Daily Allowance", ncs(dallow), "pink"),
@@ -915,6 +917,15 @@ def yearly():
 @app.route("/ping")
 def ping():
     return "", 204
+
+
+@app.route("/update_source_day", methods=["POST"])
+def update_source_day():
+    source_id = request.form.get("source_id", type=int)
+    day = request.form.get("day", "").strip()
+    if source_id and day.isdigit() and 1 <= int(day) <= 31:
+        db.execute("UPDATE source SET day=? WHERE source_id=?", [int(day), source_id])
+    return redirect(url_for("calcs"))
 
 
 @app.route("/exit")
