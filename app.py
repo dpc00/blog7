@@ -631,7 +631,7 @@ def balances():
     asset_id = request.args.get("asset", type=int, default=_NS_ASSET_ID)
     recent = db.fetchall(
         "SELECT id, day, amt, balance, flow FROM transactions"
-        " WHERE asset_id=? ORDER BY day DESC, rowid DESC LIMIT 15",
+        " WHERE asset_id=? ORDER BY day DESC, balance ASC LIMIT 15",
         [asset_id],
     )
     ft_rows = db.fetchall("SELECT flow, code FROM flow_types")
