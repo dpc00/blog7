@@ -545,7 +545,7 @@ def _ns_do_sync():
             if ending is not None:
                 final_bal = round(ending / 100, 2)
 
-    posted_txns.sort(key=lambda x: x[0])
+    posted_txns.sort(key=lambda x: x[0], reverse=True)
 
     last_ts = (
         posted_txns[-1][0]
