@@ -545,7 +545,7 @@ def _ns_do_sync():
             if ending is not None:
                 final_bal = round(ending / 100, 2)
 
-    posted_txns.sort(key=lambda x: x[0], reverse=True)
+    posted_txns.sort(key=lambda x: x[0])
 
     last_ts = (
         max(posted_txns, key=lambda x: x[0])[0]
@@ -574,7 +574,7 @@ def _ns_do_sync():
     except Exception:
         pass
 
-    pending_txns.sort(key=lambda x: x[0], reverse=True)
+    pending_txns.sort(key=lambda x: x[0])
     all_txns = posted_txns + pending_txns
     db.execute("DELETE FROM transactions WHERE asset_id=?", [_NS_ASSET_ID])
 
@@ -631,7 +631,7 @@ def balances():
     asset_id = request.args.get("asset", type=int, default=_NS_ASSET_ID)
     recent = db.fetchall(
         "SELECT id, day, amt, balance, flow FROM transactions"
-        " WHERE asset_id=? ORDER BY day DESC, rowid ASC LIMIT 15",
+        " WHERE asset_id=? ORDER BY day DESC, rowid DESC LIMIT 15",
         [asset_id],
     )
     ft_rows = db.fetchall("SELECT flow, code FROM flow_types")
