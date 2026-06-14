@@ -574,6 +574,7 @@ def _ns_do_sync():
     except Exception:
         pass
 
+    pending_txns.sort(key=lambda x: x[0], reverse=True)
     all_txns = posted_txns + pending_txns
     db.execute("DELETE FROM transactions WHERE asset_id=?", [_NS_ASSET_ID])
 
