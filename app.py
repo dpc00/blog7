@@ -548,7 +548,7 @@ def _ns_do_sync():
     posted_txns.sort(key=lambda x: x[0], reverse=True)
 
     last_ts = (
-        posted_txns[-1][0]
+        max(posted_txns, key=lambda x: x[0])[0]
         if posted_txns
         else datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     )
