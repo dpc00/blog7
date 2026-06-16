@@ -20,10 +20,10 @@ def _require(var: str) -> Path:
 
 
 ROOT     = _require("DPC_ROOT")
+PROJECTS = ROOT / "projects"
 DATA     = ROOT / "data" / "finance"
 DB_DIR   = DATA / "db"
 SECRETS  = PROJECTS / "secrets" / "finance"
-PROJECTS = ROOT / "projects"
 
 FINANCE_DB = DB_DIR / "finance.db"
 BLOG7_DB   = DB_DIR / "blog7.db"
