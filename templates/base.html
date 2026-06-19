@@ -15,6 +15,7 @@
     <a href="/weekly"       class="{{ 'active' if tab == 'weekly' }}">Weekly</a>
     <a href="/monthly"      class="{{ 'active' if tab == 'monthly' }}">Monthly</a>
     <a href="/yearly"       class="{{ 'active' if tab == 'yearly' }}">Yearly</a>
+    <a href="/quit" onclick="fetch('/quit');window.close();return false;" style="margin-left:auto;color:#c0392b;">Quit</a>
   </nav>
   <div class="content">
     {% with messages = get_flashed_messages(with_categories=True) %}

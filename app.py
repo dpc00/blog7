@@ -1032,5 +1032,12 @@ def _silent_reauth():
     return token or None
 
 
+@app.route("/quit")
+def quit_server():
+    import threading
+    threading.Thread(target=lambda: os._exit(0), daemon=True).start()
+    return "bye"
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
