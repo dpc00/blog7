@@ -854,10 +854,15 @@ def transactions():
     ft_rows = db.fetchall("SELECT flow, name FROM flow_types")
     flow_name_map = {r.flow: r.name for r in ft_rows}
 
-    tie = "ASC" if not asc else "DESC"
+    # Within-day order is chronological via `seq` (statement position, decoded
+    # from the sqid id by build_blog7db). The tie direction matches the primary
+    # direction so a day-DESC view shows the latest transaction of a day on top;
+    # the previous rowid tiebreaker scrambled within-day order because sqid
+    # strings are not order-preserving. rowid is a final fallback for NULL seq.
+    tie = direction
     rows = db.fetchall(
         f"SELECT id, day, COALESCE(comp, desc) AS label, asset_id, flow, amt, balance"
-        f" FROM transactions ORDER BY {sort_col} {direction}, rowid {tie}"
+        f" FROM transactions ORDER BY {sort_col} {direction}, seq {tie}, rowid {tie}"
     )
 
     return render_template(
