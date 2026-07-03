@@ -16,7 +16,6 @@ Flask web application. Also handles finance data flows and backups.
 ## Known Issues
 - Complicated data flows
 - Backup and format reconciliation problems
-- C:\Users\donal\projects\blog7\docs\superpowers\specs\2026-04-18-gdrive-data-migration-design.md has stale paths
 
 ## Go Here For
 Flask app features, finance data integration, blog functionality
