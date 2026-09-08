@@ -1,8 +1,6 @@
 *.pyc
 *.w
-.claude/*
-!.claude/memory/
-!.claude/memory/**
+.claude/settings.local.json
 .playwright*/
 .pytest*/
 __pycache__/
