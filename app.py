@@ -818,10 +818,11 @@ def calcs():
         if s["day"] and int(s["day"]) > 0:
             days = dl(int(s["day"]))
             dl_items.append({
-                "label": f"{int(round(days))} days left until {s['name']} {s['type']}",
+                "label": f"{days:.1f} days left until {s['name']} {s['type']}",
                 "source_id": s["id"],
                 "day": s["day"],
             })
+    dl_items.sort(key=lambda di: di["label"])
 
     calcs_data = [
         ("DAllow", "Daily Allowance", ncs(dallow), "pink"),
