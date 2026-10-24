@@ -824,6 +824,53 @@ def calcs():
             })
     dl_items.sort(key=lambda di: di["label"])
 
+    # Projection: each source repeats on its day for its latest deposit amount.
+    dep_pat = {
+        ("SSA", "SSI"): "SSI TREAS",
+        ("SSA", "Early Retirement"): "SSA TREAS",
+        ("CODHS", "OAP"): "CODHS EBT",
+    }
+
+    def fnum(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return 0.0
+
+    pend = []
+    for r in db.fetchall("SELECT name, type, day, amount, asset_id FROM source"):
+        if not r.day or int(r.day) <= 0:
+            continue
+        amt = fnum(r.amount)
+        pat = dep_pat.get((r.name, r.type))
+        if pat:
+            last = db.fetchone(
+                "SELECT amt FROM transactions WHERE flow=1 AND asset_id=?"
+                " AND desc LIKE ? ORDER BY day DESC LIMIT 1",
+                [r.asset_id, f"%{pat}%"],
+            )
+            if last:
+                amt = last.amt
+        pend.append((dl(int(r.day)), r, amt))
+    pend.sort(key=lambda p: p[0])
+    pool_bal = {
+        False: spend,
+        True: sum(a["balance"] for a in assets if a["ebt"]),
+    }
+    proj = []
+    now = datetime.now()
+    for t, r, amt in pend:
+        ebt = r.asset_id in ebt_ids
+        pool_bal[ebt] += amt
+        proj.append({
+            "date": (now + timedelta(days=t, minutes=1)).strftime("%m/%d"),
+            "days": f"{t:.1f}",
+            "src": f"{r.name} {r.type}",
+            "amt": ncs(amt),
+            "pool": "fs" if ebt else "cash",
+            "bal": ncs(pool_bal[ebt]),
+        })
+
     calcs_data = [
         ("DAllow", "Daily Allowance", ncs(dallow), "pink"),
         ("INec", "Income Needed", ncs(inec), "green"),
@@ -837,6 +884,7 @@ def calcs():
         tab="calcs",
         calcs=calcs_data,
         dl_items=dl_items,
+        proj=proj,
         dtot_label=dtot_label,
     )
 

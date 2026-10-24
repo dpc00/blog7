@@ -26,4 +26,18 @@
 {% endfor %}
 {% endif %}
 
+{% if proj %}
+<hr>
+<table style="font-size:13px;">
+  <tr><th>date</th><th>days</th><th>source</th><th>amt</th><th>pool</th><th>bal</th></tr>
+  {% for p in proj %}
+  <tr>
+    <td>{{ p.date }}</td><td>{{ p.days }}</td><td>{{ p.src }}</td>
+    <td style="text-align:right;">{{ p.amt }}</td><td>{{ p.pool }}</td>
+    <td style="text-align:right;">{{ p.bal }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
 {% endblock %}
