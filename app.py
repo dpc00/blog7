@@ -12,7 +12,7 @@ import re
 import sqlite3
 import subprocess
 import threading
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
@@ -166,6 +166,89 @@ def dl(dom: int) -> float:
             break
         nd += relativedelta(months=1)
     return (nd - now).total_seconds() / 86400.0
+
+
+def _nth_weekday(year: int, month: int, weekday: int, n: int) -> date:
+    """n-th weekday (Mon=0) of month; n=-1 means last."""
+    if n > 0:
+        first = date(year, month, 1)
+        return first + timedelta(days=(weekday - first.weekday()) % 7 + 7 * (n - 1))
+    last = date(year, month, calendar.monthrange(year, month)[1])
+    return last - timedelta(days=(last.weekday() - weekday) % 7)
+
+
+def _is_fed_holiday(d: date) -> bool:
+    """US federal holiday, with Sat->Fri / Sun->Mon observance."""
+    for y in (d.year, d.year + 1):
+        fixed = [date(y, 1, 1), date(y, 6, 19), date(y, 7, 4), date(y, 11, 11), date(y, 12, 25)]
+        obs = [f - timedelta(days=1) if f.weekday() == 5 else
+               f + timedelta(days=1) if f.weekday() == 6 else f for f in fixed]
+        floating = [
+            _nth_weekday(y, 1, 0, 3), _nth_weekday(y, 2, 0, 3), _nth_weekday(y, 5, 0, -1),
+            _nth_weekday(y, 9, 0, 1), _nth_weekday(y, 10, 0, 2), _nth_weekday(y, 11, 3, 4),
+        ]
+        if d in obs or d in floating:
+            return True
+    return False
+
+
+def _is_bday(d: date) -> bool:
+    return d.weekday() < 5 and not _is_fed_holiday(d)
+
+
+def _bday_shift(d: date, n: int) -> date:
+    """Move d by n business days (n<0 = earlier). n=0 rolls back to a business day."""
+    step = -1 if n <= 0 else 1
+    if n == 0:
+        while not _is_bday(d):
+            d += timedelta(days=-1)
+        return d
+    for _ in range(abs(n)):
+        d += timedelta(days=step)
+        while not _is_bday(d):
+            d += timedelta(days=step)
+    return d
+
+
+# Netspend posts benefits early. Rules derived from finance.db deposit history:
+#   SSI TREAS  : paid on the 1st (prior business day if non-business) -> posts 4 business days earlier
+#   SSA TREAS  : paid on the 3rd (prior business day if non-business) -> posts 3 business days earlier
+#   CODHS EBT  : 1st of next month minus 5 calendar days; a Saturday moves to Sunday
+# Posting time of day, from Netspend API timestamps (Sep 2025 - Sep 2026; the API
+# reports Central, these are Mountain = Central - 1h):
+#   SSI / SSA  : 11:10 every time (two outliers at 15:40)
+#   OAP        : 05:06 or 05:36 on weekdays; 20:36 when the date is a Sunday
+def deposit_time(name: str, typ: str, d: date) -> timedelta:
+    if (name, typ) == ("CODHS", "OAP"):
+        return timedelta(hours=20, minutes=36) if d.weekday() == 6 else timedelta(hours=5, minutes=20)
+    return timedelta(hours=11, minutes=10)
+
+
+def deposit_date(name: str, typ: str, year: int, month: int) -> date | None:
+    """Netspend posting date for the payment cycle whose pay month is (year, month)."""
+    if (name, typ) == ("SSA", "SSI"):
+        return _bday_shift(_bday_shift(date(year, month, 1), 0), -4)
+    if (name, typ) == ("SSA", "Early Retirement"):
+        return _bday_shift(_bday_shift(date(year, month, 3), 0), -3)
+    if (name, typ) == ("CODHS", "OAP"):
+        d = date(year, month, 1) - timedelta(days=5)
+        return d + timedelta(days=1) if d.weekday() == 5 else d
+    return None
+
+
+def src_days(name: str, typ: str, dom: int) -> float:
+    """Days until the next posting of a source; falls back to day-of-month dl()."""
+    now = datetime.now()
+    if deposit_date(name, typ, now.year, now.month) is None:
+        return dl(dom)
+    y, m = now.year, now.month
+    for _ in range(3):
+        dd = deposit_date(name, typ, y, m)
+        nd = datetime(dd.year, dd.month, dd.day) + deposit_time(name, typ, dd)
+        if nd > now:
+            return (nd - now).total_seconds() / 86400.0
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    return dl(dom)
 
 
 def txtpa(txt: str) -> list:
@@ -785,9 +868,9 @@ def calcs():
         return sum(a["balance"] for a in assets if not a["ebt"])
 
     dl_rows = db.fetchall(
-        f"SELECT day FROM source WHERE day IS NOT NULL AND day != ''{excl}", ebt_ids
+        f"SELECT name, type, day FROM source WHERE day IS NOT NULL AND day != ''{excl}", ebt_ids
     )
-    days_left_vals = [dl(int(r.day)) for r in dl_rows if r.day and int(r.day) > 0]
+    days_left_vals = [src_days(r.name, r.type, int(r.day)) for r in dl_rows if r.day and int(r.day) > 0]
     maxdl = sum(days_left_vals) / len(days_left_vals) if days_left_vals else 30.0
     spend = spendable()
     dallow = spend / maxdl if maxdl > 0 else 0.0
@@ -816,7 +899,7 @@ def calcs():
     dl_items = []
     for s in sources:
         if s["day"] and int(s["day"]) > 0:
-            days = dl(int(s["day"]))
+            days = src_days(s["name"], s["type"], int(s["day"]))
             dl_items.append({
                 "label": f"{days:.1f} days left until {s['name']} {s['type']}",
                 "source_id": s["id"],
@@ -851,7 +934,7 @@ def calcs():
             )
             if last:
                 amt = last.amt
-        pend.append((dl(int(r.day)), r, amt))
+        pend.append((src_days(r.name, r.type, int(r.day)), r, amt))
     pend.sort(key=lambda p: p[0])
     pool_bal = {
         False: spend,
